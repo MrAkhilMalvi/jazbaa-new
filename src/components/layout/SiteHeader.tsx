@@ -72,7 +72,7 @@ export function SiteHeader() {
           <div className="flex items-center gap-2">
             <ThemeToggle />
             <Button asChild variant="ember" size="sm" className="hidden sm:inline-flex">
-              <Link to="/join">Join</Link>
+              <Link to="/signup">Sign up</Link>
             </Button>
             <button
               className="md:hidden p-2 rounded-full hover:bg-accent/10"
@@ -104,7 +104,7 @@ export function SiteHeader() {
                 </NavLink>
               ))}
               <Button asChild variant="ember" className="mt-2">
-                <Link to="/join">Join the Community</Link>
+                <Link to="/signup">Join the Community</Link>
               </Button>
             </nav>
           </div>
