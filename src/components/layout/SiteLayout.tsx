@@ -16,16 +16,19 @@ import NotFound from "@/pages/NotFound";
 export function SiteLayout() {
   const location = useLocation();
 
-  // Smooth scroll to top on route change — no hard jump.
+  // ✅ FIX: Wait for Framer Motion to paint the new DOM before scrolling to top.
+  // This prevents the page/Lenis from getting stuck on route changes.
   useEffect(() => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    });
   }, [location.pathname]);
 
   return (
     <div className="min-h-screen flex flex-col">
       <SiteHeader />
       <main className="flex-1">
+        {/* AnimatePresence handles the unmount/mount of pages */}
         <AnimatePresence mode="wait" initial={false}>
           <PageTransition key={location.pathname}>
             <Routes location={location} key={location.pathname}>

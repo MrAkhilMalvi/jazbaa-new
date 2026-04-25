@@ -39,17 +39,24 @@ export function SiteHeader() {
           className={cn(
             "flex items-center justify-between gap-6 rounded-full px-4 md:px-6 py-2.5 transition-all duration-500",
             scrolled
-              ? "bg-background/85 border border-border shadow-soft"
+              ? "bg-background/85 border border-border shadow-soft backdrop-blur-md"
               : "bg-transparent"
           )}
         >
-          <Link to="/" className="flex items-center gap-2 group" aria-label="JAZBAA home">
-            <span className="relative h-8 w-8 rounded-full bg-gradient-ember shadow-glow grid place-items-center">
-              <span className="font-display text-accent-foreground text-sm font-bold">J</span>
-            </span>
-            <span className="font-display text-xl font-semibold tracking-tight">
-              JAZBAA
-            </span>
+          {/* LOGO SECTION */}
+          <Link to="/" className="flex items-center group" aria-label="JAZBAA home">
+            {/* Light Mode Logo */}
+            <img 
+              src="/jazbaa-light-logo.png" 
+              alt="Jazbaa Logo" 
+              className="h-10 md:h-30 w-auto object-contain transition-transform duration-300 group-hover:scale-105 block dark:hidden"
+            />
+            {/* Dark Mode Logo */}
+            <img 
+              src="/jazbaa-light-logo.png" 
+              alt="Jazbaa Logo" 
+              className="h-10 md:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105 hidden dark:block"
+            />
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
