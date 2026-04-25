@@ -37,16 +37,23 @@ export function Aurora({
     const ro = new ResizeObserver(resize);
     ro.observe(canvas);
 
-    // Read accent color from CSS var (HSL string like "12 100% 59%")
+    // Read accent color from CSS var (HSL tokens like "12 100% 59%") and
+    // convert to comma-separated form Canvas can parse.
     const styles = getComputedStyle(document.documentElement);
-    const accent = styles.getPropertyValue("--accent").trim() || "12 100% 59%";
-    const glow = styles.getPropertyValue("--accent-glow").trim() || "28 100% 62%";
+    const toHsla = (raw: string, fallback: string, a: number) => {
+      const v = (raw || fallback).trim().replace(/\s+/g, " ");
+      const parts = v.split(" ").filter(Boolean);
+      const [hH, sS, lL] = parts.length >= 3 ? parts : fallback.split(" ");
+      return `hsla(${hH}, ${sS}, ${lL}, ${a})`;
+    };
+    const accentRaw = styles.getPropertyValue("--accent");
+    const glowRaw = styles.getPropertyValue("--accent-glow");
 
     const blobs = [
-      { x: 0.2, y: 0.3, r: 0.55, c: `hsla(${accent}, 0.55)`, sx: 0.00018, sy: 0.00012 },
-      { x: 0.8, y: 0.5, r: 0.5, c: `hsla(${glow}, 0.45)`, sx: -0.00015, sy: 0.00022 },
-      { x: 0.5, y: 0.85, r: 0.6, c: `hsla(${accent}, 0.35)`, sx: 0.0002, sy: -0.00016 },
-      { x: 0.3, y: 0.7, r: 0.45, c: `hsla(${glow}, 0.3)`, sx: -0.00022, sy: -0.0001 },
+      { x: 0.2, y: 0.3, r: 0.55, c: toHsla(accentRaw, "12 100% 59%", 0.55), sx: 0.00018, sy: 0.00012 },
+      { x: 0.8, y: 0.5, r: 0.5, c: toHsla(glowRaw, "28 100% 62%", 0.45), sx: -0.00015, sy: 0.00022 },
+      { x: 0.5, y: 0.85, r: 0.6, c: toHsla(accentRaw, "12 100% 59%", 0.35), sx: 0.0002, sy: -0.00016 },
+      { x: 0.3, y: 0.7, r: 0.45, c: toHsla(glowRaw, "28 100% 62%", 0.3), sx: -0.00022, sy: -0.0001 },
     ];
 
     const start = performance.now();
