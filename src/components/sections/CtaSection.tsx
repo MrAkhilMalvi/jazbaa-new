@@ -1,12 +1,15 @@
 import { Link } from "react-router-dom";
 import { Reveal, RevealText } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/button";
+import { Aurora } from "@/components/animations/Aurora";
+import { Magnetic } from "@/components/animations/MagneticButton";
 import { ArrowRight } from "lucide-react";
 
 export function CtaSection() {
   return (
-    <section className="py-24 md:py-36 relative overflow-hidden bg-gradient-mesh noise">
-      <div className="container-editorial text-center">
+    <section className="relative py-24 md:py-36 overflow-hidden bg-background noise">
+      <Aurora className="opacity-90" intensity={1.2} />
+      <div className="container-editorial relative text-center">
         <Reveal>
           <p className="text-xs uppercase tracking-[0.3em] text-accent">
             Don't just scroll through life
@@ -32,14 +35,18 @@ export function CtaSection() {
 
         <Reveal delay={0.4}>
           <div className="mt-10 flex flex-wrap gap-3 justify-center">
-            <Button asChild variant="ember" size="lg">
-              <Link to="/join">
-                Join JAZBAA Today <ArrowRight className="ml-1 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg">
-              <Link to="/events">View Events</Link>
-            </Button>
+            <Magnetic strength={0.35}>
+              <Button asChild variant="ember" size="lg">
+                <Link to="/signup">
+                  Join JAZBAA Today <ArrowRight className="ml-1 h-4 w-4" />
+                </Link>
+              </Button>
+            </Magnetic>
+            <Magnetic strength={0.35}>
+              <Button asChild variant="outline" size="lg">
+                <Link to="/events">View Events</Link>
+              </Button>
+            </Magnetic>
           </div>
         </Reveal>
       </div>

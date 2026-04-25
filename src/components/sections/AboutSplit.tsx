@@ -1,9 +1,10 @@
 import { Reveal, RevealText } from "@/components/animations/Reveal";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { BlobBackdrop } from "@/components/animations/BlobBackdrop";
 
 const IMG =
-  "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=1200&q=80"; // candid community
+  "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1400&q=85";
 
 export function AboutSplit() {
   const ref = useRef<HTMLDivElement>(null);
@@ -11,11 +12,13 @@ export function AboutSplit() {
     target: ref,
     offset: ["start end", "end start"],
   });
-  const y = useTransform(scrollYProgress, [0, 1], [-40, 60]);
+  const y = useTransform(scrollYProgress, [0, 1], [-60, 80]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.05, 1, 1.05]);
 
   return (
-    <section ref={ref} className="py-24 md:py-36">
-      <div className="container-editorial grid gap-12 md:gap-20 md:grid-cols-12 items-start">
+    <section ref={ref} className="relative py-24 md:py-36 overflow-hidden">
+      <BlobBackdrop className="-top-20 -left-32 w-[640px] h-[640px]" />
+      <div className="container-editorial relative grid gap-12 md:gap-20 md:grid-cols-12 items-start">
         <div className="md:col-span-6 md:sticky md:top-32">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.3em] text-accent mb-6">
@@ -49,13 +52,18 @@ export function AboutSplit() {
             style={{ y }}
             className="relative rounded-3xl overflow-hidden shadow-clay aspect-[4/5]"
           >
-            <img
+            <motion.img
+              style={{ scale }}
               src={IMG}
-              alt="Friends gathered at a candid community gathering"
+              alt="A community circle of friends laughing together"
               loading="lazy"
               className="h-full w-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-foreground/30 via-transparent to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-foreground/40 via-transparent to-transparent" />
+            <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between text-background">
+              <p className="font-display italic text-lg">— A second home.</p>
+              <span className="text-xs uppercase tracking-[0.25em] opacity-80">JAZBAA · 2025</span>
+            </div>
           </motion.div>
 
           <Reveal delay={0.2}>

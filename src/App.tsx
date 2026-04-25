@@ -5,10 +5,12 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { SiteLayout } from "@/components/layout/SiteLayout";
+import { SmoothScroll } from "@/components/animations/SmoothScroll";
 import Index from "./pages/Index.tsx";
 import About from "./pages/About.tsx";
 import Events from "./pages/Events.tsx";
 import Join from "./pages/Join.tsx";
+import Signup from "./pages/Signup.tsx";
 import Contact from "./pages/Contact.tsx";
 import Login from "./pages/Login.tsx";
 import NotFound from "./pages/NotFound.tsx";
@@ -22,12 +24,14 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
+          <SmoothScroll />
           <SiteLayout>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/events" element={<Events />} />
               <Route path="/join" element={<Join />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

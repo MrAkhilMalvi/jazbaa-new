@@ -4,22 +4,22 @@ const offers = [
   {
     label: "Creative Expression",
     items: ["Singing & Karaoke", "Music & Instrument Circles", "Dance & Movement"],
-    img: "https://images.unsplash.com/photo-1501386761578-eac5c94b800a?auto=format&fit=crop&w=900&q=80",
+    img: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1100&q=85",
   },
   {
     label: "Intellectual Engagement",
     items: ["Book Clubs & Discussions", "Storytelling", "Open Mic Evenings"],
-    img: "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?auto=format&fit=crop&w=900&q=80",
+    img: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=1100&q=85",
   },
   {
     label: "Wellness & Mindfulness",
     items: ["Meditation & Breathwork", "Mind-Body Sessions", "Wellness Walks"],
-    img: "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=900&q=80",
+    img: "https://images.unsplash.com/photo-1545389336-cf090694435e?auto=format&fit=crop&w=1100&q=85",
   },
   {
     label: "Social Connection",
     items: ["Community Meetups", "Themed Events & Concerts", "Friendship Circles"],
-    img: "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=900&q=80",
+    img: "https://images.unsplash.com/photo-1543007630-9710e4a00a20?auto=format&fit=crop&w=1100&q=85",
   },
 ];
 
