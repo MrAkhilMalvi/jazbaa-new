@@ -9,6 +9,7 @@ import { Aurora } from "@/components/animations/Aurora";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { signupApi } from "@/api/Auth.api";
 import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from "@/components/ui/select";
@@ -53,36 +54,50 @@ const Signup = () => {
     });
   };
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const data = {
-      firstName: String(fd.get("firstName") ?? ""),
-      lastName: String(fd.get("lastName") ?? ""),
-      email: String(fd.get("email") ?? ""),
-      mobile: String(fd.get("mobile") ?? ""),
-      city: String(fd.get("city") ?? ""),
-      state: String(fd.get("state") ?? ""),
-      country: String(fd.get("country") ?? ""),
-      ageGroup: fd.get("ageGroup") as string,
-      category: fd.get("category") as string,
-      interests,
-      consent: fd.get("consent") === "on",
-    };
-    const parsed = schema.safeParse(data);
-    if (!parsed.success) {
-      toast.error(parsed.error.errors[0]?.message ?? "Please check the form");
-      return;
-    }
-    setSubmitting(true);
-    setTimeout(() => {
-      setSubmitting(false);
-      toast.success("Welcome to JAZBAA! We'll be in touch soon.");
-      (e.target as HTMLFormElement).reset();
-      setInterests([]);
-      navigate("/");
-    }, 800);
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  const fd = new FormData(e.currentTarget);
+
+  const data = {
+    firstName: String(fd.get("firstName") ?? ""),
+    lastName: String(fd.get("lastName") ?? ""),
+    email: String(fd.get("email") ?? ""),
+    mobile: String(fd.get("mobile") ?? ""),
+    city: String(fd.get("city") ?? ""),
+    state: String(fd.get("state") ?? ""),
+    country: String(fd.get("country") ?? ""),
+    ageGroup: fd.get("ageGroup") as string,
+    category: fd.get("category") as string,
+    interests,
+    consent: fd.get("consent") === "on",
   };
+
+  const parsed = schema.safeParse(data);
+
+  if (!parsed.success) {
+    toast.error(parsed.error.errors[0]?.message ?? "Please check the form");
+    return;
+  }
+
+  try {
+    setSubmitting(true);
+
+    await signupApi(data); // 🔥 REAL BACKEND CALL
+
+    toast.success("Welcome to JAZBAA 🎉");
+
+    (e.target as HTMLFormElement).reset();
+    setInterests([]);
+
+    navigate("/login"); // better UX
+
+  } catch (err: any) {
+    // error already handled by axios interceptor
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <section className="relative min-h-screen pt-28 pb-16 overflow-hidden">

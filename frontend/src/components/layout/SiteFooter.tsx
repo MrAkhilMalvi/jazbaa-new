@@ -12,7 +12,6 @@ export function SiteFooter() {
             {/* Same responsive logo trick from the header */}
             <Link to="/" className="relative block w-[110px] sm:w-[130px] h-10 mb-4 md:mb-6 shrink-0" aria-label="JAZBAA home">
                {/* Soft background glow for dark mode readability */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[150%] bg-white/40 dark:bg-white/10 blur-[12px] rounded-full pointer-events-none"></div>
               <img
                 src="/jazbaalogo.png"
                 alt="Jazbaa Logo"

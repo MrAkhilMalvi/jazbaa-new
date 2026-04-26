@@ -4,6 +4,7 @@ import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/context/AuthContext";
 
 const links =[
   { to: "/", label: "Home" },
@@ -17,6 +18,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const[open, setOpen] = useState(false);
   const { pathname } = useLocation();
+  const { user, logout } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -80,26 +82,39 @@ export function SiteHeader() {
           </nav>
 
           {/* ACTIONS */}
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <Button
-              asChild
-              variant="default"
-              size="sm"
-              className="hidden sm:inline-flex bg-gradient-ember text-white border-0 hover:shadow-glow transition-all"
-            >
-              <Link to="/signup">Sign up</Link>
-            </Button>
-            
-            {/* MOBILE MENU TOGGLE */}
-            <button
-              className="md:hidden p-2 ml-1 rounded-full hover:bg-accent/10 transition-colors"
-              onClick={() => setOpen((v) => !v)}
-              aria-label="Toggle menu"
-            >
-              {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-            </button>
-          </div>
+<div className="flex items-center gap-2">
+  <ThemeToggle />
+
+  {!user ? (
+    <>
+      <Button asChild variant="ghost" size="sm">
+        <Link to="/login">Sign in</Link>
+      </Button>
+
+      <Button
+        asChild
+        size="sm"
+        className="hidden sm:inline-flex bg-gradient-ember text-white"
+      >
+        <Link to="/signup">Sign up</Link>
+      </Button>
+    </>
+  ) : (
+    <div className="flex items-center gap-2">
+      {/* Avatar */}
+      <img
+        src={user?.avatar || "https://i.pravatar.cc/40"}
+        alt="user"
+        className="w-9 h-9 rounded-full border"
+      />
+
+      {/* Logout */}
+      <Button size="sm" variant="outline" onClick={logout}>
+        Logout
+      </Button>
+    </div>
+  )}
+</div>
         </div>
 
         {/* MOBILE MENU DROPDOWN */}

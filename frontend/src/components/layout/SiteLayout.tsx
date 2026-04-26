@@ -12,12 +12,11 @@ import Signup from "@/pages/Signup";
 import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
+import { RequireAuth } from "@/lib/RequireAuth";
 
 export function SiteLayout() {
   const location = useLocation();
 
-  // ✅ FIX: Wait for Framer Motion to paint the new DOM before scrolling to top.
-  // This prevents the page/Lenis from getting stuck on route changes.
   useEffect(() => {
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0, left: 0, behavior: "instant" });
@@ -34,7 +33,14 @@ export function SiteLayout() {
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
-              <Route path="/events" element={<Events />} />
+              <Route
+                path="/events"
+                element={
+                  <RequireAuth>
+                    <Events />
+                  </RequireAuth>
+                }
+              />
               <Route path="/join" element={<Join />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/contact" element={<Contact />} />
