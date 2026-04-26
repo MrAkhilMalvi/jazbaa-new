@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { CtaSection } from "@/components/sections/CtaSection";
 
-const TEAM_IMG = "https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?auto=format&fit=crop&w=1400&q=80";
-const PORTRAIT_1 = "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=600&q=80";
-const PORTRAIT_2 = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=600&q=80";
+const TEAM_IMG = "/images/About/about1.jpg";
+const PORTRAIT_1 = "/images/About/about2.jpg";
+const PORTRAIT_2 = "/images/About/about3.jpg";
 
 const About = () => {
   return (

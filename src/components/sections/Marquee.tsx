@@ -1,33 +1,37 @@
 import { Reveal } from "@/components/animations/Reveal";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
 import { useRef } from "react";
 
-const items = [
+const items =[
   "Sing.", "Dance.", "Read.", "Breathe.", "Connect.",
   "Create.", "Play.", "Belong.", "Live your JAZBAA.",
 ];
 
 export function Marquee() {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
-  const x = useTransform(scrollYProgress, [0, 1], ["0%", "-30%"]);
+  const ref = useRef(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({ target: ref, offset:["start end", "end start"] });
+  
+  // Use a slightly smaller scroll distance on mobile so it doesn't move too violently
+  const x = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["0%", "-30%"]);
 
   const row = [...items, ...items, ...items];
+  
   return (
     <section
       ref={ref}
       aria-hidden
-      className="relative py-12 md:py-16 border-y border-border/60 bg-background overflow-hidden"
+      className="relative py-8 sm:py-12 md:py-16 border-y border-border/60 bg-background overflow-hidden"
     >
       <Reveal>
-        <motion.div style={{ x }} className="flex gap-12 whitespace-nowrap will-change-transform">
+        <motion.div style={{ x }} className="flex gap-6 sm:gap-8 md:gap-12 whitespace-nowrap will-change-transform">
           {row.map((t, i) => (
             <span
               key={i}
-              className="font-display italic text-5xl md:text-7xl lg:text-8xl font-light text-foreground/80 flex items-center gap-12"
+              className="font-display italic text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-light text-foreground/80 flex items-center gap-6 sm:gap-8 md:gap-12"
             >
               {t}
-              <span className="h-2 w-2 rounded-full bg-accent shrink-0" />
+              <span className="h-1.5 w-1.5 md:h-2 md:w-2 rounded-full bg-accent shrink-0" />
             </span>
           ))}
         </motion.div>

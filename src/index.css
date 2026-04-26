@@ -129,7 +129,6 @@ html.lenis, html.lenis body { height: auto; }
     @apply mx-auto w-full max-w-[1400px] px-6 md:px-10;
   }
 
-  /* Structural elements */
   .glass {
     background: hsl(var(--glass-bg));
     backdrop-filter: blur(18px) saturate(140%);
@@ -147,14 +146,13 @@ html.lenis, html.lenis body { height: auto; }
   }
   .text-balance { text-wrap: balance; }
 
-  /* Actual functional noise overlay */
   .noise { position: relative; }
   .noise::after {
     content: "";
     position: absolute;
     inset: 0;
     pointer-events: none;
-    opacity: 0.3; /* Adjusted for visibility */
+    opacity: 0.3;
     mix-blend-mode: overlay;
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
     z-index: 50;
@@ -162,13 +160,10 @@ html.lenis, html.lenis body { height: auto; }
 }
 
 /* ==========================================================================
-   ADVANCED UTILITIES: HOVERS & SCROLL ANIMATIONS
+   ADVANCED UTILITIES
    ========================================================================== */
 @layer utilities {
   
-  /* --- 1. ADVANCED HOVERS --- */
-  
-  /* Editorial Link Underline: Expands from left, retreats to right */
   .hover-link-editorial {
     position: relative;
     display: inline-block;
@@ -191,7 +186,6 @@ html.lenis, html.lenis body { height: auto; }
     transform-origin: bottom left;
   }
 
-  /* Cinematic Image Reveal (Wrap around an image tag) */
   .hover-img-cinematic {
     overflow: hidden;
     will-change: transform;
@@ -206,7 +200,6 @@ html.lenis, html.lenis body { height: auto; }
     filter: brightness(0.8) contrast(1.1);
   }
 
-  /* 3D Magnetic Lift */
   .hover-lift-3d {
     transition: transform 0.6s var(--ease-bounce), box-shadow 0.6s var(--ease-fluid);
     will-change: transform;
@@ -216,11 +209,6 @@ html.lenis, html.lenis body { height: auto; }
     box-shadow: var(--shadow-glow);
   }
 
-  /* --- 2. ADVANCED SCROLL REVEALS --- */
-  
-  /* To use these: Add the class to your HTML, and when it enters the viewport via JS, add the '.is-inview' class */
-
-  /* Cinematic Blur Up */
   .reveal-blur-up {
     opacity: 0;
     filter: blur(12px);
@@ -234,7 +222,6 @@ html.lenis, html.lenis body { height: auto; }
     transform: translateY(0) scale(1);
   }
 
-  /* Dramatic Scale Reveal (Good for big hero images) */
   .reveal-scale-in {
     opacity: 0;
     transform: scale(1.15);
@@ -247,7 +234,6 @@ html.lenis, html.lenis body { height: auto; }
     clip-path: inset(0 0 0 0);
   }
 
-  /* Staggered Children (Add .stagger-children to parent, triggers all children on view) */
   .stagger-children > * {
     opacity: 0;
     transform: translateY(20px);
@@ -259,10 +245,6 @@ html.lenis, html.lenis body { height: auto; }
   .stagger-children.is-inview > *:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
   .stagger-children.is-inview > *:nth-child(5) { transition-delay: 0.5s; opacity: 1; transform: translateY(0); }
 
-
-  /* --- 3. SECTION TRANSITIONS (Page blocks merging into one another) --- */
-
-  /* Curtain Wipe: Unveils the section from top to bottom */
   .section-wipe-down {
     clip-path: inset(0 0 100% 0);
     transition: clip-path 1.6s var(--ease-cinematic);
@@ -271,7 +253,6 @@ html.lenis, html.lenis body { height: auto; }
     clip-path: inset(0 0 0 0);
   }
 
-  /* Overlap Parallax (Keeps previous section stuck while next covers it) */
   .section-parallax-sticky {
     position: sticky;
     top: 0;
@@ -285,7 +266,7 @@ html.lenis, html.lenis body { height: auto; }
     box-shadow: 0 -20px 40px rgba(0,0,0,0.1);
   }
 
-    .ease-cinematic {
+  .ease-cinematic {
     transition-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
   }
   
@@ -294,6 +275,22 @@ html.lenis, html.lenis body { height: auto; }
                       radial-gradient(at 80% 0%, hsla(189, 100%, 56%, 1) 0px, transparent 50%),
                       radial-gradient(at 0% 50%, hsla(355, 100%, 93%, 1) 0px, transparent 50%);
   }
+
+  /* ==========================================================================
+     LOGO VISIBILITY FIXES
+     ========================================================================== */
+  .logo-premium {
+    /* The first shadow gives a pure white halo so the colored letters don't blend with the background.
+       The second shadow gives it a slight 3D depth. */
+    filter: drop-shadow(0px 0px 8px rgba(255, 255, 255, 1)) drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.15));
+    will-change: filter, transform;
+  }
+
+  .dark .logo-premium {
+    /* Strong glowing outline for dark mode to make it legible against dark backgrounds */
+    filter: drop-shadow(0px 0px 14px rgba(255, 255, 255, 0.35)) brightness(1.2);
+  }
+
 }
 
 /* Animations */
