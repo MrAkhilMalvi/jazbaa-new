@@ -5,7 +5,7 @@ import pool from "../../config/db.js";
 export const getMe = async (req, res, next) => {
   try {
     const result = await pool.query(
-      "SELECT id,email,avatar FROM users WHERE id=$1",
+      "SELECT id,email,avatar,first_name FROM users WHERE id=$1",
       [req.user.id]
     );
 
@@ -52,7 +52,6 @@ export const googleLogin = async (req, res, next) => {
     const { user, accessToken, refreshToken } =
       await service.googleUser(req.body.token);
 
-      console.log("TOKEN:", req.body.token);
 
     setAuthCookies(res, accessToken, refreshToken);
 

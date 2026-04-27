@@ -33,7 +33,7 @@ export function AboutSplit() {
 
   return (
     <section ref={ref} className="relative py-16 md:py-24 lg:py-36 overflow-hidden">
-      <BlobBackdrop className="-top-20 -left-10 md:-left-32 w-[300px] md:w-[640px] h-[300px] md:h-[640px]" />
+      {/* <BlobBackdrop className="-top-20 -left-10 md:-left-32 w-[300px] md:w-[640px] h-[300px] md:h-[640px]" /> */}
       
       <div className="container-editorial relative grid gap-10 md:gap-20 md:grid-cols-12 items-start">
         

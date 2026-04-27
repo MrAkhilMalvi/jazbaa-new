@@ -12,8 +12,8 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Fraunces"', "ui-serif", "Georgia", "serif"],
-        sans: ['"Inter"', "ui-sans-serif", "system-ui", "sans-serif"],
+        display: ['"Outfit"', "sans-serif"],
+        sans: ['"Plus Jakarta Sans"', "ui-sans-serif", "system-ui", "sans-serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -21,6 +21,16 @@ export default {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        
+        /* THE NEW COOLORS PALETTE */
+        palette: {
+          orange: "hsl(var(--clr-orange))",
+          yellow: "hsl(var(--clr-yellow))",
+          gold: "hsl(var(--clr-gold))",
+          pink: "hsl(var(--clr-pink))",
+          purple: "hsl(var(--clr-purple))",
+        },
+
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -62,7 +72,7 @@ export default {
         },
       },
       backgroundImage: {
-        "gradient-ember": "var(--gradient-ember)",
+        "gradient-jazbaa": "var(--gradient-jazbaa)",
         "gradient-warm": "var(--gradient-warm)",
         "gradient-mesh": "var(--gradient-mesh)",
       },
@@ -103,5 +113,5 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
+  // plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 } satisfies Config;

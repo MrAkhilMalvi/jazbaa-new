@@ -17,7 +17,7 @@ export default function Home() {
         <Offerings />
         <PassionTracks />
         <WhyJazbaa />
-        <Stories />
+        {/* <Stories /> */}
 
         {/* 2. New Scroll Path Journey Animation (Transitions smoothly into the footer) */}
         <ScrollJourney />

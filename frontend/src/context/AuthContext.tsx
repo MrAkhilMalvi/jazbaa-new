@@ -6,6 +6,7 @@ type User = {
   id: string;
   email: string;
   avatar?: string;
+  first_name?:string;
 };
 
 type AuthContextType = {
@@ -25,7 +26,8 @@ export const AuthProvider = ({ children }: any) => {
     const fetchUser = async () => {
       try {
         const res = await getMeApi();
-        // backend route
+        console.log(res.data.user);
+        
         setUser(res.data.user);
       } catch {
         setUser(null);

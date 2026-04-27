@@ -32,10 +32,30 @@ const schema = z.object({
   city: z.string().trim().min(1, "Required").max(80),
   state: z.string().trim().min(1, "Required").max(80),
   country: z.string().trim().min(1, "Required").max(80),
-  ageGroup: z.enum(["upto25", "25to50", "over50"], { required_error: "Pick one" }),
-  category: z.enum(["Member", "Volunteer", "Lead"], { required_error: "Pick one" }),
-  interests: z.array(z.string()).min(1, "Pick at least 1").max(3, "Pick up to 3"),
-  consent: z.literal(true, { errorMap: () => ({ message: "Consent is required" }) }),
+
+  ageGroup: z.enum(["upto25", "25to50", "over50"], {
+    required_error: "Pick one",
+  }),
+
+  category: z.enum(["Member", "Volunteer", "Lead"], {
+    required_error: "Pick one",
+  }),
+
+  interests: z.array(z.string()).min(1, "Pick at least 1").max(3),
+
+  password: z
+    .string()
+    .min(6, "Password must be at least 6 characters"),
+
+  confirmPassword: z.string(),
+
+  consent: z.literal(true, {
+    errorMap: () => ({ message: "Consent is required" }),
+  }),
+})
+.refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords do not match",
+  path: ["confirmPassword"],
 });
 
 const Signup = () => {
@@ -59,19 +79,23 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
   const fd = new FormData(e.currentTarget);
 
-  const data = {
-    firstName: String(fd.get("firstName") ?? ""),
-    lastName: String(fd.get("lastName") ?? ""),
-    email: String(fd.get("email") ?? ""),
-    mobile: String(fd.get("mobile") ?? ""),
-    city: String(fd.get("city") ?? ""),
-    state: String(fd.get("state") ?? ""),
-    country: String(fd.get("country") ?? ""),
-    ageGroup: fd.get("ageGroup") as string,
-    category: fd.get("category") as string,
-    interests,
-    consent: fd.get("consent") === "on",
-  };
+const data = {
+  firstName: String(fd.get("firstName") ?? ""),
+  lastName: String(fd.get("lastName") ?? ""),
+  email: String(fd.get("email") ?? ""),
+  mobile: String(fd.get("mobile") ?? ""),
+  city: String(fd.get("city") ?? ""),
+  state: String(fd.get("state") ?? ""),
+  country: String(fd.get("country") ?? ""),
+  ageGroup: fd.get("ageGroup") as string,
+  category: fd.get("category") as string,
+  interests,
+
+  password: String(fd.get("password") ?? ""),
+  confirmPassword: String(fd.get("confirmPassword") ?? ""),
+
+  consent: fd.get("consent") === "on",
+};
 
   const parsed = schema.safeParse(data);
 
@@ -167,6 +191,8 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <Field label="Mobile number"><Input name="mobile" type="tel" required maxLength={20} /></Field>
               <Field label="City"><Input name="city" required maxLength={80} /></Field>
               <Field label="State"><Input name="state" required maxLength={80} /></Field>
+              <Field label="Password"><Input name="password" type="password" required minLength={6} /></Field>
+              <Field label="Confirm Password"><Input name="confirmPassword" type="password" required minLength={6} /></Field>
               <Field label="Country">
                 <Select name="country" defaultValue="India">
                   <SelectTrigger><SelectValue /></SelectTrigger>
@@ -250,7 +276,7 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 Already a member?{" "}
                 <Link to="/login" className="text-accent hover:underline">Sign in</Link>
               </p>
-              <Button type="submit" variant="ember" size="lg" disabled={submitting}>
+              <Button type="submit" variant="glass" size="lg" disabled={submitting}>
                 {submitting ? "Joining..." : "Create account"}
                 <ArrowRight className="ml-1 h-4 w-4" />
               </Button>

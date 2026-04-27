@@ -1,12 +1,12 @@
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 
-const links =[
+const links = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
   { to: "/events", label: "Events" },
@@ -16,10 +16,14 @@ const links =[
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
-  const[open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false); // <-- New state for Avatar Dropdown
   const { pathname } = useLocation();
   const { user, logout } = useAuth();
 
+  const profileMenuRef = useRef(null);
+
+  // Handle scroll styling
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -27,7 +31,25 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => setOpen(false),[pathname]);
+  // Close menus on route change
+  useEffect(() => {
+    setOpen(false);
+    setProfileOpen(false);
+  }, [pathname]);
+
+  // Handle click outside to close the avatar profile menu
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileMenuRef.current &&
+        !profileMenuRef.current.contains(event.target)
+      ) {
+        setProfileOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <header
@@ -46,21 +68,20 @@ export function SiteHeader() {
           )}
         >
           {/* =========================================
-              LOGO SECTION - FIXED RESPONSIVE SIZE
+              LOGO SECTION
               ========================================= */}
           <Link
             to="/"
-            /* FIXED: Changed w-[1200px] to w-[110px] so it fits perfectly on mobile */
             className="flex items-center group relative shrink-0 w-[110px] sm:w-[130px] md:w-[160px] h-10 md:h-12"
             aria-label="JAZBAA home"
           >
             <img
               src="/jazbaalogo.png"
               alt="Jazbaa Logo"
-              /* Adjusted height classes to smoothly scale from mobile to desktop */
               className="absolute top-1/2 left-0 -translate-y-1/2 h-[90px] sm:h-[110px] md:h-[120px] lg:h-[110px] w-auto max-w-none object-contain transition-all duration-500 group-hover:scale-105 logo-premium"
             />
           </Link>
+
           {/* DESKTOP NAV */}
           <nav className="hidden md:flex items-center gap-1">
             {links.map((l) => (
@@ -82,39 +103,73 @@ export function SiteHeader() {
           </nav>
 
           {/* ACTIONS */}
-<div className="flex items-center gap-2">
-  <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <ThemeToggle />
 
-  {!user ? (
-    <>
-      <Button asChild variant="ghost" size="sm">
-        <Link to="/login">Sign in</Link>
-      </Button>
+            {!user ? (
+              <>
+                <Button asChild variant="ghost" size="sm">
+                  <Link to="/login">Sign in</Link>
+                </Button>
 
-      <Button
-        asChild
-        size="sm"
-        className="hidden sm:inline-flex bg-gradient-ember text-white"
-      >
-        <Link to="/signup">Sign up</Link>
-      </Button>
-    </>
-  ) : (
-    <div className="flex items-center gap-2">
-      {/* Avatar */}
-      <img
-        src={user?.avatar || "https://i.pravatar.cc/40"}
-        alt="user"
-        className="w-9 h-9 rounded-full border"
-      />
+                <Button
+                  asChild
+                  size="sm"
+                  variant="outline"
+                  className="hidden sm:inline-flex"
+                >
+                  <Link to="/signup">Sign up</Link>
+                </Button>
+              </>
+            ) : (
+              <div className="relative" ref={profileMenuRef}>
+                {/* Avatar Button */}
+                <button
+                  onClick={() => setProfileOpen(!profileOpen)}
+                  className="flex items-center justify-center rounded-full ring-2 ring-transparent hover:ring-accent transition-all focus:outline-none overflow-hidden"
+                >
+                  {user?.avatar ? (
+                    <img
+                      src={user.avatar}
+                      alt="avatar"
+                      className="w-10 h-10 object-cover rounded-full"
+                    />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center text-sm font-bold">
+                      {user?.first_name?.toUpperCase()}
+                    </div>
+                  )}
+                </button>
 
-      {/* Logout */}
-      <Button size="sm" variant="outline" onClick={logout}>
-        Logout
-      </Button>
-    </div>
-  )}
-</div>
+                {/* Avatar Dropdown Menu */}
+                {profileOpen && (
+                  <div className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-xl shadow-lg p-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-500/10"
+                      onClick={() => {
+                        setProfileOpen(false);
+                        logout();
+                      }}
+                    >
+                      Logout
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* MOBILE MENU TOGGLE (Using the Menu/X icons you imported) */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setOpen(!open)}
+            >
+              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* MOBILE MENU DROPDOWN */}
@@ -138,7 +193,10 @@ export function SiteHeader() {
                   {l.label}
                 </NavLink>
               ))}
-              <Button asChild className="mt-2 w-full bg-gradient-ember text-white h-12">
+              <Button
+                asChild
+                className="mt-2 w-full bg-gradient-ember text-white h-12"
+              >
                 <Link to="/signup">Join the Community</Link>
               </Button>
             </nav>
