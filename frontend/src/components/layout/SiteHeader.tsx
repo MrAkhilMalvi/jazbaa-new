@@ -9,8 +9,8 @@ import { useAuth } from "@/context/AuthContext";
 const links = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About" },
-  { to: "/events", label: "Events" },
-  { to: "/join", label: "Join" },
+  { to: "/events", label: "Events & Experiences" },
+  { to: "/join", label: "Explore" },
   { to: "/contact", label: "Contact" },
 ];
 
@@ -58,10 +58,10 @@ export function SiteHeader() {
         scrolled ? "py-2" : "py-4",
       )}
     >
-      <div className="container-editorial">
+      {/* <div className=""> */}
         <div
           className={cn(
-            "flex items-center justify-between gap-4 md:gap-6 rounded-full px-4 md:px-6 py-2.5 transition-all duration-500",
+            "flex items-center justify-between gap-4 md:gap-6 w-full px-4 md:px-6 py-2.5 transition-all duration-500",
             scrolled
               ? "bg-background/85 border border-border shadow-soft backdrop-blur-md"
               : "bg-transparent",
@@ -78,7 +78,7 @@ export function SiteHeader() {
             <img
               src="/jazbaalogo.png"
               alt="Jazbaa Logo"
-              className="absolute top-1/2 left-0 -translate-y-1/2 h-[90px] sm:h-[110px] md:h-[120px] lg:h-[110px] w-auto max-w-none object-contain transition-all duration-500 group-hover:scale-105 logo-premium"
+              className="absolute top-1/2 left-0 -translate-y-1/2 h-[90px] sm:h-[110px] md:h-[120px] lg:h-[130px] w-auto max-w-none object-contain transition-all duration-500 group-hover:scale-105 logo-premium"
             />
           </Link>
 
@@ -109,16 +109,16 @@ export function SiteHeader() {
             {!user ? (
               <>
                 <Button asChild variant="ghost" size="sm">
-                  <Link to="/login">Sign in</Link>
+                  <Link to="/login">Login</Link>
                 </Button>
 
                 <Button
                   asChild
                   size="sm"
-                  variant="outline"
+                  variant="destructive"
                   className="hidden sm:inline-flex"
                 >
-                  <Link to="/signup">Sign up</Link>
+                  <Link to="/signup">Join / Sign up</Link>
                 </Button>
               </>
             ) : (
@@ -202,7 +202,7 @@ export function SiteHeader() {
             </nav>
           </div>
         )}
-      </div>
+      {/* </div> */}
     </header>
   );
 }

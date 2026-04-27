@@ -3,8 +3,8 @@ import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion
 import { useRef } from "react";
 
 const items =[
-  "Sing.", "Dance.", "Read.", "Breathe.", "Connect.",
-  "Create.", "Play.", "Belong.", "Live your JAZBAA.",
+  "Music", "Art", "Singing", "Dance", "Social Connect",
+  "Hobbies", "Concerts", "Classic Movies"
 ];
 
 export function Marquee() {
@@ -12,7 +12,6 @@ export function Marquee() {
   const reduce = useReducedMotion();
   const { scrollYProgress } = useScroll({ target: ref, offset:["start end", "end start"] });
   
-  // Use a slightly smaller scroll distance on mobile so it doesn't move too violently
   const x = useTransform(scrollYProgress, [0, 1], reduce ? ["0%", "0%"] : ["0%", "-30%"]);
 
   const row = [...items, ...items, ...items];

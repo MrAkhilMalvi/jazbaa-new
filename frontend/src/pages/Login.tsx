@@ -9,10 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Reveal, RevealText } from "@/components/animations/Reveal";
 import { Aurora } from "@/components/animations/Aurora";
-import { googleLoginApi } from "@/api/Auth.api";
+import { getMeApi, googleLoginApi } from "@/api/Auth.api";
 import { GoogleLogin } from "@react-oauth/google";
 import { loginApi } from "@/api/Auth.api";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 const SIDE_IMG =
   "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85";
@@ -25,44 +26,43 @@ const schema = z.object({
 const Login = () => {
   const [busy, setBusy] = useState(false);
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
-const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  e.preventDefault();
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  const fd = new FormData(e.currentTarget);
-  const formData = Object.fromEntries(fd);
+    const fd = new FormData(e.currentTarget);
+    const formData = Object.fromEntries(fd);
 
-  const parsed = schema.safeParse(formData);
+    const parsed = schema.safeParse(formData);
 
-  if (!parsed.success) {
-    toast.error(parsed.error.errors[0]?.message ?? "Check your details");
-    return;
-  }
+    if (!parsed.success) {
+      toast.error(parsed.error.errors[0]?.message ?? "Check your details");
+      return;
+    }
 
-  try {
-    setBusy(true);
+    try {
+      setBusy(true);
 
-    const res = await loginApi(parsed.data);
+      const res = await loginApi(parsed.data);
+      const me = await getMeApi();
 
-    // ✅ handle success
-    toast.success("Login successful 🚀");
+      setUser(me.data.user); 
+      navigate("/");
 
-
-    navigate("/"); // redirect to home/dashboard
-
-  } catch (err: any) {
-    // axios interceptor OR fallback
-    toast.error(err?.response?.data?.message || "Login failed");
-  } finally {
-    setBusy(false);
-  }
-};
+      navigate("/");
+    } catch (err: any) {
+      // axios interceptor OR fallback
+      toast.error(err?.response?.data?.message || "Login failed");
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <section className="relative min-h-screen pt-28 pb-16 overflow-hidden bg-background">
       <Aurora className="opacity-50" />
       <div className="container-editorial relative grid lg:grid-cols-2 gap-10 items-stretch">
-        
         {/* Visual side - Kept exactly as is */}
         <Reveal className="hidden lg:block">
           <div className="relative h-full min-h-[600px] rounded-3xl overflow-hidden shadow-clay">
@@ -87,9 +87,6 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
             />
             <div className="relative z-10 h-full flex flex-col justify-end p-10 text-background">
-              <p className="text-xs uppercase tracking-[0.4em] text-accent font-bold">
-                Welcome back
-              </p>
               <RevealText
                 as="h2"
                 text="Your tribe is waiting."
@@ -113,7 +110,9 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               <p className="text-[10px] uppercase tracking-[0.3em] text-accent font-bold">
                 Login
               </p>
-              <h1 className="font-display text-4xl tracking-tight">Sign in to JAZBAA</h1>
+              <h1 className="font-display text-4xl tracking-tight">
+                Sign in to JAZBAA
+              </h1>
               <p className="text-sm text-muted-foreground">
                 Registered users — welcome back.
               </p>
@@ -121,7 +120,9 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-xs uppercase tracking-widest opacity-70">Email Address</Label>
+                <Label className="text-xs uppercase tracking-widest opacity-70">
+                  Email Address
+                </Label>
                 <Input
                   className="bg-background/50"
                   type="email"
@@ -133,7 +134,9 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
-                  <Label className="text-xs uppercase tracking-widest opacity-70">Password</Label>
+                  <Label className="text-xs uppercase tracking-widest opacity-70">
+                    Password
+                  </Label>
                   <button
                     type="button"
                     className="text-[10px] uppercase tracking-wider text-accent hover:underline font-bold"
@@ -158,7 +161,7 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
               className="w-full h-12 text-sm uppercase tracking-widest font-bold"
               disabled={busy}
             >
-              {busy ? "Signing in..." : "Sign in"} 
+              {busy ? "Signing in..." : "Sign in"}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Button>
 
@@ -171,7 +174,7 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                 or
               </span>
             </div>
-            
+
             <div className="flex flex-col items-center justify-center w-full min-h-[44px]">
               <GoogleLogin
                 onSuccess={async (credentialResponse) => {
@@ -189,7 +192,7 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
                   toast.error("Google login failed");
                 }}
                 // Ensures the button takes up the container width as much as possible
-                width="320px" 
+                width="320px"
                 theme="outline"
                 shape="pill"
               />

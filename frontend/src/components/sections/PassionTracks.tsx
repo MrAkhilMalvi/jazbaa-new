@@ -4,12 +4,12 @@ import { useRef, useState } from "react";
 import { Reveal } from "@/components/animations/Reveal";
 
 const passions =[
-  { title: "Singing & Karaoke", emoji: "🎤", img: "/images/PassionTracks/explore1.jpg" },
-  { title: "Music & Instruments", emoji: "🎸", img: "/images/PassionTracks/explore2.jpg" },
-  { title: "Dance & Movement", emoji: "💃", img: "/images/PassionTracks/explore3.jpg" },
-  { title: "Book Clubs", emoji: "📚", img: "/images/PassionTracks/explore4.jpg" },
-  { title: "Meditation & Wellness", emoji: "🧘", img: "/images/PassionTracks/explore5.jpg" },
-  { title: "Open Mics & Socials", emoji: "🎭", img: "/images/PassionTracks/explore6.jpg" }
+  { title: "Singing & Karaoke",  img: "/images/PassionTracks/explore2.jpg" },
+  { title: "Music & Instruments",  img: "/images/PassionTracks/explore1.jpg" },
+  { title: "Dance & Movement",  img: "/images/PassionTracks/explore3.jpg" },
+  { title: "Book Club",  img: "/images/PassionTracks/explore4.jpg" },
+  { title: "Meditation & Wellness", img: "/images/PassionTracks/explore5.jpg" },
+  { title: "Open Mics & Socials",  img: "/images/PassionTracks/explore6.jpg" }
 ];
 
 export function PassionTracks() {

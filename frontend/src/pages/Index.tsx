@@ -5,6 +5,7 @@ import { PassionTracks } from "@/components/sections/PassionTracks";
 import { WhyJazbaa } from "@/components/sections/WhyJazbaa";
 import { Stories } from "@/components/sections/Stories";
 import { ScrollJourney } from "@/components/animations/ScrollJourney";
+import { Marquee } from "@/components/sections/Marquee";
 
 export default function Home() {
   return (
@@ -13,6 +14,7 @@ export default function Home() {
       <main className="relative bg-background text-foreground overflow-hidden">
         {/* Your Existing Sections */}
         <Hero />
+        <Marquee />
         <AboutSplit />
         <Offerings />
         <PassionTracks />

@@ -20,8 +20,17 @@ const SIDE_IMG =
   "https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1400&q=80";
 
 const interestsList = [
-  "Reading Books","Story Telling","Karaoke / Singing","Music","Concert",
-  "Drawing","Art","Photography","Dance","Meditation","Open Mic","Book Club",
+  "Music",
+  "Art",
+  "Karaoke / Singing",
+  "Dance",
+  "Meditation",
+  "Open Mic",
+  "Drawing",
+  "Book Club",
+  "Story Telling",
+  "Concert / Classic Movies",
+  "Photography",
 ];
 
 const schema = z.object({
@@ -179,7 +188,7 @@ const data = {
               className="display text-4xl md:text-5xl lg:text-6xl font-light mt-4 max-w-[18ch]"
             />
             <p className="text-muted-foreground mt-4">
-              Member · Volunteer · Chapter Lead — pick what fits you.
+              Member · Volunteer · Tribe Leader — pick what fits you.
             </p>
           </div>
 
@@ -224,7 +233,7 @@ const data = {
                 {[
                   { v: "Member", d: "Attend events & connect" },
                   { v: "Volunteer", d: "Help organize & engage" },
-                  { v: "Lead", d: "Lead a city chapter" },
+                  { v: "Lead", d: "Lead a Tribe" },
                 ].map((o) => (
                   <Label key={o.v} className="flex items-start gap-3 p-4 rounded-2xl border border-border cursor-pointer hover:border-accent transition-colors [&:has([data-state=checked])]:border-accent [&:has([data-state=checked])]:bg-accent/5">
                     <RadioGroupItem value={o.v} className="mt-1" />
@@ -267,7 +276,7 @@ const data = {
             <Label className="flex items-start gap-3 cursor-pointer">
               <Checkbox name="consent" className="mt-1" />
               <span className="text-sm text-muted-foreground">
-                I give consent to capture my details for JAZBAA activities.
+                I give consent to capture my details for JAZBAA activities. The data will be used for notification or update about jazbaa.
               </span>
             </Label>
 

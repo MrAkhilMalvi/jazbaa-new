@@ -13,7 +13,7 @@ const About = () => {
       <section className="pt-40 pb-20">
         <div className="container-editorial">
           <Reveal>
-            <p className="text-xs uppercase tracking-[0.3em] text-accent">About JAZBAA</p>
+            <p className="text-2xl uppercase  text-accent">About JAZBAA</p>
           </Reveal>
           <RevealText
             as="h1"
@@ -71,9 +71,9 @@ const About = () => {
         <div className="container-editorial grid md:grid-cols-2 gap-8">
           <Reveal>
             <div className="clay p-10 h-full">
-              <p className="text-xs uppercase tracking-[0.3em] text-accent">Our Vision</p>
+              <p className="text-lg uppercase tracking-[0.3em] ">Our Vision</p>
               <p className="mt-6 font-display text-3xl md:text-4xl leading-snug">
-                A global community where people live and engage joyfully,
+                To create a global community where people live and engage joyfully,
                 creatively, and consciously.
               </p>
             </div>

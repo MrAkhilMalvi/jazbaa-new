@@ -10,16 +10,9 @@ import { Magnetic } from "@/components/animations/MagneticButton";
 const HERO_IMG_1 = "/images/Hero/image1.jpg"; // friends laughing, warm
 const HERO_IMG_2 = "/images/Hero/image2.jpg"; // singer on stage, warm
 const HERO_IMG_3 = "/images/Hero/image5.jpg"; // dancer in golden light
-const HERO_IMG_4 = "/images/Hero/image11.jpg"; // crowd hands up, joy
+const HERO_IMG_4 = "/images/Hero/hero1.jpg"; // crowd hands up, joy
 
-const floats =[
-  { e: "🎤", x: "8%", y: "18%", d: 0 },
-  { e: "🎸", x: "92%", y: "12%", d: 0.6 },
-  { e: "💃", x: "94%", y: "78%", d: 1.2 },
-  { e: "📚", x: "5%", y: "82%", d: 1.8 },
-  { e: "🧘", x: "50%", y: "5%", d: 2.4 },
-  { e: "✨", x: "20%", y: "55%", d: 3.0 },
-];
+
 
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -72,33 +65,7 @@ export function Hero() {
         }}
       />
 
-      {/* Floating emoji confetti (Kept your logic, made it crisp) */}
-      {!reduce && (
-        <div aria-hidden className="absolute inset-0 pointer-events-none hidden md:block">
-          {floats.map((f, i) => (
-            <motion.span
-              key={i}
-              className="absolute text-3xl select-none drop-shadow-md"
-              style={{ left: f.x, top: f.y }}
-              initial={{ opacity: 0, scale: 0.6 }}
-              animate={{
-                opacity: [0, 1, 1, 0.85],
-                scale: [0.6, 1, 1, 1],
-                y:[0, -14, 0, -10, 0],
-                rotate:[0, 8, -6, 4, 0],
-              }}
-              transition={{
-                duration: 7 + (i % 3),
-                delay: f.d,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-            >
-              {f.e}
-            </motion.span>
-          ))}
-        </div>
-      )}
+
 
       <div className="container-editorial relative z-10">
         {/* Eyebrow */}
@@ -131,7 +98,7 @@ export function Hero() {
                 as="span" 
                 text="Live your JAZBAA." 
                 className="block text-gradient-jazbaa pb-2" 
-                delay={0.3} 
+                delay={0.15} 
               />
             </h1>
 

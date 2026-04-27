@@ -8,7 +8,7 @@ import { ArrowRight } from "lucide-react";
 export function CtaSection() {
   return (
     <section className="relative py-16 md:py-24 lg:py-36 overflow-hidden bg-background noise">
-      <Aurora className="opacity-90" intensity={1.2} />
+      {/* <Aurora className="opacity-90" intensity={1.2} /> */}
       
       <div className="container-editorial relative text-center px-4">
         <Reveal>
@@ -25,7 +25,7 @@ export function CtaSection() {
         <RevealText
           as="h2"
           text="Read it. Live it."
-          className="display text-[12vw] sm:text-5xl md:text-7xl lg:text-[8rem] font-light italic text-accent leading-[1.1]"
+          className="display text-[12vw] sm:text-5xl md:text-7xl lg:text-[8rem] font-light  text-accent leading-[1.1]"
           delay={0.15}
         />
 
@@ -39,7 +39,7 @@ export function CtaSection() {
           <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center items-center w-full max-w-xs sm:max-w-none mx-auto">
             <div className="w-full sm:w-auto">
               <Magnetic strength={0.35}>
-                <Button asChild variant="ember" size="lg" className="w-full h-12 sm:w-auto">
+                <Button asChild variant="outline" size="lg" className="w-full h-12 sm:w-auto">
                   <Link to="/signup">
                     Join JAZBAA Today <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>

@@ -25,7 +25,7 @@ const Join = () => {
     <>
       {/* HERO */}
       <section className="relative pt-40 pb-20 overflow-hidden bg-gradient-mesh noise">
-        <Aurora className="opacity-70" />
+        {/* <Aurora className="opacity-70" /> */}
         <div className="container-editorial relative">
           <Reveal>
             <p className="text-xs uppercase tracking-[0.3em] text-accent">Join JAZBAA</p>
@@ -38,7 +38,7 @@ const Join = () => {
           <RevealText
             as="h1"
             text="Fuel your passion."
-            className="display text-6xl md:text-8xl lg:text-[8rem] font-light italic text-accent"
+            className="display text-6xl md:text-8xl lg:text-[8rem] font-light  text-accent"
             delay={0.15}
           />
           <Reveal delay={0.4}>
@@ -49,7 +49,7 @@ const Join = () => {
                 everyday life. Sign up free and start showing up for yourself.
               </p>
               <div className="md:col-span-6 md:text-right flex md:justify-end flex-wrap gap-3">
-                <Button asChild variant="ember" size="lg">
+                <Button asChild variant="link" size="lg">
                   <Link to="/signup">
                     Become a Member <ArrowRight className="ml-1 h-4 w-4" />
                   </Link>
