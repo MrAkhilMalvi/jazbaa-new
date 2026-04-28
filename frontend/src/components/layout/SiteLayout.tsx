@@ -33,14 +33,15 @@ export function SiteLayout() {
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
-              <Route
+              {/* <Route
                 path="/events"
                 element={
                   <RequireAuth>
                     <Events />
                   </RequireAuth>
                 }
-              />
+              /> */}
+              <Route path="/events" element={<Events />} />
               {/* <Route path="/join" element={<Join />} /> */}
               <Route path="/signup" element={<Signup />} />
               <Route path="/contact" element={<Contact />} />

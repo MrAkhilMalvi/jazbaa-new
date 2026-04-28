@@ -23,10 +23,10 @@ export function ThemeToggle() {
           aria-label="Toggle theme"
           className="rounded-full hover:bg-accent/10"
         >
-          {mounted && theme === "dark" ? (
-            <Moon className="h-[18px] w-[18px]" />
-          ) : (
+          {mounted && theme === "light" ? (
             <Sun className="h-[18px] w-[18px]" />
+          ) : (
+             <Moon className="h-[18px] w-[18px]" />
           )}
         </Button>
       </DropdownMenuTrigger>
