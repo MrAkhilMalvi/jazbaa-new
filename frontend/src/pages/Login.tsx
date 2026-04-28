@@ -137,12 +137,12 @@ const Login = () => {
                   <Label className="text-xs uppercase tracking-widest opacity-70">
                     Password
                   </Label>
-                  <button
+                  {/* <button
                     type="button"
                     className="text-[10px] uppercase tracking-wider text-accent hover:underline font-bold"
                   >
                     Forgot?
-                  </button>
+                  </button> */}
                 </div>
                 <Input
                   className="bg-background/50"

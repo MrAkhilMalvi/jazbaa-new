@@ -1,101 +1,129 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { Reveal } from "@/components/animations/Reveal";
+import { 
+  Sparkles, 
+  Mic2, 
+  Music, 
+  Activity, 
+  BookOpen, 
+  Heart, 
+  Users,
+  ArrowRight
+} from "lucide-react";
 
-const passions =[
-  { title: "Singing & Karaoke",  img: "/images/PassionTracks/explore2.jpg" },
-  { title: "Music & Instruments",  img: "/images/PassionTracks/explore1.jpg" },
-  { title: "Dance & Movement",  img: "/images/PassionTracks/explore3.jpg" },
-  { title: "Book Club",  img: "/images/PassionTracks/explore4.jpg" },
-  { title: "Meditation & Wellness", img: "/images/PassionTracks/explore5.jpg" },
-  { title: "Open Mics & Socials",  img: "/images/PassionTracks/explore6.jpg" }
+// 1. Added specific Lucide icons to each track
+const passions = [
+  { title: "Singing & Karaoke", icon: Mic2, img: "/images/PassionTracks/passion8.jpg" },
+  { title: "Music & Instruments", icon: Music, img: "/images/PassionTracks/explore1.jpg" },
+  { title: "Dance & Movement", icon: Activity, img: "/images/PassionTracks/dance.jpeg" },
+  { title: "Book Club", icon: BookOpen, img: "/images/PassionTracks/explore4.jpg" },
+  { title: "Meditation & Wellness", icon: Heart, img: "/images/PassionTracks/explore5.jpg" },
+  { title: "Open Mics & Socials", icon: Users, img: "/images/PassionTracks/explore6.jpg" },
 ];
 
+const marqueeItems = [...passions, ...passions];
+
 export function PassionTracks() {
-  const scrollRef = useRef(null);
-  const[isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const[scrollLeft, setScrollLeft] = useState(0);
-
-  // Desktop Mouse Drag Logic
-  const handleMouseDown = (e) => {
-    if (!scrollRef.current) return;
-    setIsDragging(true);
-    setStartX(e.pageX - scrollRef.current.offsetLeft);
-    setScrollLeft(scrollRef.current.scrollLeft);
-  };
-  const handleMouseLeave = () => setIsDragging(false);
-  const handleMouseUp = () => setIsDragging(false);
-  const handleMouseMove = (e) => {
-    if (!isDragging || !scrollRef.current) return;
-    e.preventDefault();
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 2; 
-    scrollRef.current.scrollLeft = scrollLeft - walk;
-  };
-
   return (
-    <section className="py-16 md:py-24 relative bg-background">
-      <div className="container-editorial mb-8 md:mb-12">
+    <section className="py-24 md:py-32 relative bg-[#fbfaf8] dark:bg-black overflow-hidden transition-colors duration-500">
+      
+      {/* =========================================
+          HEADER SECTION
+          ========================================= */}
+      <div className="max-w-[1400px] mx-auto px-4 md:px-8 mb-12 md:mb-16">
         <Reveal>
-          <h2 className="display text-[11vw] sm:text-5xl md:text-7xl mb-2 sm:mb-4 text-primary leading-[1.1]">
-            Explore your passion
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 shadow-sm mb-6 transition-colors duration-300">
+            <Sparkles className="w-3.5 h-3.5 text-[#ff6a3d]" />
+            <span className="text-xs font-bold tracking-widest text-[#c04a18] dark:text-orange-400 uppercase">
+              Explore
+            </span>
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight mb-4 transition-colors duration-300">
+            Find your <span className="italic text-[#ff6a3d]">passion.</span>
           </h2>
-          <p className="text-base sm:text-xl text-muted-foreground font-light text-balance">
-            Pick a track. Live it.
+          <p className="text-lg md:text-xl text-slate-600 dark:text-white/60 font-medium max-w-2xl transition-colors duration-300">
+            Pick a track. Immerse yourself. Connect with others who share your energy.
           </p>
         </Reveal>
       </div>
 
-      <div
-        ref={scrollRef}
-        /* 
-          ✅ FIX: Mobile horizontal swiping enabled effortlessly.
-          ✅ FIX: Added proper snapping properties for phones.
-        */
-        className={`overflow-x-auto overflow-y-hidden scroll-smooth snap-x snap-mandatory pb-8 md:pb-12 [scrollbar-width:none][&::-webkit-scrollbar]:hidden w-full touch-pan-x overscroll-x-contain select-none ${
-          isDragging ? "cursor-grabbing snap-none" : "cursor-grab"
-        }`}
-        onMouseDown={handleMouseDown}
-        onMouseLeave={handleMouseLeave}
-        onMouseUp={handleMouseUp}
-        onMouseMove={handleMouseMove}
+      {/* =========================================
+          INFINITE AUTO-SCROLLING CAROUSEL
+          ========================================= */}
+      <div 
+        className="relative w-full overflow-hidden mt-8"
+        // PRO FIX: CSS Mask perfectly fades the left and right edges smoothly into the background
+        style={{ 
+          WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
+          maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' 
+        }}
       >
-        <div className="flex gap-4 sm:gap-6 px-4 md:px-10 w-max">
-          {passions.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.1}>
-              <article 
-                className="snap-center sm:snap-start group relative w-[80vw] sm:w-[320px] md:w-[440px] aspect-[4/5] rounded-2xl md:rounded-3xl overflow-hidden clay hover-lift-3d flex-shrink-0"
+        <motion.div
+          className="flex gap-5 sm:gap-6 w-max px-4 py-6"
+          animate={{ x: ["0%", "-50%"] }}
+          transition={{
+            repeat: Infinity,
+            repeatType: "loop",
+            ease: "linear",
+            duration: 35, // Adjust speed here
+          }}
+          style={{ willChange: "transform" }}
+        >
+          {marqueeItems.map((p, i) => {
+            const originalIndex = i % passions.length;
+            const Icon = p.icon;
+
+            return (
+              <article
+                key={i}
+                className="group relative w-[280px] md:w-[340px] aspect-[4/5] rounded-[2.5rem] overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-zinc-900 cursor-pointer border border-slate-200 dark:border-white/10 shadow-lg hover:shadow-2xl dark:hover:shadow-[0_0_40px_rgba(255,106,61,0.15)] transition-all duration-500 hover:-translate-y-2"
               >
-                <div className="hover-img-cinematic absolute inset-0 w-full h-full">
+                {/* 1. Image Background (with slow zoom micro-interaction) */}
+                <div className="absolute inset-0 w-full h-full overflow-hidden">
                   <img
                     src={p.img}
                     alt={p.title}
-                    draggable={false} 
+                    draggable={false}
                     loading="lazy"
-                    className="w-full h-full object-cover pointer-events-none"
+                    className="w-full h-full object-cover scale-110 group-hover:scale-100 transition-transform duration-700 ease-out"
                   />
                 </div>
 
-                <div className="absolute inset-0 bg-gradient-to-t from-primary/95 via-primary/20 to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-700" />
-
-                <div className="absolute inset-x-0 bottom-0 p-6 md:p-8 text-primary-foreground z-10 transform translate-y-2 group-hover:translate-y-0 transition-transform duration-[0.8s] ease-cinematic">
-                  <span className="text-3xl md:text-4xl block mb-3 md:mb-4 filter drop-shadow-md">{p.emoji}</span>
-                  <h3 className="font-display text-2xl sm:text-3xl md:text-4xl leading-tight">
-                    {p.title}
-                  </h3>
+                {/* 2. Number Badge (Top Right) */}
+                <div className="absolute top-5 right-5 w-10 h-10 rounded-full bg-black/30 backdrop-blur-md border border-white/20 flex items-center justify-center z-10 transition-colors duration-300 group-hover:bg-[#ff6a3d] group-hover:border-[#ff6a3d]">
+                  <span className="text-white text-sm font-bold tracking-wider">
+                    0{originalIndex + 1}
+                  </span>
                 </div>
 
-                <div className="absolute top-4 right-4 md:top-6 md:right-6 text-[10px] md:text-xs font-semibold px-3 py-1.5 md:px-4 md:py-2 rounded-full glass text-foreground z-10 shadow-soft backdrop-blur-md">
-                  0{i + 1}
+                {/* 3. Bottom Glass Panel (Ensures perfect text visibility and alignment) */}
+                <div className="absolute inset-x-0 bottom-0 p-4 z-10">
+                  <div className="relative overflow-hidden rounded-[1.5rem] bg-black/40 backdrop-blur-xl border border-white/10 p-4 flex items-center justify-between transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
+                    
+                    {/* STRICT ROW ALIGNMENT: Icon + Text */}
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#ff6a3d] transition-colors duration-500">
+                        <Icon className="w-4 h-4 text-white" />
+                      </div>
+                      <h3 className="text-white font-bold text-lg leading-tight tracking-wide">
+                        {p.title}
+                      </h3>
+                    </div>
+
+                    {/* Micro-interaction: Arrow slides in on hover */}
+                    <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out">
+                      <ArrowRight className="w-4 h-4 text-black" />
+                    </div>
+
+                  </div>
                 </div>
+
               </article>
-            </Reveal>
-          ))}
-          {/* ✅ Spacer element to ensure the last card has right margin on mobile */}
-          <div className="w-1 sm:w-4 flex-shrink-0" aria-hidden="true"></div>
-        </div>
+            );
+          })}
+        </motion.div>
       </div>
     </section>
   );

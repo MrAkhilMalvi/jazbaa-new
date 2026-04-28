@@ -22,7 +22,7 @@ export function Reveal({
     <motion.div
       initial={reduce ? false : { opacity: 0, y }}
       whileInView={reduce ? undefined : { opacity: 1, y: 0 }}
-      viewport={{ once, margin: "-80px" }}
+      viewport={{ once, margin: "-120px" }}
       transition={{ duration: 0.9, delay, ease: [0.22, 1, 0.36, 1] }}
       className={className}
       {...rest}
@@ -48,22 +48,22 @@ export function RevealText({
   const words = text.split(" ");
   const MotionTag = motion(Tag as any);
   return (
-    <MotionTag
-      className={className}
-      initial="hidden"
-      whileInView="show"
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ staggerChildren: 0.06, delayChildren: delay }}
-    >
+<MotionTag
+  className={className}
+  initial={reduce ? false : "hidden"}
+  whileInView="show"
+  viewport={{ once: true, margin: "-120px" }}
+  transition={{ staggerChildren: 0.06, delayChildren: delay }}
+>
       {words.map((w, i) => (
         <span
           key={i}
-          className="inline-block overflow-hidden align-bottom mr-[0.25em]"
+          className="inline-block overflow-hidden align-bottom mr-[0.25em] py-[0.12em]"
         >
           <motion.span
             className="inline-block"
             variants={{
-              hidden: { y: "110%" },
+              hidden: { y: "100%" },
               show: { y: "0%" },
             }}
             transition={{

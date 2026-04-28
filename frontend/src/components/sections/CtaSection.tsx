@@ -17,17 +17,22 @@ export function CtaSection() {
           </p>
         </Reveal>
         
-        <RevealText
-          as="h2"
-          text="Sing. Dance. Play."
-          className="display text-[12vw] sm:text-5xl md:text-7xl lg:text-[8rem] font-light mt-4 sm:mt-6 leading-[1.1]"
-        />
-        <RevealText
-          as="h2"
-          text="Read it. Live it."
-          className="display text-[12vw] sm:text-5xl md:text-7xl lg:text-[8rem] font-light  text-accent leading-[1.1]"
-          delay={0.15}
-        />
+<RevealText
+  as="h2"
+  text="Sing. Dance. Play."
+  className="display text-[12vw] sm:text-5xl md:text-7xl lg:text-[8rem] 
+             font-light mt-4 sm:mt-6 
+             leading-[1.05] pb-2"
+/>
+
+<RevealText
+  as="h2"
+  text="Read it. Live it."
+  className="display text-[12vw] sm:text-5xl md:text-7xl lg:text-[8rem] 
+             font-light text-accent 
+             leading-[1.05] pb-2"
+  delay={0.15}
+/>
 
         <Reveal delay={0.3}>
           <p className="mt-6 sm:mt-8 text-base sm:text-lg text-muted-foreground max-w-xl mx-auto px-2">

@@ -8,16 +8,15 @@ import { useAuth } from "@/context/AuthContext";
 
 const links = [
   { to: "/", label: "Home" },
-  { to: "/about", label: "About" },
   { to: "/events", label: "Events & Experiences" },
-  { to: "/join", label: "Explore" },
+  // { to: "/join", label: "Explore" },
   { to: "/contact", label: "Contact" },
 ];
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false); // <-- New state for Avatar Dropdown
+  const [profileOpen, setProfileOpen] = useState(false);
   const { pathname } = useLocation();
   const { user, logout } = useAuth();
 
@@ -54,36 +53,136 @@ export function SiteHeader() {
   return (
     <header
       className={cn(
-        "fixed top-0 inset-x-0 z-50 transition-all duration-500",
-        scrolled ? "py-2" : "py-4",
+        "fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300",
+        // Modern glassmorphism background that looks great in both light and dark modes
+        scrolled
+          ? "bg-background/80 backdrop-blur-lg border-b border-border shadow-sm py-2.5"
+          : "bg-background/95 backdrop-blur-sm border-b border-transparent py-4"
       )}
     >
-      {/* <div className=""> */}
-        <div
-          className={cn(
-            "flex items-center justify-between gap-4 md:gap-6 w-full px-4 md:px-6 py-2.5 transition-all duration-500",
-            scrolled
-              ? "bg-background/85 border border-border shadow-soft backdrop-blur-md"
-              : "bg-transparent",
-          )}
+      <div className="flex items-center justify-between gap-4 md:gap-6 w-full max-w-[1600px] mx-auto px-4 md:px-8">
+        {/* =========================================
+            LOGO SECTION
+            ========================================= */}
+        <Link
+          to="/"
+          className="flex items-center group relative shrink-0 w-[110px] sm:w-[130px] md:w-[160px] h-10 md:h-12"
+          aria-label="JAZBAA home"
         >
-          {/* =========================================
-              LOGO SECTION
-              ========================================= */}
-          <Link
-            to="/"
-            className="flex items-center group relative shrink-0 w-[110px] sm:w-[130px] md:w-[160px] h-10 md:h-12"
-            aria-label="JAZBAA home"
-          >
-            <img
-              src="/jazbaalogo.png"
-              alt="Jazbaa Logo"
-              className="absolute top-1/2 left-0 -translate-y-1/2 h-[90px] sm:h-[110px] md:h-[120px] lg:h-[130px] w-auto max-w-none object-contain transition-all duration-500 group-hover:scale-105 logo-premium"
-            />
-          </Link>
+          <img
+            src="/jazbaalogo.png"
+            alt="Jazbaa Logo"
+            className="absolute top-1/2 left-0 -translate-y-1/2 h-[90px] sm:h-[110px] md:h-[120px] lg:h-[130px] w-auto max-w-none object-contain transition-all duration-500 group-hover:scale-105"
+          />
+        </Link>
 
-          {/* DESKTOP NAV */}
-          <nav className="hidden md:flex items-center gap-1">
+        {/* =========================================
+            DESKTOP NAV
+            ========================================= */}
+        <nav className="hidden md:flex items-center gap-1.5">
+          {links.map((l) => (
+            <NavLink
+              key={l.to}
+              to={l.to}
+              end={l.to === "/"}
+              className={({ isActive }) =>
+                cn(
+                  // Increased font size to text-base and adjusted weight to font-medium for a cleaner look
+                  "px-4 py-2.5 text-base font-medium transition-all duration-200 rounded-md tracking-wide", 
+                  "hover:bg-accent/10", 
+                  isActive 
+                    ? "bg-accent/10 text-accent font-semibold shadow-sm" 
+                    : "text-foreground/70 hover:text-foreground" // Muted when inactive, solid when hovered
+                )
+              }
+            >
+              {l.label}
+            </NavLink>
+          ))}
+        </nav>
+
+        {/* =========================================
+            ACTIONS
+            ========================================= */}
+        <div className="flex items-center gap-3">
+          <ThemeToggle />
+
+          {!user ? (
+            <>
+              <Button 
+                asChild 
+                variant="ghost" 
+                size="sm" 
+                className="hidden sm:inline-flex hover:bg-accent/10 hover:text-accent rounded-md text-base font-medium"
+              >
+                <Link to="/login">Login</Link>
+              </Button>
+
+              <Button
+                asChild
+                size="sm"
+                className="hidden sm:inline-flex rounded-md text-base font-medium shadow-sm transition-transform active:scale-95"
+              >
+                <Link to="/signup">Join / Sign up</Link>
+              </Button>
+            </>
+          ) : (
+            <div className="relative" ref={profileMenuRef}>
+              {/* Avatar Button */}
+              <button
+                onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center justify-center rounded-full ring-2 ring-transparent hover:ring-accent transition-all focus:outline-none overflow-hidden hover:opacity-80"
+              >
+                {user?.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt="avatar"
+                    className="w-10 h-10 object-cover rounded-full"
+                  />
+                ) : (
+                  <div className="w-10 h-10 rounded-full bg-accent text-primary-foreground flex items-center justify-center text-base font-bold shadow-sm">
+                    {user?.first_name?.charAt(0)?.toUpperCase() || "U"}
+                  </div>
+                )}
+              </button>
+
+              {/* Avatar Dropdown Menu */}
+              {profileOpen && (
+                <div className="absolute right-0 mt-3 w-48 bg-background/95 backdrop-blur-md border border-border rounded-xl shadow-xl p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-500/10 rounded-lg text-sm font-medium"
+                    onClick={() => {
+                      setProfileOpen(false);
+                      logout();
+                    }}
+                  >
+                    Logout
+                  </Button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* MOBILE MENU TOGGLE */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden hover:bg-accent/10 hover:text-accent rounded-md"
+            onClick={() => setOpen(!open)}
+          >
+            {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </Button>
+        </div>
+      </div>
+
+      {/* =========================================
+          MOBILE MENU DROPDOWN
+          ========================================= */}
+      {open && (
+        <div className="md:hidden absolute top-full left-0 w-full bg-background/95 backdrop-blur-xl border-b border-border shadow-2xl animate-in slide-in-from-top-2 duration-300">
+          <nav className="flex flex-col p-4 gap-2">
             {links.map((l) => (
               <NavLink
                 key={l.to}
@@ -91,118 +190,34 @@ export function SiteHeader() {
                 end={l.to === "/"}
                 className={({ isActive }) =>
                   cn(
-                    "relative px-3 lg:px-4 py-2 text-sm font-medium rounded-full transition-colors",
-                    "hover:text-accent",
-                    isActive ? "text-accent" : "text-foreground/80",
+                    "px-4 py-3.5 text-lg font-medium transition-all duration-200 rounded-lg",
+                    isActive
+                      ? "bg-accent/10 text-accent font-semibold"
+                      : "text-foreground/80 hover:bg-accent/10 hover:text-foreground"
                   )
                 }
               >
                 {l.label}
               </NavLink>
             ))}
-          </nav>
-
-          {/* ACTIONS */}
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-
-            {!user ? (
-              <>
-                <Button asChild variant="ghost" size="sm">
+            
+            {/* Show auth buttons in mobile view if logged out */}
+            {!user && (
+              <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-border">
+                <Button asChild variant="ghost" className="w-full justify-center hover:bg-accent/10 rounded-lg h-12 text-base font-medium">
                   <Link to="/login">Login</Link>
                 </Button>
-
                 <Button
                   asChild
-                  size="sm"
-                  variant="destructive"
-                  className="hidden sm:inline-flex"
+                  className="w-full rounded-lg h-12 text-base font-medium shadow-sm"
                 >
-                  <Link to="/signup">Join / Sign up</Link>
+                  <Link to="/signup">Join the Community</Link>
                 </Button>
-              </>
-            ) : (
-              <div className="relative" ref={profileMenuRef}>
-                {/* Avatar Button */}
-                <button
-                  onClick={() => setProfileOpen(!profileOpen)}
-                  className="flex items-center justify-center rounded-full ring-2 ring-transparent hover:ring-accent transition-all focus:outline-none overflow-hidden"
-                >
-                  {user?.avatar ? (
-                    <img
-                      src={user.avatar}
-                      alt="avatar"
-                      className="w-10 h-10 object-cover rounded-full"
-                    />
-                  ) : (
-                    <div className="w-10 h-10 rounded-full bg-accent text-white flex items-center justify-center text-sm font-bold">
-                      {user?.first_name?.toUpperCase()}
-                    </div>
-                  )}
-                </button>
-
-                {/* Avatar Dropdown Menu */}
-                {profileOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-background border border-border rounded-xl shadow-lg p-1 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                    <Button
-                      variant="ghost"
-                      size="sm"
-                      className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-500/10"
-                      onClick={() => {
-                        setProfileOpen(false);
-                        logout();
-                      }}
-                    >
-                      Logout
-                    </Button>
-                  </div>
-                )}
               </div>
             )}
-
-            {/* MOBILE MENU TOGGLE (Using the Menu/X icons you imported) */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setOpen(!open)}
-            >
-              {open ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </Button>
-          </div>
+          </nav>
         </div>
-
-        {/* MOBILE MENU DROPDOWN */}
-        {open && (
-          <div className="md:hidden mt-2 glass rounded-3xl p-4 animate-in fade-in slide-in-from-top-4 duration-300 shadow-xl border border-border">
-            <nav className="flex flex-col gap-1">
-              {links.map((l) => (
-                <NavLink
-                  key={l.to}
-                  to={l.to}
-                  end={l.to === "/"}
-                  className={({ isActive }) =>
-                    cn(
-                      "px-4 py-3 rounded-2xl text-base font-medium transition-colors",
-                      isActive
-                        ? "bg-accent/10 text-accent"
-                        : "hover:bg-foreground/5",
-                    )
-                  }
-                >
-                  {l.label}
-                </NavLink>
-              ))}
-              <Button
-                asChild
-                className="mt-2 w-full bg-gradient-ember text-white h-12"
-              >
-                <Link to="/signup">Join the Community</Link>
-              </Button>
-            </nav>
-          </div>
-        )}
-      {/* </div> */}
+      )}
     </header>
   );
 }

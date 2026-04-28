@@ -41,7 +41,7 @@ export function SiteLayout() {
                   </RequireAuth>
                 }
               />
-              <Route path="/join" element={<Join />} />
+              {/* <Route path="/join" element={<Join />} /> */}
               <Route path="/signup" element={<Signup />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />

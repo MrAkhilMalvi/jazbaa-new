@@ -1,5 +1,10 @@
 import { Link } from "react-router-dom";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+} from "framer-motion";
 import { ArrowRight, Play, Sparkles } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -12,41 +17,60 @@ const HERO_IMG_2 = "/images/Hero/image2.jpg"; // singer on stage, warm
 const HERO_IMG_3 = "/images/Hero/image5.jpg"; // dancer in golden light
 const HERO_IMG_4 = "/images/Hero/hero1.jpg"; // crowd hands up, joy
 
-
-
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
-  
+
   // Responsive parallax offsets so images don't fly out of bounds on mobile
-  const [offsets, setOffsets] = useState({ y1: -120, y2: -60, y3: -180, y4: -90 });
+  const [offsets, setOffsets] = useState({
+    y1: -120,
+    y2: -60,
+    y3: -180,
+    y4: -120,
+  });
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 768) {
         // Mobile offsets (much smaller movements)
-        setOffsets({ y1: -30, y2: -15, y3: -45, y4: -20 });
+        setOffsets({ y1: -30, y2: -15, y3: -45, y4: -30 });
       } else {
         // Desktop offsets
-        setOffsets({ y1: -120, y2: -60, y3: -180, y4: -90 });
+        setOffsets({ y1: -120, y2: -60, y3: -180, y4: -100 });
       }
     };
     handleResize(); // Initial check
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  },[]);
+  }, []);
 
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
 
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : offsets.y1]);
-  const y2 = useTransform(scrollYProgress, [0, 1],[0, reduce ? 0 : offsets.y2]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : offsets.y3]);
-  const y4 = useTransform(scrollYProgress, [0, 1], [0, reduce ? 0 : offsets.y4]);
-  const rot1 = useTransform(scrollYProgress, [0, 1],[-4, reduce ? -4 : 4]);
-  const rot3 = useTransform(scrollYProgress, [0, 1],[5, reduce ? 5 : -6]);
+  const y1 = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, reduce ? 0 : offsets.y1],
+  );
+  const y2 = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, reduce ? 0 : offsets.y2],
+  );
+  const y3 = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, reduce ? 0 : offsets.y3],
+  );
+  const y4 = useTransform(
+    scrollYProgress,
+    [0, 1],
+    [0, reduce ? 0 : offsets.y4],
+  );
+  const rot1 = useTransform(scrollYProgress, [0, 1], [-4, reduce ? -4 : 4]);
+  const rot3 = useTransform(scrollYProgress, [0, 1], [5, reduce ? 5 : -6]);
 
   return (
     <section
@@ -64,8 +88,6 @@ export function Hero() {
           backgroundSize: "64px 64px",
         }}
       />
-
-
 
       <div className="container-editorial relative z-10">
         {/* Eyebrow */}
@@ -85,20 +107,19 @@ export function Hero() {
         <div className="grid md:grid-cols-12 gap-8 md:gap-10 items-start">
           {/* LEFT — copy */}
           <div className="md:col-span-7">
-            {/* Cleaned up typography using Display font and sharp tracking */}
             <h1 className="display text-[13vw] sm:text-[10vw] md:text-[7vw] lg:text-[6.2vw] font-bold max-w-[14ch] leading-[1.05] md:leading-[0.95] tracking-tight">
               <RevealText as="span" text="Keep your" className="block" />
               <RevealText
                 as="span"
                 text="passion alive."
                 className="block text-palette-pink"
-                delay={0.15}
+                delay={0.2}
               />
-              <RevealText 
-                as="span" 
-                text="Live your JAZBAA." 
-                className="block text-gradient-jazbaa pb-2" 
-                delay={0.15} 
+              <RevealText
+                as="span"
+                text="Live your JAZBAA."
+                className="block text-gradient-jazbaa pb-2"
+                delay={0.2}
               />
             </h1>
 
@@ -106,7 +127,9 @@ export function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.7 }}
-              className="mt-6 md:mt-8 text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed text-balance max-w-xl font-medium"
+              className="mt-6 md:mt-8 text-base sm:text-lg md:text-xl 
+             text-foreground/70 dark:text-foreground/80 
+             leading-relaxed text-balance max-w-xl font-medium"
             >
               A vibrant community where music, movement, mindfulness, and
               meaningful connections come together.
@@ -121,7 +144,11 @@ export function Hero() {
               <div className="w-full sm:w-auto">
                 <Magnetic strength={0.2}>
                   {/* Replaced blurry ember button with sharp gradient button */}
-                  <Button asChild size="lg" className="w-full sm:w-auto h-12 bg-gradient-jazbaa text-white shadow-clean hover:shadow-hover border-0 hover:-translate-y-0.5 transition-all">
+                  <Button
+                    asChild
+                    size="lg"
+                    className="w-full sm:w-auto h-12 bg-gradient-jazbaa text-white shadow-clean hover:shadow-hover border-0 hover:-translate-y-0.5 transition-all"
+                  >
                     <Link to="/signup">
                       Join the Community <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -131,7 +158,12 @@ export function Hero() {
               <div className="w-full sm:w-auto">
                 <Magnetic strength={0.2}>
                   {/* Replaced messy blur outline with a crisp, solid outline button */}
-                  <Button asChild variant="outline" size="lg" className="w-full sm:w-auto h-12 bg-card border border-border text-foreground hover:bg-secondary shadow-sm hover:shadow-clean transition-all">
+                  <Button
+                    asChild
+                    variant="outline"
+                    size="lg"
+                    className="w-full sm:w-auto h-12 bg-card border border-border text-foreground hover:bg-secondary shadow-sm hover:shadow-clean transition-all"
+                  >
                     <Link to="/events">
                       <Play className="h-4 w-4 mr-2" /> Explore Events
                     </Link>
@@ -139,7 +171,6 @@ export function Hero() {
                 </Magnetic>
               </div>
             </motion.div>
-
           </div>
 
           {/* RIGHT — image collage */}
@@ -183,7 +214,13 @@ export function Hero() {
 
             <motion.div
               style={{ y: y4 }}
-              className="absolute right-2 bottom-8 sm:bottom-10 w-[38%] md:w-[40%] aspect-square rounded-2xl md:rounded-3xl overflow-hidden shadow-clean hover:shadow-hover border border-border/40 transition-shadow duration-500 bg-card hidden sm:block z-20"
+              className="absolute right-2 bottom-8 sm:bottom-10 
+w-[55%] md:w-[45%] 
+aspect-square 
+rounded-2xl md:rounded-3xl 
+overflow-hidden shadow-clean hover:shadow-hover 
+border border-border/40 transition-shadow duration-500 
+bg-card hidden sm:block z-20"
             >
               <img
                 src={HERO_IMG_4}
@@ -205,7 +242,7 @@ export function Hero() {
       >
         <span>Scroll</span>
         <motion.span
-          animate={reduce ? undefined : { scaleY:[0.4, 1, 0.4] }}
+          animate={reduce ? undefined : { scaleY: [0.4, 1, 0.4] }}
           transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
           style={{ transformOrigin: "top" }}
           className="h-10 w-[2px] rounded-full bg-palette-purple/40"
