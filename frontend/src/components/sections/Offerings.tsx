@@ -14,7 +14,7 @@ const offers = [
   },
   {
     label: "Intellectual Engagement",
-    items: ["Book Clubs & Discussions", "Storytelling", "Open Mic Evenings"],
+    items: ["Reader's Club & Discussions", "Storytelling", "Open Mic Evenings"],
     img: "/images/Offerings/passion2.jpg",
     icon: BookOpen,
   },
@@ -34,7 +34,7 @@ const offers = [
 
 export function Offerings() {
   return (
-    <section className="py-24 md:py-32 bg-[#fbfaf8] dark:bg-black transition-colors duration-500 relative overflow-hidden">
+    <section className="py-20 md:py-20 bg-[#fbfaf8] dark:bg-black transition-colors duration-500 relative overflow-hidden">
       
       {/* Ambient Glows for Dark Mode */}
       <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#ff6a3d]/5 blur-[120px] rounded-full pointer-events-none" />
@@ -50,21 +50,15 @@ export function Offerings() {
             <Reveal>
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 dark:bg-[#ff6a3d]/10 border border-orange-200 dark:border-[#ff6a3d]/20 shadow-sm mb-6 transition-colors duration-300">
                 <Sparkles className="w-3.5 h-3.5 text-[#ff6a3d]" />
-                <span className="text-xs font-bold tracking-widest text-[#c04a18] dark:text-[#ff6a3d] uppercase">
-                  What we offer
-                </span>
+<span className="text-base sm:text-lg md:text-xl font-bold tracking-wide text-[#c04a18] dark:text-[#ff6a3d] uppercase">
+  What we offer
+</span>
               </div>
               <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-tight tracking-tight transition-colors duration-300">
                 Spaces for every <span className="italic text-[#ff6a3d]">passion.</span>
               </h2>
             </Reveal>
           </div>
-          <Reveal delay={0.2}>
-            <p className="text-lg md:text-xl text-slate-600 dark:text-white/60 font-medium max-w-md md:text-right transition-colors duration-300">
-              Four pillars. Endless ways to express, connect, and grow — online
-              and in person.
-            </p>
-          </Reveal>
         </div>
 
         {/* =========================================

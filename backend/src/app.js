@@ -11,11 +11,29 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// ✅ CORS
-app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:8081",
-  credentials: true,
-}));
+// ✅ Allowed Origins (IMPORTANT)
+const allowedOrigins = [
+  "http://localhost:8081",          // local
+  "http://localhost:3000",          // optional
+  process.env.CLIENT_URL,           // production domain
+];
+
+// ✅ CORS config
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (like Postman/mobile apps)
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error("CORS not allowed"));
+      }
+    },
+    credentials: true,
+  })
+);
 
 // ✅ Routes
 app.use("/api/auth", authRoutes);

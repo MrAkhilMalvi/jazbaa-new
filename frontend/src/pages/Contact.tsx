@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import emailjs from "@emailjs/browser";
 import { Mail, MapPin, Phone, MessageSquare, Send, Sparkles } from "lucide-react";
 
 const schema = z.object({
@@ -20,21 +21,43 @@ const Contact = () => {
   const [busy, setBusy] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const fd = new FormData(e.currentTarget);
-    const parsed = schema.safeParse(Object.fromEntries(fd));
-    if (!parsed.success) {
-      toast.error(parsed.error.errors[0]?.message ?? "Please check the form");
-      return;
-    }
-    setBusy(true);
-    setTimeout(() => {
-      setBusy(false);
-      toast.success("Message sent. We'll write back soon!");
-      (e.target as HTMLFormElement).reset();
-    }, 700);
-  };
+const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  e.preventDefault();
+
+  const fd = new FormData(e.currentTarget);
+  const data = Object.fromEntries(fd);
+
+  const parsed = schema.safeParse(data);
+  if (!parsed.success) {
+    toast.error(parsed.error.errors[0]?.message ?? "Please check the form");
+    return;
+  }
+
+  setBusy(true);
+
+  try {
+    await emailjs.send(
+      "service_4mkeh9r",
+      "template_q2gnm91",
+      {
+        name: data.name,
+        email: data.email,
+        subject: data.subject,
+        message: data.message,
+      },
+      "q8qaVW87xEZmdz_Qg"
+    );
+
+    toast.success("Message sent successfully 🚀");
+    (e.target as HTMLFormElement).reset();
+
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to send message ❌");
+  } finally {
+    setBusy(false);
+  }
+};
 
   return (
     <div className="bg-[#fbfaf8] dark:bg-black min-h-screen selection:bg-[#ff6a3d]/30 transition-colors duration-500 relative overflow-hidden">

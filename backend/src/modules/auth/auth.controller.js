@@ -15,7 +15,6 @@ export const getMe = async (req, res, next) => {
   }
 };
 
-
 export const signup = async (req, res, next) => {
   try {
     const user = await service.signupUser(req.body);
@@ -39,6 +38,7 @@ export const login = async (req, res, next) => {
     const { user, accessToken, refreshToken } =
       await service.loginUser(req.body.email, req.body.password, meta);
 
+    // ✅ cookies
     setAuthCookies(res, accessToken, refreshToken);
 
     res.json({ message: "Login successful", user });
@@ -49,9 +49,13 @@ export const login = async (req, res, next) => {
 
 export const googleLogin = async (req, res, next) => {
   try {
-    const { user, accessToken, refreshToken } =
-      await service.googleUser(req.body.token);
+    const meta = {
+      ua: req.headers["user-agent"],
+      ip: req.ip
+    };
 
+    const { user, accessToken, refreshToken } =
+      await service.googleUser(req.body.token, meta); // ✅ pass meta
 
     setAuthCookies(res, accessToken, refreshToken);
 
@@ -65,8 +69,19 @@ export const logout = async (req, res, next) => {
   try {
     await service.logoutUser(req.cookies.refreshToken);
 
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    const isProd = process.env.NODE_ENV === "production";
+
+    res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+    });
+
+    res.clearCookie("refreshToken", {
+      httpOnly: true,
+      secure: isProd,
+      sameSite: isProd ? "none" : "lax",
+    });
 
     res.json({ message: "Logged out" });
   } catch (err) {

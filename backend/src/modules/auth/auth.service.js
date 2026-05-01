@@ -25,7 +25,6 @@ export const signupUser = async (data) => {
     consent
   } = data;
 
-  // 🔴 Validation
   if (!email || !consent) {
     throw new Error("INVALID_INPUT");
   }
@@ -34,7 +33,6 @@ export const signupUser = async (data) => {
     throw new Error("MAX_3_INTERESTS");
   }
 
-  // 🔍 Check existing user
   const existing = await pool.query(
     "SELECT id FROM users WHERE email=$1",
     [email]
@@ -44,10 +42,8 @@ export const signupUser = async (data) => {
     throw new Error("USER_EXISTS");
   }
 
-  // 🔐 Hash password
   const hashed = password ? await bcrypt.hash(password, 10) : null;
 
-  // 💾 Insert FULL data
   const result = await pool.query(
     `INSERT INTO users(
       first_name,
@@ -64,7 +60,7 @@ export const signupUser = async (data) => {
       consent
     )
     VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
-    RETURNING id, email`,
+    RETURNING id,email,first_name,avatar`,
     [
       firstName,
       lastName,
@@ -95,32 +91,42 @@ export const loginUser = async (email, password, meta) => {
 
   const user = userRes.rows[0];
 
-  const match = await bcrypt.compare(password, user.password || "");
+  if (!user.password) throw new Error("USE_GOOGLE_LOGIN");
+
+  const match = await bcrypt.compare(password, user.password);
   if (!match) throw new Error("INVALID");
 
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
+  // ✅ INSERT SESSION
   await pool.query(
     `INSERT INTO sessions(user_id,refresh_token,user_agent,ip_address,expires_at)
      VALUES($1,$2,$3,$4,NOW() + interval '7 days')`,
     [user.id, refreshToken, meta.ua, meta.ip]
   );
 
-  return { user, accessToken, refreshToken };
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      first_name: user.first_name,
+      avatar: user.avatar
+    },
+    accessToken,
+    refreshToken
+  };
 };
 
-// 🔵 Google Login
-// 🔵 Google Login (UPDATED)
-export const googleUser = async (token) => {
+// 🔵 Google Login (FIXED)
+export const googleUser = async (token, meta) => {
   const ticket = await client.verifyIdToken({
     idToken: token,
     audience: process.env.GOOGLE_CLIENT_ID,
   });
 
   const payload = ticket.getPayload();
-
-  const { email, name, sub, picture } = payload;
+  const { email, sub, picture, name } = payload;
 
   let userRes = await pool.query(
     "SELECT * FROM users WHERE email=$1",
@@ -130,24 +136,21 @@ export const googleUser = async (token) => {
   let user;
 
   if (!userRes.rows.length) {
-    // ✅ SAVE avatar from Google
     const insert = await pool.query(
-      `INSERT INTO users(email, google_id, avatar, consent)
-       VALUES($1,$2,$3,true) RETURNING *`,
-      [email, sub, picture]
+      `INSERT INTO users(email, google_id, avatar, first_name, consent)
+       VALUES($1,$2,$3,$4,true) RETURNING *`,
+      [email, sub, picture, name]
     );
 
     user = insert.rows[0];
   } else {
     user = userRes.rows[0];
 
-    // ✅ Update avatar if missing
     if (!user.avatar && picture) {
       await pool.query(
         "UPDATE users SET avatar=$1 WHERE id=$2",
         [picture, user.id]
       );
-
       user.avatar = picture;
     }
   }
@@ -155,7 +158,23 @@ export const googleUser = async (token) => {
   const accessToken = generateAccessToken(user);
   const refreshToken = generateRefreshToken(user);
 
-  return { user, accessToken, refreshToken };
+  // ✅🔥 IMPORTANT FIX (YOU WERE MISSING THIS)
+  await pool.query(
+    `INSERT INTO sessions(user_id,refresh_token,user_agent,ip_address,expires_at)
+     VALUES($1,$2,$3,$4,NOW() + interval '7 days')`,
+    [user.id, refreshToken, meta?.ua || "", meta?.ip || ""]
+  );
+
+  return {
+    user: {
+      id: user.id,
+      email: user.email,
+      first_name: user.first_name,
+      avatar: user.avatar
+    },
+    accessToken,
+    refreshToken
+  };
 };
 
 // 🔴 Logout

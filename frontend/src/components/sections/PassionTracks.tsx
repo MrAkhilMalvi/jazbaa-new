@@ -2,33 +2,56 @@
 
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/animations/Reveal";
-import { 
-  Sparkles, 
-  Mic2, 
-  Music, 
-  Activity, 
-  BookOpen, 
-  Heart, 
+import {
+  Sparkles,
+  Mic2,
+  Music,
+  Activity,
+  BookOpen,
+  Heart,
   Users,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 
 // 1. Added specific Lucide icons to each track
 const passions = [
-  { title: "Singing & Karaoke", icon: Mic2, img: "/images/PassionTracks/passion8.jpg" },
-  { title: "Music & Instruments", icon: Music, img: "/images/PassionTracks/explore1.jpg" },
-  { title: "Dance & Movement", icon: Activity, img: "/images/PassionTracks/dance.jpeg" },
-  { title: "Book Club", icon: BookOpen, img: "/images/PassionTracks/explore4.jpg" },
-  { title: "Meditation & Wellness", icon: Heart, img: "/images/PassionTracks/explore5.jpg" },
-  { title: "Open Mics & Socials", icon: Users, img: "/images/PassionTracks/explore6.jpg" },
+  {
+    title: "Singing & Karaoke",
+    icon: Mic2,
+    img: "/images/PassionTracks/passion9.jpg",
+  },
+  {
+    title: "Music & Instruments",
+    icon: Music,
+    img: "/images/PassionTracks/explore1.jpg",
+  },
+  {
+    title: "Dance & Movement",
+    icon: Activity,
+    img: "/images/PassionTracks/dance.jpeg",
+  },
+  {
+    title: "Reader's Club",
+    icon: BookOpen,
+    img: "/images/PassionTracks/explore4.jpg",
+  },
+  {
+    title: "Meditation & Wellness",
+    icon: Heart,
+    img: "/images/PassionTracks/explore5.jpg",
+  },
+  {
+    title: "Open Mics & Socials",
+    icon: Users,
+    img: "/images/PassionTracks/explore6.jpg",
+  },
 ];
 
 const marqueeItems = [...passions, ...passions];
 
 export function PassionTracks() {
   return (
-    <section className="py-24 md:py-32 relative bg-[#fbfaf8] dark:bg-black overflow-hidden transition-colors duration-500">
-      
+    <section className="py-20 md:py-20 relative bg-[#fbfaf8] dark:bg-black overflow-hidden transition-colors duration-500">
       {/* =========================================
           HEADER SECTION
           ========================================= */}
@@ -36,7 +59,8 @@ export function PassionTracks() {
         <Reveal>
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-500/20 shadow-sm mb-6 transition-colors duration-300">
             <Sparkles className="w-3.5 h-3.5 text-[#ff6a3d]" />
-            <span className="text-xs font-bold tracking-widest text-[#c04a18] dark:text-orange-400 uppercase">
+
+            <span className="text-base sm:text-lg md:text-xl font-bold tracking-wide text-[#c04a18] dark:text-[#ff6a3d] uppercase">
               Explore
             </span>
           </div>
@@ -44,7 +68,8 @@ export function PassionTracks() {
             Find your <span className="italic text-[#ff6a3d]">passion.</span>
           </h2>
           <p className="text-lg md:text-xl text-slate-600 dark:text-white/60 font-medium max-w-2xl transition-colors duration-300">
-            Pick a track. Immerse yourself. Connect with others who share your energy.
+            Pick a track. Immerse yourself. Connect with others who share your
+            energy.
           </p>
         </Reveal>
       </div>
@@ -52,12 +77,14 @@ export function PassionTracks() {
       {/* =========================================
           INFINITE AUTO-SCROLLING CAROUSEL
           ========================================= */}
-      <div 
+      <div
         className="relative w-full overflow-hidden mt-8"
         // PRO FIX: CSS Mask perfectly fades the left and right edges smoothly into the background
-        style={{ 
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-          maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)' 
+        style={{
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
+          maskImage:
+            "linear-gradient(to right, transparent, black 10%, black 90%, transparent)",
         }}
       >
         <motion.div
@@ -101,7 +128,6 @@ export function PassionTracks() {
                 {/* 3. Bottom Glass Panel (Ensures perfect text visibility and alignment) */}
                 <div className="absolute inset-x-0 bottom-0 p-4 z-10">
                   <div className="relative overflow-hidden rounded-[1.5rem] bg-black/40 backdrop-blur-xl border border-white/10 p-4 flex items-center justify-between transform translate-y-2 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    
                     {/* STRICT ROW ALIGNMENT: Icon + Text */}
                     <div className="flex items-center gap-3.5">
                       <div className="w-10 h-10 rounded-full bg-white/10 border border-white/10 flex items-center justify-center shrink-0 group-hover:bg-[#ff6a3d] transition-colors duration-500">
@@ -116,10 +142,8 @@ export function PassionTracks() {
                     <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center shrink-0 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-500 ease-out">
                       <ArrowRight className="w-4 h-4 text-black" />
                     </div>
-
                   </div>
                 </div>
-
               </article>
             );
           })}
