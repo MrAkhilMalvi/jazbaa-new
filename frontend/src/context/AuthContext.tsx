@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import axios from "@/api/axios";
 import { getMeApi, logoutApi } from "@/api/Auth.api";
 
 type User = {

@@ -49,7 +49,7 @@ export function SiteLayout() {
       <SiteHeader />
       <main className="flex-1">
         {/* AnimatePresence handles the unmount/mount of pages */}
-        <AnimatePresence mode="wait" initial={false}>
+        <AnimatePresence mode="wait">
           <PageTransition key={location.pathname}>
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Index />} />

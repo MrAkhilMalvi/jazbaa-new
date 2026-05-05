@@ -377,3 +377,17 @@
   /* placeholder */
   @apply placeholder:text-slate-400 dark:placeholder:text-white/30;
 }
+
+@keyframes marquee-vertical {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(calc(-100% - var(--gap)));
+  }
+}
+
+.animate-marquee-vertical {
+  animation: marquee-vertical var(--duration, 40s) linear infinite;
+}
+

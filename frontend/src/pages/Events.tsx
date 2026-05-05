@@ -276,10 +276,10 @@ const Events = () => {
                             <MapPin className="h-4 w-4 text-orange-400" />
 
                             <span className="px-3 py-1 rounded-full bg-orange-500/10 text-orange-500 text-xs font-semibold border border-orange-200">
-                              in{" "}
+                              {" "}
                               {isPreview
-                                ? "Venue to be announced soon"
-                                : e.location || "Venue to be announced soon"}
+                                ? "Venue / Location- To Be Announced"
+                                : e.location || "Venue / Location- To Be Announced"}
                             </span>
                           </div>
                         </div>
