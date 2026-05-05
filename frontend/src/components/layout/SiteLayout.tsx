@@ -53,7 +53,10 @@ export function SiteLayout() {
           <PageTransition key={location.pathname}>
             <Routes location={location} key={location.pathname}>
               <Route path="/" element={<Index />} />
-              <Route path="/about" element={<Navigate to="/#about" replace />} />
+              <Route
+                path="/about"
+                element={<Navigate to="/#about" replace />}
+              />
               {/* <Route
                 path="/events"
                 element={
