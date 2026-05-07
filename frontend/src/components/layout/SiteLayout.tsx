@@ -11,6 +11,9 @@ import Signup from "@/pages/Signup";
 import Contact from "@/pages/Contact";
 import Login from "@/pages/Login";
 import NotFound from "@/pages/NotFound";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
+import TermsConditions from "@/pages/TermsConditions";
+import CookiePolicy from "@/pages/CookiePolicy";
 import { RequireAuth } from "@/lib/RequireAuth";
 
 export function SiteLayout() {
@@ -70,6 +73,9 @@ export function SiteLayout() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-conditions" element={<TermsConditions />} />
+              <Route path="/cookie-policy" element={<CookiePolicy />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </PageTransition>

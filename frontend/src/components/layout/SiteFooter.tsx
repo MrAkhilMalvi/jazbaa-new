@@ -166,6 +166,13 @@ export function SiteFooter() {
               >
                 Terms & Conditions
               </Link>
+              <span className="w-1 h-1 rounded-full bg-slate-300 dark:bg-white/20" />
+              <Link
+                to="/cookie-policy"
+                className="hover:text-[#ff6a3d] transition-colors duration-300"
+              >
+                Cookie Policy
+              </Link>
             </div>
           </div>
 
