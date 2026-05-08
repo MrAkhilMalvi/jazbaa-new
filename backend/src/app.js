@@ -11,26 +11,48 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// ✅ Allowed Origins (IMPORTANT)
+const cors = require("cors");
+
+// ✅ Allowed Origins
 const allowedOrigins = [
-  "http://localhost:8081",          // local
-  "http://localhost:3000",          // optional
-  process.env.CLIENT_URL,           // production domain
+  "http://localhost:8081",
+  "http://localhost:3000",
+
+  // Bluehost frontend domain
+  "https://jazbaa.naviralife.co.in",
+  "https://www.jazbaa.naviralife.co.in",
+
+  // optional from env
+  process.env.CLIENT_URL,
 ];
 
-// ✅ CORS config
+// ✅ CORS Config
 app.use(
   cors({
     origin: function (origin, callback) {
-      // allow requests with no origin (like Postman/mobile apps)
-      if (!origin) return callback(null, true);
+      console.log("Incoming Origin:", origin);
 
-      if (allowedOrigins.includes(origin)) {
+      // allow Postman / mobile apps / server requests
+      if (!origin) {
         return callback(null, true);
+      }
+
+      // remove trailing slash safety
+      const cleanOrigin = origin.replace(/\/$/, "");
+
+      const isAllowed = allowedOrigins.some(
+        (allowed) =>
+          allowed &&
+          allowed.replace(/\/$/, "") === cleanOrigin
+      );
+
+      if (isAllowed) {
+        callback(null, true);
       } else {
-        return callback(new Error("CORS not allowed"));
+        callback(new Error(`CORS not allowed: ${origin}`));
       }
     },
+
     credentials: true,
   })
 );
