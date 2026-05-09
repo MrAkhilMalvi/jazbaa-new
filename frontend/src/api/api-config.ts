@@ -5,5 +5,7 @@ export const API_ENDPOINTS = {
     GOOGLE: "/auth/google",
     LOGOUT: "/auth/logout",
     ME: "/auth/me",
+    FORGOT_PASSWORD: "/auth/forgot-password",
+    RESET_PASSWORD: "/auth/reset-password",
   },
 };

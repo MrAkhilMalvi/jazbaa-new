@@ -51,19 +51,19 @@ export const CardSpotlight = ({
           🌞 LIGHT MODE SPOTLIGHT (Orange Highlight)
           ============================================== */}
       <motion.div
-        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition duration-300 group-hover/spotlight:opacity-100 dark:hidden"
+        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition duration-300 group-hover/spotlight:opacity-100 dark:hidde"
         style={{
           maskImage: useMotionTemplate`
             radial-gradient(
               ${radius}px circle at ${mouseX}px ${mouseY}px,
               white,
-              transparent 80%
+              transparent 90%
             )
           `,
           background: useMotionTemplate`
             radial-gradient(
               ${radius}px circle at ${mouseX}px ${mouseY}px,
-              rgba(255,106,61,0.12), /* Light Mode Orange Color */
+              rgba(255,106,61,0.0.20), /* Light Mode Orange Color */
               transparent 60%
             )
           `,

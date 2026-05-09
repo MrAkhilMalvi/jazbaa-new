@@ -47,7 +47,7 @@ export function SiteFooter() {
                   to="/#about"
                   className="inline-block hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] sm:hover:translate-x-1 transition-all duration-300"
                 >
-                  About
+                  About Us
                 </Link>
               </li>
               <li>
@@ -60,26 +60,10 @@ export function SiteFooter() {
               </li>
               <li>
                 <Link
-                  to="/signup"
-                  className="inline-block hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] sm:hover:translate-x-1 transition-all duration-300"
-                >
-                  Join
-                </Link>
-              </li>
-              <li>
-                <Link
                   to="/contact"
                   className="inline-block hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] sm:hover:translate-x-1 transition-all duration-300"
                 >
-                  Contact
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/login"
-                  className="inline-block hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] sm:hover:translate-x-1 transition-all duration-300"
-                >
-                  Login
+                  Contact Us
                 </Link>
               </li>
             </ul>

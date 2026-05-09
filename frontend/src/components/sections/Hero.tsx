@@ -10,6 +10,7 @@ import { useRef, useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { RevealText } from "@/components/animations/Reveal";
 import { Magnetic } from "@/components/animations/MagneticButton";
+import { useAuth } from "@/context/AuthContext";
 
 // Warm, joyful, human-focused photography (Unsplash). All q=85 for sharpness.
 const HERO_IMG_1 = "/images/Hero/image1.jpg"; // friends laughing, warm
@@ -20,6 +21,7 @@ const HERO_IMG_4 = "/images/Hero/hero1.jpg"; // crowd hands up, joy
 export function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const  { user } = useAuth();
 
   // Responsive parallax offsets so images don't fly out of bounds on mobile
   const [offsets, setOffsets] = useState({
@@ -129,19 +131,23 @@ export function Hero() {
               transition={{ duration: 0.9, delay: 0.85 }}
               className="mt-8 flex flex-col sm:flex-row flex-wrap gap-4 w-full sm:w-auto"
             >
-              <div className="w-full sm:w-auto">
-                <Magnetic strength={0.2}>
-                  <Button
-                    asChild
-                    size="lg"
-                    className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 text-base bg-gradient-jazbaa text-white shadow-clean hover:shadow-hover border-0 hover:-translate-y-0.5 transition-all"
-                  >
-                    <Link to="/signup">
-                      Join the Community <ArrowRight className="ml-2 h-5 w-5" />
-                    </Link>
-                  </Button>
-                </Magnetic>
-              </div>
+<div className="w-full sm:w-auto">
+  <Magnetic strength={0.2}>
+    <Button
+      asChild
+      size="lg"
+      className="w-full sm:w-auto h-12 md:h-14 px-6 md:px-8 text-base bg-gradient-jazbaa text-white shadow-clean hover:shadow-hover border-0 hover:-translate-y-0.5 transition-all"
+    >
+      <Link to={user ? "/" : "/signup"}>
+        {user
+          ? "Get Involved"
+          : "Join the Community"}
+
+        <ArrowRight className="ml-2 h-5 w-5" />
+      </Link>
+    </Button>
+  </Magnetic>
+</div>
               <div className="w-full sm:w-auto">
                 <Magnetic strength={0.2}>
                   <Button

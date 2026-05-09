@@ -5,6 +5,7 @@ import { CtaSection } from "@/components/sections/CtaSection";
 import { motion } from "framer-motion";
 import { Sparkles, Eye, Target, CheckCircle2, ArrowRight } from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
+import { useAuth } from "@/context/AuthContext";
 
 const TEAM_IMG = "/images/About/about1.jpg";
 const images = [
@@ -33,7 +34,7 @@ export function VerticalImageMarquee({ images }: { images: string[] }) {
   const half = Math.ceil(scrollingImages.length / 2);
   const firstCol = scrollingImages.slice(0, half);
   const secondCol = scrollingImages.slice(half);
-
+  
   return (
     <div className="relative flex h-full w-full flex-row gap-4 overflow-hidden rounded-3xl p-3">
       
@@ -78,9 +79,10 @@ export function VerticalImageMarquee({ images }: { images: string[] }) {
 /* =========================================
    MAIN ABOUT COMPONENT
    ========================================= */
-const About = () => {
-  return (
-    <div className="bg-[#fbfaf8] dark:bg-black transition-colors duration-300">
+   const About = () => {
+     const { user } = useAuth();
+     return (
+       <div className="bg-[#fbfaf8] dark:bg-black transition-colors duration-300">
       {/* =========================================
           HERO SECTION
           ========================================= */}
@@ -268,18 +270,21 @@ const About = () => {
             </div>
 
             <Reveal delay={0.5}>
-              <div className="mt-12">
-                <Button
-                  asChild
-                  size="lg"
-                  className="h-14 px-8 text-base bg-[#ff6a3d] hover:bg-[#e05b3e] text-white shadow-xl hover:shadow-orange-500/30 dark:hover:shadow-orange-500/20 hover:-translate-y-1 transition-all rounded-full border-0"
-                >
-                  <Link to="/signup">
-                    Become part of JAZBAA{" "}
-                    <ArrowRight className="ml-2 h-5 w-5" />
-                  </Link>
-                </Button>
-              </div>
+<div className="mt-12">
+  <Button
+    asChild
+    size="lg"
+    className="h-14 px-8 text-base bg-[#ff6a3d] hover:bg-[#e05b3e] text-white shadow-xl hover:shadow-orange-500/30 dark:hover:shadow-orange-500/20 hover:-translate-y-1 transition-all rounded-full border-0"
+  >
+    <Link to={user ? "/" : "/signup"}>
+      {user
+        ? "Get Involved"
+        : "Become part of JAZBAA"}
+
+      <ArrowRight className="ml-2 h-5 w-5" />
+    </Link>
+  </Button>
+</div>
             </Reveal>
           </div>
         </div>

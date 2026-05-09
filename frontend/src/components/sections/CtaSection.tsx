@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Aurora } from "@/components/animations/Aurora";
 import { Magnetic } from "@/components/animations/MagneticButton";
 import { ArrowRight } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export function CtaSection() {
+  const { user } = useAuth();
   return (
     <section className="relative py-10 md:py-10 lg:py-10 overflow-hidden bg-background noise">
 
@@ -38,16 +40,20 @@ export function CtaSection() {
           <div className="mt-8 sm:mt-10 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center items-center w-full max-w-xs sm:max-w-none mx-auto">
             <div className="w-full sm:w-auto">
               <Magnetic strength={0.35}>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="w-full h-16 sm:w-auto"
-                >
-                  <Link to="/signup">
-                    Join JAZBAA Today <ArrowRight className="ml-1 h-4 w-4" />
-                  </Link>
-                </Button>
+<Button
+  asChild
+  variant="outline"
+  size="lg"
+  className="w-full h-16 sm:w-auto"
+>
+  <Link to={user ? "/" : "/signup"}>
+    {user
+      ? "Get Involved"
+      : "Join JAZBAA Today"}
+
+    <ArrowRight className="ml-1 h-4 w-4" />
+  </Link>
+</Button>
               </Magnetic>
             </div>
             <div className="w-full sm:w-auto">

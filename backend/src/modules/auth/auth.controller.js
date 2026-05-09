@@ -88,3 +88,42 @@ export const logout = async (req, res, next) => {
     next(err);
   }
 };
+
+export const forgotPassword = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    await service.forgotPassword(req.body.email);
+
+    res.json({
+      message:
+        "If email exists, reset link sent",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const resetPassword = async (
+  req,
+  res,
+  next
+) => {
+  try {
+    const { token, password } = req.body;
+
+    await service.resetPassword(
+      token,
+      password
+    );
+
+    res.json({
+      message:
+        "Password reset successful",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
