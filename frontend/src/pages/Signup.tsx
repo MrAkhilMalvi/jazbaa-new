@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { z } from "zod";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Check, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Sparkles, Check, CheckCircle2, Eye, EyeOff } from "lucide-react";
 import { Reveal, RevealText } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { signupApi } from "@/api/Auth.api";
+import { signupSchema } from "@/lib/auth.schema";
 import {
   Select,
   SelectContent,
@@ -18,56 +18,123 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Field } from "@/components/ui/Field";
+import { countryCodes, interestsList } from "@/constants/SingupConstants";
 
-// Replace with your actual illustration path
 const SIGNUP_ILLUSTRATION = "/images/singupimg.webp";
 
-const interestsList = [
-  "Music",
-  "Art",
-  "Karaoke / Singing",
-  "Dance",
-  "Meditation",
-  "Open Mic",
-  "Drawing",
-  "Reader's Club",
-  "Story Telling",
-  "Concert / Classic Movies",
-  "Photography",
-];
 
-const schema = z
-  .object({
-    firstName: z.string().trim().min(1, "First name is required").max(60),
-    lastName: z.string().trim().min(1, "Last name is required").max(60),
-    email: z.string().trim().email("Please enter a valid email").max(255),
-    mobile: z.string().trim().min(7, "Invalid mobile number").max(20),
-    city: z.string().trim().min(1, "City is required").max(80),
-    state: z.string().trim().min(1, "State is required").max(80),
-    country: z.string().trim().min(1, "Country is required").max(80),
-    ageGroup: z.enum(["upto25", "25to50", "over50"], { required_error: "Please select an age group" }),
-    category: z.enum(["Member", "Volunteer", "Lead"], { required_error: "Please select a sign-up category" }),
-    interests: z.array(z.string()).min(1, "Pick at least 1 interest").max(3, "You can only pick up to 3 interests"),
-    password: z.string().min(6, "Password must be at least 6 characters"),
-    confirmPassword: z.string(),
-    consent: z.boolean().refine((val) => val === true, { message: "You must agree to the terms to sign up." }),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"],
-  });
 
 const Signup = () => {
   const navigate = useNavigate();
   const [submitting, setSubmitting] = useState(false);
   const [focused, setFocused] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Password visibility states
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  // Dynamic Geography API Lists & Loaders
+  const [countriesList, setCountriesList] = useState<string[]>([]);
+  const [statesList, setStatesList] = useState<string[]>([]);
+  const [citiesList, setCitiesList] = useState<string[]>([]);
+  const [countriesLoading, setCountriesLoading] = useState(false);
+  const [statesLoading, setStatesLoading] = useState(false);
+  const [citiesLoading, setCitiesLoading] = useState(false);
 
   // Controlled UI States
   const [interests, setInterests] = useState<string[]>([]);
   const [category, setCategory] = useState<"Member" | "Volunteer" | "Lead">("Member");
   const [ageGroup, setAgeGroup] = useState<string>("");
   const [country, setCountry] = useState<string>("India");
+  const [state, setState] = useState<string>("");
+  const [city, setCity] = useState<string>("");
+  const [countryCode, setCountryCode] = useState<string>("+91");
   const [consent, setConsent] = useState(false);
+
+  // Fetch Countries on Component Mount
+  useEffect(() => {
+    const fetchCountries = async () => {
+      setCountriesLoading(true);
+      try {
+        const res = await fetch("https://countriesnow.space/api/v0.1/countries/iso");
+        const json = await res.json();
+        if (!json.error) {
+          const names: string[] = json.data.map((c: any) => c.name);
+          setCountriesList(names.sort());
+        } else {
+          setCountriesList(["India", "United States", "United Kingdom", "Canada", "Singapore", "Australia", "UAE"]);
+        }
+      } catch (err) {
+        setCountriesList(["India", "United States", "United Kingdom", "Canada", "Singapore", "Australia", "UAE"]);
+      } finally {
+        setCountriesLoading(false);
+      }
+    };
+    fetchCountries();
+  }, []);
+
+  // Fetch States when Country changes
+  useEffect(() => {
+    setState("");
+    setCity("");
+    setStatesList([]);
+    setCitiesList([]);
+    if (!country) return;
+
+    const fetchStates = async () => {
+      setStatesLoading(true);
+      try {
+        const res = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ country }),
+        });
+        const json = await res.json();
+        if (!json.error && json.data?.states) {
+          const names: string[] = json.data.states.map((s: any) => s.name);
+          setStatesList(names.sort());
+        } else {
+          setStatesList(["Other"]);
+        }
+      } catch (err) {
+        setStatesList(["Other"]);
+      } finally {
+        setStatesLoading(false);
+      }
+    };
+    fetchStates();
+  }, [country]);
+
+  // Fetch Cities when State changes
+  useEffect(() => {
+    setCity("");
+    setCitiesList([]);
+    if (!country || !state) return;
+
+    const fetchCities = async () => {
+      setCitiesLoading(true);
+      try {
+        const res = await fetch("https://countriesnow.space/api/v0.1/countries/state/cities", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ country, state }),
+        });
+        const json = await res.json();
+        if (!json.error && json.data) {
+          const sortedCities: string[] = [...json.data].sort();
+          setCitiesList(sortedCities);
+        } else {
+          setCitiesList(["Other"]);
+        }
+      } catch (err) {
+        setCitiesList(["Other"]);
+      } finally {
+        setCitiesLoading(false);
+      }
+    };
+    fetchCities();
+  }, [country, state]);
 
   const toggleInterest = (i: string) => {
     setInterests((curr) => {
@@ -82,20 +149,17 @@ const Signup = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!consent) {
-      toast.error("Please agree to the consent terms to continue.");
-      return;
-    }
+    setErrors({});
 
     const fd = new FormData(e.currentTarget);
-    const data = {
-      firstName: String(fd.get("firstName") ?? ""),
-      lastName: String(fd.get("lastName") ?? ""),
-      email: String(fd.get("email") ?? ""),
-      mobile: String(fd.get("mobile") ?? ""),
-      city: String(fd.get("city") ?? ""),
-      state: String(fd.get("state") ?? ""),
+    const rawData = {
+      firstName: String(fd.get("firstName") ?? "").trim(),
+      lastName: String(fd.get("lastName") ?? "").trim(),
+      email: String(fd.get("email") ?? "").trim(),
+      countryCode,
+      mobile: String(fd.get("mobile") ?? "").trim(),
+      city,
+      state,
       country,
       ageGroup,
       category,
@@ -105,51 +169,55 @@ const Signup = () => {
       consent,
     };
 
-    const parsed = schema.safeParse(data);
+    const parsed = signupSchema.safeParse(rawData);
 
     if (!parsed.success) {
-      toast.error(parsed.error.errors[0]?.message ?? "Please check the form");
+      const fieldErrors: Record<string, string> = {};
+      parsed.error.errors.forEach((err) => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0].toString()] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      toast.error("Please resolve validation errors to proceed.");
       return;
     }
 
     try {
       setSubmitting(true);
-      await signupApi(data);
+      await signupApi(parsed.data);
       toast.success("Welcome to JAZBAA 🎉");
       (e.target as HTMLFormElement).reset();
       setInterests([]);
       navigate("/login");
     } catch (err: any) {
-      // Handled by interceptor
+      toast.error(err?.response?.data?.message || "Registration failed. Try again.");
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <section className="relative min-h-screen pt-32 pb-24 bg-[#fbfaf8] dark:bg-black transition-colors duration-500 overflow-hidden">
-      {/* Ambient background glows */}
-      <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-orange-400/10 dark:bg-[#ff6a3d]/10 blur-[120px] rounded-full pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-blue-400/5 dark:bg-blue-500/5 blur-[120px] rounded-full pointer-events-none" />
+    <section className="relative min-h-screen pt-20 mt-5 pb-12 bg-[#fbfaf8] dark:bg-black transition-colors duration-500 overflow-hidden">
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-400/10 dark:bg-[#ff6a3d]/10 blur-[100px] rounded-full pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-400/5 dark:bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
 
-      <div className="max-w-[1400px] mx-auto px-4 grid lg:grid-cols-12 gap-12 lg:gap-20 items-start relative z-10">
+      <div className="max-w-[1300px] mx-auto px-4 grid lg:grid-cols-12 gap-8 lg:gap-12 items-start relative z-10">
         
         {/* =========================================
-            LEFT PANEL (Marketing & Illustration)
+            LEFT PANEL (Info Panel & Aligned List)
             ========================================= */}
-        <div className="lg:col-span-5 lg:sticky lg:top-24 space-y-6 lg:space-y-8 flex flex-col items-center lg:items-start text-center lg:text-left">
-          
+        <div className="lg:col-span-5 lg:sticky lg:top-20 space-y-5 lg:space-y-6 flex flex-col items-center lg:items-start text-center lg:text-left">
           <Reveal delay={0.1} className="w-full flex flex-col items-center lg:items-start">
-            {/* Animated "Free" Badge */}
             <motion.div
-              whileHover={{ scale: 1.05 }}
-              className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-orange-100 dark:bg-[#ff6a3d]/10 border border-orange-200 dark:border-[#ff6a3d]/20 shadow-sm mb-6 cursor-default transition-colors duration-300"
+              whileHover={{ scale: 1.02 }}
+              className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-orange-100 dark:bg-[#ff6a3d]/10 border border-orange-200 dark:border-[#ff6a3d]/20 shadow-sm mb-4 cursor-default"
             >
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6a3d] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#ff6a3d]"></span>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6a3d] opacity-75 animate-duration-1000"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff6a3d]"></span>
               </span>
-              <span className="text-sm md:text-base font-bold text-[#c04a18] dark:text-[#ff6a3d] uppercase tracking-wider">
+              <span className="text-xs md:text-sm font-bold text-[#c04a18] dark:text-[#ff6a3d] uppercase tracking-wider">
                 100% Free to Join
               </span>
             </motion.div>
@@ -157,16 +225,16 @@ const Signup = () => {
             <RevealText
               as="h1"
               text="Claim your space."
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.1] text-center lg:text-left w-full"
+              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.1] w-full"
             />
             
-            <p className="text-slate-600 dark:text-white/70 text-lg md:text-xl mt-6 font-medium leading-relaxed max-w-md">
+            <p className="text-slate-600 dark:text-white/70 text-base md:text-lg mt-3 font-medium leading-relaxed max-w-md">
               Takes less than 2 minutes to join the movement and start reconnecting with what you love.
             </p>
           </Reveal>
 
-          {/* Value Propositions / Checklist */}
-          <div className="pt-2 lg:pt-6 space-y-4 lg:space-y-5 w-full max-w-md">
+          {/* Checklist Layout Optimized for Mobile Alignment */}
+          <div className="pt-2 lg:pt-3 space-y-3.5 w-full max-w-md mx-auto lg:mx-0 flex flex-col items-start text-left">
             {[
               "Connect with like-minded peers",
               "Access exclusive local events",
@@ -175,111 +243,221 @@ const Signup = () => {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -20 }}
+                initial={{ opacity: 0, x: -15 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-                className="flex items-center gap-4 group justify-center lg:justify-start"
+                transition={{ delay: 0.2 + i * 0.08, duration: 0.4 }}
+                className="flex items-start gap-3 w-full"
               >
-                <div className="flex items-center justify-center w-8 h-8 shrink-0 rounded-full bg-slate-100 dark:bg-white/5 group-hover:bg-[#ff6a3d] transition-colors duration-300">
-                  <CheckCircle2 className="w-5 h-5 text-slate-400 dark:text-white/40 group-hover:text-white transition-colors duration-300" />
+                <div className="flex items-center justify-center w-6 h-6 shrink-0 mt-0.5 rounded-full bg-slate-100 dark:bg-white/5 text-slate-400 dark:text-white/40">
+                  <CheckCircle2 className="w-4 h-4 text-[#ff6a3d]" />
                 </div>
-                <span className="text-base md:text-lg text-slate-700 dark:text-white/80 font-medium group-hover:text-slate-900 dark:group-hover:text-white transition-colors duration-300">
+                <span className="text-sm md:text-base text-slate-700 dark:text-white/80 font-medium">
                   {item}
                 </span>
               </motion.div>
             ))}
           </div>
 
-          {/* Beautiful Floating Illustration */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="w-full max-w-[300px] sm:max-w-[360px] lg:max-w-[600px] mt-8 lg:mt-12 relative hidden sm:block"
+            transition={{ delay: 0.5, duration: 0.6 }}
+            className="w-full max-w-[240px] sm:max-w-[280px] lg:max-w-[400px] mt-4 lg:mt-6 relative hidden sm:block"
           >
-            {/* Soft backdrop glow for the illustration in dark mode */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#ff6a3d]/20 blur-[60px] rounded-full -z-10 hidden dark:block" />
-            
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full bg-[#ff6a3d]/15 blur-[40px] rounded-full -z-10 hidden dark:block" />
             <motion.img
-              animate={{ y: [0, -12, 0] }}
+              animate={{ y: [0, -8, 0] }}
               transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
               src={SIGNUP_ILLUSTRATION}
               alt="Join our community"
-              className="w-full h-full object-contain drop-shadow-2xl dark:drop-shadow-[0_10px_30px_rgba(255,106,61,0.15)] rounded-lg"
+              className="w-full h-auto object-contain drop-shadow-xl dark:drop-shadow-[0_10px_20px_rgba(255,106,61,0.1)] rounded-lg"
             />
           </motion.div>
         </div>
 
         {/* =========================================
-            RIGHT PANEL (The Form)
+            RIGHT PANEL (Form Entry Panel)
             ========================================= */}
         <div className="lg:col-span-7 w-full">
           <Reveal delay={0.2}>
             <form
               onSubmit={onSubmit}
-              className="bg-white dark:bg-zinc-900/80 p-6 sm:p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] shadow-xl dark:shadow-none border border-slate-200/60 dark:border-white/10 space-y-10 md:space-y-12 transition-colors duration-500 relative overflow-hidden"
+              className="bg-white dark:bg-zinc-900/80 p-5 sm:p-6 md:p-8 rounded-[1.5rem] md:rounded-[2rem] shadow-lg border border-slate-200/60 dark:border-white/10 space-y-6 md:space-y-8 relative overflow-hidden"
             >
-              {/* Subtle glass reflection effect inside form */}
-              <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-white/40 dark:from-white/5 to-transparent pointer-events-none" />
+              <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white/40 dark:from-white/5 to-transparent pointer-events-none" />
 
               {/* --- PERSONAL INFO --- */}
-              <div className="space-y-6 relative z-10">
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-white/10 pb-4">
+              <div className="space-y-4 relative z-10">
+                <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-white/10 pb-2">
                   Personal Details
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Field label="First name" focusState={focused === "fn"}>
-                    <Input name="firstName" required onFocus={() => setFocused("fn")} onBlur={() => setFocused(null)} className="form-input-premium" />
+                    <Input name="firstName" required onFocus={() => setFocused("fn")} onBlur={() => setFocused(null)} className="form-input-premium h-10 md:h-11" />
+                    {errors.firstName && <span className="text-xs text-red-500 mt-1 block">{errors.firstName}</span>}
                   </Field>
+
                   <Field label="Last name" focusState={focused === "ln"}>
-                    <Input name="lastName" required onFocus={() => setFocused("ln")} onBlur={() => setFocused(null)} className="form-input-premium" />
+                    <Input name="lastName" required onFocus={() => setFocused("ln")} onBlur={() => setFocused(null)} className="form-input-premium h-10 md:h-11" />
+                    {errors.lastName && <span className="text-xs text-red-500 mt-1 block">{errors.lastName}</span>}
                   </Field>
+
                   <Field label="Email Address" focusState={focused === "em"}>
-                    <Input name="email" type="email" required onFocus={() => setFocused("em")} onBlur={() => setFocused(null)} className="form-input-premium" />
+                    <Input name="email" type="email" required onFocus={() => setFocused("em")} onBlur={() => setFocused(null)} className="form-input-premium h-10 md:h-11" />
+                    {errors.email && <span className="text-xs text-red-500 mt-1 block">{errors.email}</span>}
                   </Field>
-                  <Field label="Mobile Number" focusState={focused === "mo"}>
-                    <Input name="mobile" type="tel" required onFocus={() => setFocused("mo")} onBlur={() => setFocused(null)} className="form-input-premium" />
-                  </Field>
-                  <Field label="Password" focusState={focused === "pw"}>
-                    <Input name="password" type="password" required minLength={6} onFocus={() => setFocused("pw")} onBlur={() => setFocused(null)} className="form-input-premium" />
-                  </Field>
-                  <Field label="Confirm Password" focusState={focused === "cpw"}>
-                    <Input name="confirmPassword" type="password" required minLength={6} onFocus={() => setFocused("cpw")} onBlur={() => setFocused(null)} className="form-input-premium" />
-                  </Field>
+
+                  {/* Phone Input with 10 digit enforcement */}
+                  <div className="flex flex-col space-y-1.5">
+                    <Label className="text-xs font-bold text-slate-500 dark:text-white/40 ml-1">Mobile Number</Label>
+                    <div className="flex gap-2">
+                      <div className="w-1/3 min-w-[90px]">
+                        <Select value={countryCode} onValueChange={setCountryCode}>
+                          <SelectTrigger className="h-10 md:h-11 rounded-lg bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 focus:ring-4 focus:ring-[#ff6a3d]/10 focus:border-[#ff6a3d] dark:text-white text-xs md:text-sm">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {countryCodes.map((cc) => (
+                              <SelectItem key={cc.code} value={cc.code}>
+                                {cc.code} ({cc.country})
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                      <div className="flex-1">
+                        <Input
+                          name="mobile"
+                          type="text"
+                          pattern="\d*"
+                          maxLength={10}
+                          inputMode="numeric"
+                          placeholder="10 digit number"
+                          required
+                          onKeyPress={(e) => {
+                            if (!/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                            }
+                          }}
+                          className="h-10 md:h-11 rounded-lg bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 focus:ring-4 focus:ring-[#ff6a3d]/10 focus:border-[#ff6a3d] dark:text-white text-xs md:text-sm px-3"
+                        />
+                      </div>
+                    </div>
+                    {errors.mobile && <span className="text-xs text-red-500 block">{errors.mobile}</span>}
+                  </div>
+
+                  {/* Password with Eye icon toggle */}
+                  <div className="flex flex-col space-y-1">
+                    <Field label="Password" focusState={focused === "pw"}>
+                      <div className="relative">
+                        <Input
+                          name="password"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Min. 8 chars, 1 uppercase, 1 symbol"
+                          required
+                          onFocus={() => setFocused("pw")}
+                          onBlur={() => setFocused(null)}
+                          className="form-input-premium h-10 md:h-11 pr-10 w-full"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </Field>
+                    {errors.password && <span className="text-xs text-red-500 block mt-1">{errors.password}</span>}
+                  </div>
+
+                  {/* Confirm Password with Eye icon toggle */}
+                  <div className="flex flex-col space-y-1">
+                    <Field label="Confirm Password" focusState={focused === "cpw"}>
+                      <div className="relative">
+                        <Input
+                          name="confirmPassword"
+                          type={showConfirmPassword ? "text" : "password"}
+                          required
+                          onFocus={() => setFocused("cpw")}
+                          onBlur={() => setFocused(null)}
+                          className="form-input-premium h-10 md:h-11 pr-10 w-full"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
+                        >
+                          {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                        </button>
+                      </div>
+                    </Field>
+                    {errors.confirmPassword && <span className="text-xs text-red-500 block mt-1">{errors.confirmPassword}</span>}
+                  </div>
                 </div>
               </div>
 
-              {/* --- LOCATION & AGE --- */}
-              <div className="space-y-6 relative z-10">
-                <h3 className="text-xl md:text-2xl font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-white/10 pb-4">
+              {/* --- DEMOGRAPHICS (DYNAMIC LOCATION API INTERACTION) --- */}
+              <div className="space-y-4 relative z-10">
+                <h3 className="text-lg md:text-xl font-bold text-slate-900 dark:text-white border-b border-slate-100 dark:border-white/10 pb-2">
                   Demographics
                 </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6">
-                  <Field label="City" focusState={focused === "ct"}>
-                    <Input name="city" required onFocus={() => setFocused("ct")} onBlur={() => setFocused(null)} className="form-input-premium" />
-                  </Field>
-                  <Field label="State" focusState={focused === "st"}>
-                    <Input name="state" required onFocus={() => setFocused("st")} onBlur={() => setFocused(null)} className="form-input-premium" />
-                  </Field>
-                  <Field label="Country" focusState={false}>
-                    <Select value={country} onValueChange={setCountry}>
-                      <SelectTrigger className="h-12 md:h-14 rounded-xl md:rounded-2xl bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 focus:ring-4 focus:ring-[#ff6a3d]/10 focus:border-[#ff6a3d] dark:text-white transition-all text-sm md:text-base">
-                        <SelectValue />
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  
+                  {/* Country Dropdown */}
+                  <div className="flex flex-col space-y-1.5">
+                    <Label className="text-xs font-bold text-slate-500 dark:text-white/40 ml-1">Country</Label>
+                    <Select value={country} onValueChange={setCountry} disabled={countriesLoading}>
+                      <SelectTrigger className="h-10 md:h-11 rounded-lg bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 text-xs md:text-sm">
+                        <SelectValue placeholder={countriesLoading ? "Loading..." : "Select Country"} />
                       </SelectTrigger>
                       <SelectContent>
-                        {["India", "United States", "United Kingdom", "UAE", "Singapore", "Canada", "Australia", "Other"].map((c) => (
+                        {countriesList.map((c) => (
                           <SelectItem key={c} value={c}>{c}</SelectItem>
                         ))}
                       </SelectContent>
                     </Select>
-                  </Field>
+                    {errors.country && <span className="text-xs text-red-500 block">{errors.country}</span>}
+                  </div>
+
+                  {/* State Dropdown */}
+                  <div className="flex flex-col space-y-1.5">
+                    <Label className="text-xs font-bold text-slate-500 dark:text-white/40 ml-1">State</Label>
+                    <Select value={state} onValueChange={setState} disabled={statesLoading || !country}>
+                      <SelectTrigger className="h-10 md:h-11 rounded-lg bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 text-xs md:text-sm">
+                        <SelectValue placeholder={statesLoading ? "Loading..." : "Select State"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {statesList.map((st) => (
+                          <SelectItem key={st} value={st}>{st}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.state && <span className="text-xs text-red-500 block">{errors.state}</span>}
+                  </div>
+
+                  {/* City Dropdown */}
+                  <div className="flex flex-col space-y-1.5">
+                    <Label className="text-xs font-bold text-slate-500 dark:text-white/40 ml-1">City</Label>
+                    <Select value={city} onValueChange={setCity} disabled={citiesLoading || !state}>
+                      <SelectTrigger className="h-10 md:h-11 rounded-lg bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 text-xs md:text-sm">
+                        <SelectValue placeholder={citiesLoading ? "Loading..." : "Select City"} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {citiesList.map((ct) => (
+                          <SelectItem key={ct} value={ct}>{ct}</SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    {errors.city && <span className="text-xs text-red-500 block">{errors.city}</span>}
+                  </div>
                 </div>
 
                 <div>
-                  <Label className="text-xs uppercase tracking-widest font-bold text-slate-500 dark:text-white/40 mb-3 block">
+                  <Label className="text-[10px] uppercase tracking-widest font-bold text-slate-500 dark:text-white/40 mb-2 block">
                     Age Group
                   </Label>
-                  <div className="flex flex-wrap gap-3">
+                  <div className="flex flex-wrap gap-2">
                     {[
                       { v: "upto25", l: "Up to 25" },
                       { v: "25to50", l: "25 – 50" },
@@ -290,25 +468,26 @@ const Signup = () => {
                         type="button"
                         onClick={() => setAgeGroup(o.v)}
                         className={cn(
-                          "px-5 md:px-6 py-2.5 md:py-3 rounded-full text-sm md:text-base font-bold border transition-all duration-300",
+                          "px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-bold border transition-all duration-300",
                           ageGroup === o.v
-                            ? "bg-[#ff6a3d] border-[#ff6a3d] text-white shadow-md shadow-[#ff6a3d]/20 scale-[1.02]"
-                            : "bg-white dark:bg-black/40 border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60 hover:border-slate-300 dark:hover:border-white/30 hover:scale-[1.02]"
+                            ? "bg-[#ff6a3d] border-[#ff6a3d] text-white shadow-sm scale-[1.01]"
+                            : "bg-white dark:bg-black/40 border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60 hover:border-slate-300 hover:scale-[1.01]"
                         )}
                       >
                         {o.l}
                       </button>
                     ))}
                   </div>
+                  {errors.ageGroup && <span className="text-xs text-red-500 mt-1 block">{errors.ageGroup}</span>}
                 </div>
               </div>
 
               {/* --- ROLE CATEGORY --- */}
-              <div className="space-y-4 relative z-10">
-                <Label className="text-xs uppercase tracking-widest font-bold text-slate-500 dark:text-white/40 mb-2 block">
+              <div className="space-y-3 relative z-10">
+                <Label className="text-[10px] uppercase tracking-widest font-bold text-slate-500 dark:text-white/40 mb-1.5 block">
                   How do you want to join?
                 </Label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[
                     { v: "Member", d: "Attend events & connect" },
                     { v: "Volunteer", d: "Help organize & engage" },
@@ -319,34 +498,35 @@ const Signup = () => {
                       type="button"
                       onClick={() => setCategory(o.v as any)}
                       className={cn(
-                        "p-4 md:p-5 rounded-2xl border text-left transition-all duration-300 flex flex-col gap-1.5 md:gap-2",
+                        "p-3 md:p-4 rounded-xl border text-left transition-all duration-300 flex flex-col gap-1 md:gap-1.5",
                         category === o.v
-                          ? "bg-orange-50 dark:bg-[#ff6a3d]/10 border-[#ff6a3d] ring-1 ring-[#ff6a3d] scale-[1.02]"
-                          : "bg-white dark:bg-black/40 border-slate-200 dark:border-white/10 hover:border-slate-300 dark:hover:border-white/30 hover:scale-[1.02]"
+                          ? "bg-orange-50 dark:bg-[#ff6a3d]/10 border-[#ff6a3d] ring-1 ring-[#ff6a3d] scale-[1.01]"
+                          : "bg-white dark:bg-black/40 border-slate-200 dark:border-white/10 hover:border-slate-300 hover:scale-[1.01]"
                       )}
                     >
-                      <span className={cn("font-bold text-base md:text-lg transition-colors", category === o.v ? "text-[#ff6a3d]" : "text-slate-900 dark:text-white")}>
+                      <span className={cn("font-bold text-sm md:text-base transition-colors", category === o.v ? "text-[#ff6a3d]" : "text-slate-900 dark:text-white")}>
                         {o.v}
                       </span>
-                      <span className="text-xs md:text-sm text-slate-500 dark:text-white/50 leading-snug">
+                      <span className="text-[11px] md:text-xs text-slate-500 dark:text-white/50 leading-snug">
                         {o.d}
                       </span>
                     </button>
                   ))}
                 </div>
+                {errors.category && <span className="text-xs text-red-500 mt-1 block">{errors.category}</span>}
               </div>
 
               {/* --- INTERESTS --- */}
-              <div className="space-y-4 relative z-10">
-                <div className="flex justify-between items-end mb-2">
-                  <Label className="text-xs uppercase tracking-widest font-bold text-slate-500 dark:text-white/40">
+              <div className="space-y-3 relative z-10">
+                <div className="flex justify-between items-end mb-1">
+                  <Label className="text-[10px] uppercase tracking-widest font-bold text-slate-500 dark:text-white/40">
                     Select Interests
                   </Label>
-                  <span className="text-xs font-bold text-[#ff6a3d] bg-orange-100 dark:bg-[#ff6a3d]/20 px-2 py-1 rounded-md">
+                  <span className="text-[10px] font-bold text-[#ff6a3d] bg-orange-100 dark:bg-[#ff6a3d]/20 px-1.5 py-0.5 rounded">
                     {interests.length}/3 selected
                   </span>
                 </div>
-                <div className="flex flex-wrap gap-2 md:gap-2.5">
+                <div className="flex flex-wrap gap-1.5 md:gap-2">
                   {interestsList.map((i) => {
                     const active = interests.includes(i);
                     return (
@@ -354,12 +534,12 @@ const Signup = () => {
                         key={i}
                         type="button"
                         onClick={() => toggleInterest(i)}
-                        whileTap={{ scale: 0.95 }}
+                        whileTap={{ scale: 0.97 }}
                         className={cn(
-                          "px-4 md:px-5 py-2 md:py-2.5 rounded-full text-xs md:text-sm font-bold border transition-all duration-300",
+                          "px-3.5 py-1.5 rounded-full text-[11px] md:text-xs font-bold border transition-all duration-300",
                           active
-                            ? "bg-slate-900 dark:bg-white text-white dark:text-black border-transparent shadow-md"
-                            : "bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60 hover:border-slate-300 dark:hover:border-white/30"
+                            ? "bg-slate-900 dark:bg-white text-white dark:text-black border-transparent shadow-sm"
+                            : "bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60 hover:border-slate-300 hover:scale-[1.01]"
                         )}
                       >
                         {i}
@@ -367,27 +547,29 @@ const Signup = () => {
                     );
                   })}
                 </div>
+                {errors.interests && <span className="text-xs text-red-500 mt-1 block">{errors.interests}</span>}
               </div>
 
               {/* --- CONSENT --- */}
-              <div className="pt-6 border-t border-slate-200/60 dark:border-white/10 relative z-10">
-                <label className="flex items-start gap-4 cursor-pointer group">
+              <div className="pt-4 border-t border-slate-200/60 dark:border-white/10 relative z-10">
+                <label className="flex items-start gap-3 cursor-pointer group">
                   <div className="relative flex items-center justify-center mt-0.5 shrink-0">
                     <input type="checkbox" className="peer sr-only" checked={consent} onChange={(e) => setConsent(e.target.checked)} />
-                    <div className="w-6 h-6 rounded-md border-2 border-slate-300 dark:border-white/20 flex items-center justify-center transition-all peer-checked:border-[#ff6a3d] peer-checked:bg-[#ff6a3d]/10">
-                      <Check className={cn("w-4 h-4 text-[#ff6a3d] transition-all duration-200", consent ? "opacity-100 scale-100" : "opacity-0 scale-75")} />
+                    <div className="w-5 h-5 rounded border-2 border-slate-300 dark:border-white/20 flex items-center justify-center transition-all peer-checked:border-[#ff6a3d] peer-checked:bg-[#ff6a3d]/10">
+                      <Check className={cn("w-3.5 h-3.5 text-[#ff6a3d] transition-all duration-200", consent ? "opacity-100 scale-100" : "opacity-0 scale-75")} />
                     </div>
                   </div>
-                  <span className="text-sm md:text-base text-slate-600 dark:text-white/60 font-medium leading-relaxed group-hover:text-slate-900 dark:group-hover:text-white/90 transition-colors">
+                  <span className="text-xs md:text-sm text-slate-600 dark:text-white/60 font-medium leading-relaxed group-hover:text-slate-900 dark:group-hover:text-white/90 transition-colors">
                     I give consent to capture my details for JAZBAA activities. The data will be used securely for notifications and platform updates.
                     <span className="text-red-500 ml-1">*</span>
                   </span>
                 </label>
+                {errors.consent && <span className="text-xs text-red-500 mt-2 block">{errors.consent}</span>}
               </div>
 
               {/* --- SUBMIT --- */}
-              <div className="flex flex-col-reverse sm:flex-row gap-6 items-center justify-between pt-4 relative z-10">
-                <p className="text-sm md:text-base font-medium text-slate-500 dark:text-white/50 text-center sm:text-left">
+              <div className="flex flex-col-reverse sm:flex-row gap-4 items-center justify-between pt-2 relative z-10">
+                <p className="text-xs md:text-sm font-medium text-slate-500 dark:text-white/50 text-center sm:text-left">
                   Already have an account? <br className="sm:hidden" />
                   <Link to="/login" className="text-[#ff6a3d] hover:underline font-bold sm:ml-1">
                     Sign in here
@@ -397,15 +579,15 @@ const Signup = () => {
                 <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full sm:w-auto h-14 px-8 rounded-full bg-[#ff6a3d] hover:bg-[#e05b3e] text-white text-base font-bold shadow-lg hover:shadow-orange-500/30 transition-all duration-300 group"
+                  className="w-full sm:w-auto h-11 px-6 rounded-full bg-[#ff6a3d] hover:bg-[#e05b3e] text-white text-sm font-bold shadow hover:shadow-orange-500/20 transition-all duration-300 group"
                 >
                   {submitting ? (
                     <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }}>
-                      <Sparkles className="w-5 h-5" />
+                      <Sparkles className="w-4 h-4" />
                     </motion.div>
                   ) : (
-                    <span className="flex items-center gap-2">
-                      Create Account <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+                    <span className="flex items-center gap-1.5">
+                      Create Account <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
                     </span>
                   )}
                 </Button>
