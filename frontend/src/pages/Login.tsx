@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
@@ -21,8 +21,27 @@ const Login = () => {
   const [busy, setBusy] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
   const { setUser } = useAuth();
+
+  // Detect and track system/document dark mode status
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    };
+
+    checkDarkMode();
+
+    // Observe changes to the html class attribute in case dark mode is toggled
+    const observer = new MutationObserver(checkDarkMode);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -114,9 +133,10 @@ const Login = () => {
             RIGHT PANEL (Login Form Panel)
             ========================================= */}
         <Reveal delay={0.1} className="flex justify-center w-full">
+          {/* Changed dark:bg-zinc-900/80 to solid dark:bg-zinc-900 to match inner components */}
           <form
             onSubmit={onSubmit}
-            className="bg-white dark:bg-zinc-900/80 p-5 sm:p-6 md:p-8 w-full max-w-[400px] sm:max-w-md mx-auto rounded-[1.5rem] md:rounded-[2rem] shadow-lg border border-slate-200/60 dark:border-white/10 space-y-5 md:space-y-6 relative overflow-hidden transition-colors duration-500"
+            className="bg-white dark:bg-zinc-900 p-5 sm:p-6 md:p-8 w-full max-w-[400px] sm:max-w-md mx-auto rounded-[1.5rem] md:rounded-[2rem] shadow-lg border border-slate-200/60 dark:border-white/10 space-y-5 md:space-y-6 relative overflow-hidden transition-colors duration-500"
           >
             <div className="absolute top-0 left-0 w-full h-24 bg-gradient-to-b from-white/40 dark:from-white/5 to-transparent pointer-events-none" />
 
@@ -222,7 +242,7 @@ const Login = () => {
               <GoogleLogin
                 onSuccess={handleGoogleLogin}
                 onError={() => toast.error("Google login failed")}
-                theme="outline"
+                theme={isDark ? "filled_black" : "outline"}
                 shape="pill"
                 size="large"
               />
