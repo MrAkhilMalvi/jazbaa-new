@@ -10,15 +10,16 @@ const pool = new Pool({
   password: String(process.env.DB_PASSWORD), // ensure string
   port: Number(process.env.DB_PORT),
 
-  ssl:
-    process.env.NODE_ENV === "production"
-      ? { rejectUnauthorized: false }
-      : false,
+  // ssl:
+  //   process.env.NODE_ENV === "production"
+  //     ? { rejectUnauthorized: false }
+  //     : false,
 
   // optional tuning
   max: 10,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 5000,
+  ssl: false,
 });
 
 // ✅ Test connection once
