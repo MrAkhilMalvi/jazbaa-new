@@ -134,29 +134,32 @@ const Events = () => {
 
   return (
     <div className="bg-[#fbfaf8] dark:bg-black min-h-screen transition-colors duration-300 overflow-hidden relative">
-      {/* Background Glows for Dark Mode */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-orange-500/10 blur-[120px] rounded-full pointer-events-none hidden dark:block" />
+      {/* Decorative Grid and Background Lights */}
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-gradient-to-b from-orange-500/10 to-transparent blur-[120px] rounded-full pointer-events-none" />
 
       {/* =========================================
-          HERO SECTION
+          HERO SECTION (Centered Layout)
           ========================================= */}
-      <section className="pt-32 md:pt-30 pb-12 px-4 relative z-10">
-        <div className="max-w-[1400px] mx-auto">
+      <section className="pt-28 md:pt-36 pb-12 px-4 relative z-10 text-center">
+        <div className="max-w-[1000px] mx-auto flex flex-col items-center">
           <Reveal>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 dark:bg-orange-500/10 mb-6 border border-orange-200 dark:border-orange-500/20 shadow-sm transition-colors duration-300">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-500/10 mb-6 border border-orange-200 dark:border-orange-500/20 shadow-sm transition-colors duration-300">
               <CalendarDays className="w-4 h-4 text-[#ff6a3d]" />
-              <span className="text-xs sm:text-sm font-bold tracking-[0.15em] text-[#c04a18] dark:text-orange-400 uppercase">
+              <span className="text-xs font-bold tracking-[0.15em] text-[#c04a18] dark:text-orange-400 uppercase">
                 Gatherings
               </span>
             </div>
           </Reveal>
+
           <RevealText
             as="h1"
             text="Experience the joy of living your passion."
-            className="text-[clamp(2.5rem,6vw,5.5rem)] font-bold text-slate-900 dark:text-white leading-[1.05] tracking-tight max-w-[18ch] transition-colors duration-300"
+            className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-slate-900 dark:text-white leading-[1.1] tracking-tight max-w-[22ch] transition-colors duration-300"
           />
+
           <Reveal delay={0.2}>
-            <p className="mt-6 text-lg md:text-xl text-slate-600 dark:text-white/70 max-w-2xl font-medium transition-colors duration-300">
+            <p className="mt-6 text-base sm:text-lg md:text-xl text-slate-600 dark:text-white/70 max-w-2xl font-medium transition-colors duration-300 leading-relaxed">
               Hosted periodically — online and in-person — so you can engage at
               your convenience with a community that shares your energy.
             </p>
@@ -169,8 +172,8 @@ const Events = () => {
           ========================================= */}
       <section className="pb-24 px-4 relative z-10">
         <div className="max-w-[1400px] mx-auto">
-          {/* Custom Sleek Tabs */}
-          <div className="flex justify-center md:justify-start mb-12">
+          {/* Custom Tabs */}
+          <div className="flex justify-center mb-16">
             <div className="inline-flex p-1.5 bg-slate-200/50 dark:bg-zinc-900/80 backdrop-blur-md rounded-full border border-slate-200 dark:border-white/10 transition-colors duration-300">
               {(["Upcoming", "Past"] as EventStatus[]).map((tab) => (
                 <button
@@ -181,7 +184,7 @@ const Events = () => {
                   {activeTab === tab ? (
                     <motion.div
                       layoutId="active-pill"
-                      className="absolute inset-0 bg-white dark:bg-zinc-800 rounded-full shadow-sm border border-slate-200 dark:border-white/10"
+                      className="absolute inset-0 bg-white dark:bg-zinc-800 rounded-full shadow-sm border border-slate-200/50 dark:border-white/10"
                       transition={{
                         type: "spring",
                         stiffness: 400,

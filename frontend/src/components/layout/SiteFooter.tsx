@@ -23,7 +23,6 @@ export function SiteFooter() {
               />
             </Link>
 
-            {/* Increased font size for better readability */}
             <p className="mt-4 max-w-md text-base md:text-lg text-slate-600 dark:text-white/70 leading-relaxed font-medium">
               A vibrant community where music, movement, mindfulness, and
               meaningful connections come together.
@@ -41,7 +40,6 @@ export function SiteFooter() {
               Explore
             </h4>
             <ul className="space-y-3 md:space-y-4 text-base md:text-lg font-medium text-slate-600 dark:text-white/70">
-              {/* Explicitly mapping out links to handle the anchor tag */}
               <li>
                 <Link
                   to="/#about"
@@ -91,10 +89,10 @@ export function SiteFooter() {
                   href="https://www.instagram.com/jazbaa.events/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
+                  className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
                 >
-                  <Instagram className="h-5 w-5 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
-                  @Jazbaa.Events
+                  <Instagram className="h-5 w-5 shrink-0 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
+                  <span className="truncate">@Jazbaa.Events</span>
                 </a>
               </li>
               <li>
@@ -102,22 +100,21 @@ export function SiteFooter() {
                   href="https://www.youtube.com/@Jazbaa.Events"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
+                  className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
                 >
-                  <Youtube className="h-5 w-5 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
-                  JAZBAA Community
+                  <Youtube className="h-5 w-5 shrink-0 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
+                  <span className="truncate">JAZBAA Community</span>
                 </a>
               </li>
-
               <li>
                 <a
-                  href="https://www.facebook.com/profile.php?id=61588994383834" // update if your URL is different
+                  href="https://www.facebook.com/profile.php?id=61588994383834"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
+                  className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
                 >
-                  <FacebookIcon className="h-5 w-5 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
-                  Jazbaa Events
+                  <FacebookIcon className="h-5 w-5 shrink-0 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
+                  <span className="truncate">Jazbaa Events</span>
                 </a>
               </li>
             </ul>
@@ -127,7 +124,7 @@ export function SiteFooter() {
         {/* =========================================
             BOTTOM BAR (Copyright, Legal, Tagline)
             ========================================= */}
-        <div className="mt-5 md:mt-5 pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
+        <div className="mt-12 pt-8 border-t border-slate-200 dark:border-white/10 flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
           {/* Left: Copyright & Legal Links */}
           <div className="flex flex-col gap-3 items-center lg:items-start">
             <p className="text-sm md:text-base text-slate-500 dark:text-white/50 font-medium">
@@ -165,7 +162,6 @@ export function SiteFooter() {
             Don't just live.{" "}
             <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-[#ff6a3d] to-[#ff9e80] relative inline-block group">
               Feel alive.
-              {/* Subtle underline hover effect */}
               <span className="absolute bottom-1 left-0 w-full h-[2px] bg-[#ff6a3d]/40 scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-500 ease-out" />
             </span>
           </div>
