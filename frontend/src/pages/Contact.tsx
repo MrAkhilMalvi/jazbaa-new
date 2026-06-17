@@ -109,7 +109,7 @@ const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
             </Reveal>
 
             {[
-              { icon: Mail, l: "Write to us", v: "hello@jazbaa.life", cLight: "bg-blue-50 text-blue-600", cDark: "dark:bg-blue-500/10 dark:text-blue-400" },
+              { icon: Mail, l: "Write to us", v: "jazbaa.experiences@gmail.com", cLight: "bg-blue-50 text-blue-600", cDark: "dark:bg-blue-500/10 dark:text-blue-400" },
               { icon: Phone, l: "Call us", v: "+91 90000 00000", cLight: "bg-emerald-50 text-emerald-600", cDark: "dark:bg-emerald-500/10 dark:text-emerald-400" },
               { icon: MapPin, l: "Find us", v: "NAVIRA LIFE Essentials, India", cLight: "bg-purple-50 text-purple-600", cDark: "dark:bg-purple-500/10 dark:text-purple-400" },
             ].map(({ icon: Icon, l, v, cLight, cDark }, i) => (

@@ -55,9 +55,13 @@ export const googleLogin = async (req, res, next) => {
     };
 
     const { user, accessToken, refreshToken } =
-      await service.googleUser(req.body.token, meta); // ✅ pass meta
+      await service.googleUser(req.body.token, meta);
+      
+    console.log("NODE_ENV:", process.env.NODE_ENV);
 
     setAuthCookies(res, accessToken, refreshToken);
+
+    console.log("Headers:", res.getHeaders());
 
     res.json({ user });
   } catch (err) {

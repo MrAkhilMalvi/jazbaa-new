@@ -79,11 +79,11 @@ export function SiteFooter() {
             <ul className="space-y-4 md:space-y-5 text-base md:text-lg font-medium text-slate-600 dark:text-white/70">
               <li>
                 <a
-                  href="mailto:hello@jazbaa.life"
+                  href="mailto:jazbaa.experiences@gmail.com"
                   className="flex items-center gap-3 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
                 >
                   <Mail className="h-5 w-5 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
-                  hello@jazbaa.life
+                  jazbaa.experiences@gmail.com
                 </a>
               </li>
               <li>

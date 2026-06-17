@@ -279,7 +279,8 @@ const Events = () => {
                               {" "}
                               {isPreview
                                 ? "Venue / Location- To Be Announced"
-                                : e.location || "Venue / Location- To Be Announced"}
+                                : e.location ||
+                                  "Venue / Location- To Be Announced"}
                             </span>
                           </div>
                         </div>
@@ -287,20 +288,44 @@ const Events = () => {
                     </div>
 
                     {/* Action Button */}
+                    {/* Action Button */}
                     <div className="mt-auto pt-8">
-                      <Button
-                        className={cn(
-                          "w-full h-12 rounded-xl text-base font-bold shadow-none group/btn transition-all duration-300",
-                          activeTab === "Upcoming"
-                            ? "bg-[#ff6a3d] hover:bg-[#e05b3e] text-white hover:shadow-lg hover:shadow-orange-500/20"
-                            : "bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-zinc-700",
-                        )}
-                      >
-                        {activeTab === "Upcoming"
-                          ? "Register Now"
-                          : "View Recap"}
-                        <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
-                      </Button>
+                      {activeTab === "Upcoming" &&
+                      e.title === "Sunday Karaoke Night" ? (
+                        <>
+                          <a
+                            href="https://luma.com/event/evt-YQutH4Qq1nwlqsa"
+                            className={cn(
+                              "w-full h-12 rounded-xl text-base font-bold flex items-center justify-center bg-[#ff6a3d] hover:bg-[#e05b3e] text-white transition-all duration-300 hover:shadow-lg hover:shadow-orange-500/20 group/btn",
+                            )}
+                            data-luma-action="checkout"
+                            data-luma-event-id="evt-YQutiuh"
+                          >
+                            Register Now
+                            <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
+                          </a>
+
+                          <script
+                            async
+                            src="https://embed.lu.ma/checkout-button.js"
+                          ></script>
+                        </>
+                      ) : (
+                        <Button
+                          className={cn(
+                            "w-full h-12 rounded-xl text-base font-bold shadow-none group/btn transition-all duration-300",
+                            activeTab === "Upcoming"
+                              ? "bg-[#ff6a3d] hover:bg-[#e05b3e] text-white hover:shadow-lg hover:shadow-orange-500/20"
+                              : "bg-slate-100 dark:bg-zinc-800 text-slate-900 dark:text-white hover:bg-slate-200 dark:hover:bg-zinc-700",
+                          )}
+                        >
+                          {activeTab === "Upcoming"
+                            ? "Register Now"
+                            : "View Recap"}
+
+                          <ArrowUpRight className="ml-2 h-5 w-5 transition-transform group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
+                        </Button>
+                      )}
                     </div>
                   </div>
                 </motion.article>
