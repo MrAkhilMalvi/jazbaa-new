@@ -45,28 +45,38 @@ export function SiteHeader() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // Monitor location changes to handle smooth scrolling to hash IDs
+  useEffect(() => {
+    if (location.hash) {
+      const id = location.hash.replace("#", "");
+      const element = document.getElementById(id);
+      if (element) {
+        const timer = setTimeout(() => {
+          element.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [location.pathname, location.hash]);
+
   // Custom Navigation Handler for Smooth Hash Scrolling
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, target: string) => {
     setOpen(false); // Close mobile menu if open
 
     if (target === "/#about") {
+      e.preventDefault();
       if (location.pathname === "/") {
-        // If already on Home page, intercept the click and scroll smoothly
-        e.preventDefault();
-        const element = document.getElementById("about");
-        if (element) {
-          element.scrollIntoView({ behavior: "smooth" });
-          // Optionally update URL without jumping
-          window.history.pushState(null, "", "#about");
-        }
+        navigate({ hash: "#about" });
+      } else {
+        navigate("/#about");
       }
-      // If NOT on Home page, allow default behavior (React Router handles it)
     } else if (target === "/") {
+      e.preventDefault();
       if (location.pathname === "/") {
-        // Smooth scroll to top if already on Home
-        e.preventDefault();
         window.scrollTo({ top: 0, behavior: "smooth" });
-        window.history.pushState(null, "", "/");
+        navigate({ hash: "" });
+      } else {
+        navigate("/");
       }
     }
   };
@@ -78,11 +88,13 @@ export function SiteHeader() {
     return location.pathname.startsWith(to);
   };
 
+  const isLoginActive = location.pathname === "/login";
+  const isSignupActive = location.pathname === "/signup";
+
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 w-full z-50 transition-all duration-300",
-        // Modern glassmorphism background that looks great in both light and dark modes
         scrolled
           ? "bg-white/80 dark:bg-black/80 backdrop-blur-lg border-b border-slate-200 dark:border-white/10 shadow-sm py-2"
           : "bg-white/95 dark:bg-black/95 backdrop-blur-sm border-b border-transparent py-4"
@@ -118,9 +130,9 @@ export function SiteHeader() {
                 to={l.to}
                 onClick={(e) => handleNavClick(e, l.to)}
                 className={cn(
-                  "px-4 py-2 text-base font-semibold transition-all duration-300 rounded-full",
+                  "relative px-4 py-2 text-base font-semibold transition-all duration-300 rounded-full",
                   isActive
-                    ? "bg-orange-50 dark:bg-[#ff6a3d]/10 text-[#ff6a3d]"
+                    ? "bg-[#ff6a3d] text-white shadow-lg shadow-orange-500/25"
                     : "text-slate-600 dark:text-white/70 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-slate-900 dark:hover:text-white"
                 )}
               >
@@ -138,17 +150,29 @@ export function SiteHeader() {
 
           {!user ? (
             <>
+              {/* Login Button with Dynamic States */}
               <Button
                 asChild
                 variant="ghost"
-                className="hidden sm:inline-flex hover:bg-slate-100 dark:hover:bg-white/5 text-slate-700 dark:text-white rounded-full text-base font-semibold transition-colors h-10 px-5"
+                className={cn(
+                  "hidden sm:inline-flex rounded-full text-base font-semibold transition-all duration-300 ease-in-out h-10 px-6 border",
+                  isLoginActive
+                    ? "bg-orange-50 dark:bg-[#ff6a3d]/10 text-[#ff6a3d] border-[#ff6a3d]/30"
+                    : "bg-slate-100/80 hover:bg-[#ff6a3d]/10 dark:bg-white/5 dark:hover:bg-[#ff6a3d]/15 text-slate-800 dark:text-slate-200 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] border-slate-200/40 dark:border-white/5 hover:border-[#ff6a3d]/20 dark:hover:border-[#ff6a3d]/20"
+                )}
               >
                 <Link to="/login">Login</Link>
               </Button>
 
+              {/* Sign Up Button with Dynamic States */}
               <Button
                 asChild
-                className="hidden sm:inline-flex rounded-full text-base font-bold bg-[#ff6a3d] hover:bg-[#e05b3e] text-white shadow-lg hover:shadow-orange-500/30 transition-all h-10 px-6 border-0"
+                className={cn(
+                  "hidden sm:inline-flex rounded-full text-base font-bold transition-all h-10 px-6 border",
+                  isSignupActive
+                    ? "bg-[#ff6a3d] text-white border-[#ff6a3d] shadow-lg shadow-orange-500/30 ring-2 ring-[#ff6a3d]/20"
+                    : "bg-[#ff6a3d] hover:bg-[#e05b3e] text-white border-transparent hover:shadow-orange-500/30 shadow-lg"
+                )}
               >
                 <Link to="/signup">Join / Sign up</Link>
               </Button>
@@ -228,19 +252,29 @@ export function SiteHeader() {
               );
             })}
 
-            {/* Show auth buttons in mobile view if logged out */}
+            {/* Auth buttons in mobile view if logged out */}
             {!user && (
               <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-slate-200 dark:border-white/10">
                 <Button
                   asChild
                   variant="ghost"
-                  className="w-full justify-center hover:bg-slate-100 dark:hover:bg-white/5 text-slate-700 dark:text-white rounded-xl h-12 text-base font-semibold"
+                  className={cn(
+                    "w-full justify-center rounded-xl transition-all duration-300 h-12 text-base font-semibold border",
+                    isLoginActive
+                      ? "bg-orange-50 dark:bg-[#ff6a3d]/10 text-[#ff6a3d] border-[#ff6a3d]/20"
+                      : "bg-slate-100/80 hover:bg-[#ff6a3d]/10 dark:bg-white/5 text-slate-800 dark:text-slate-200 border-slate-200/40 dark:border-white/5"
+                  )}
                 >
                   <Link to="/login" onClick={() => setOpen(false)}>Login</Link>
                 </Button>
                 <Button
                   asChild
-                  className="w-full rounded-xl h-12 text-base font-bold bg-[#ff6a3d] hover:bg-[#e05b3e] text-white shadow-md border-0"
+                  className={cn(
+                    "w-full rounded-xl h-12 text-base font-bold transition-all border",
+                    isSignupActive
+                      ? "bg-[#ff6a3d] text-white border-[#ff6a3d] shadow-lg shadow-orange-500/25"
+                      : "bg-[#ff6a3d] hover:bg-[#e05b3e] text-white border-transparent shadow-md"
+                  )}
                 >
                   <Link to="/signup" onClick={() => setOpen(false)}>Join the Community</Link>
                 </Button>

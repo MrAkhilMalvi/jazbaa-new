@@ -15,7 +15,7 @@ import { useAuth } from "@/context/AuthContext";
 import { loginSchema } from "@/lib/auth.schema";
 
 const SIDE_IMG =
-  "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=1400&q=85";
+  "/images/loginimage.jpeg";
 
 const Login = () => {
   const [busy, setBusy] = useState(false);
@@ -94,7 +94,7 @@ const Login = () => {
   };
 
   return (
-    <section className="relative min-h-screen py-10 lg:py-16 flex items-center justify-center overflow-hidden bg-[#fbfaf8] dark:bg-black transition-colors duration-500">
+    <section className="relative min-h-screen py-10 lg:py-16 flex items-center mt-5 justify-center overflow-hidden bg-[#fbfaf8] dark:bg-black transition-colors duration-500">
       <Aurora className="opacity-40 dark:opacity-20 hidden md:block" />
       <div className="absolute top-[-10%] left-[-10%] w-[300px] h-[300px] bg-orange-400/20 dark:bg-[#ff6a3d]/20 blur-[100px] rounded-full pointer-events-none md:hidden" />
 
@@ -118,12 +118,11 @@ const Login = () => {
             <div className="relative z-10 h-full flex flex-col justify-end p-10 text-white">
               <RevealText
                 as="h2"
-                text="Your tribe is waiting."
+                text="Find your people. Follow your passion."
                 className="font-bold text-4xl xl:text-5xl tracking-tight leading-[1.1] mb-4"
               />
-              <p className="max-w-sm text-sm xl:text-base text-white/80 font-medium leading-relaxed">
-                Sign in to RSVP for sessions, manage your interests, and connect
-                with members in your city.
+              <p className="max-w-lg text-sm xl:text-base text-white/80 font-medium leading-relaxed">
+                Sign in to explore experiences, connect with inspiring individuals, and make every moment meaningful.
               </p>
             </div>
           </div>

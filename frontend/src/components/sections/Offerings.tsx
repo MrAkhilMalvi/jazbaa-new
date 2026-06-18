@@ -7,15 +7,15 @@ import { Sparkles, Mic2, BookOpen, Heart, Users } from "lucide-react";
 // Using Lucide icons instead of raw SVGs for cleaner code and better alignment
 const offers = [
   {
-    label: "Creative Expression",
+    label: "Performing Arts",
     items: ["Singing & Karaoke", "Music & Instrument Circles", "Dance & Movement"],
-    img: "/images/Offerings/passion1.jpg",
+    img: "/images/Offerings/passion1.jpeg",
     icon: Mic2,
   },
   {
     label: "Intellectual Engagement",
     items: ["Reader's Club & Discussions", "Storytelling", "Open Mic Evenings"],
-    img: "/images/Offerings/passion2.jpg",
+    img: "/images/Offerings/passion2.jpeg",
     icon: BookOpen,
   },
   {
@@ -27,7 +27,7 @@ const offers = [
   {
     label: "Social Connection",
     items: ["Community Meetups", "Themed Events & Concerts", "Friendship Circles"],
-    img: "/images/other/image7.jpg",
+    img: "/images/Offerings/passion4.jpeg",
     icon: Users,
   },
 ];

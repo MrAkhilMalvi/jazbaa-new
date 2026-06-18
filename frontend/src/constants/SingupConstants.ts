@@ -1,15 +1,18 @@
 export const interestsList = [
-  "Music",
   "Art",
   "Karaoke / Singing",
   "Dance",
   "Meditation",
   "Open Mic",
-  "Drawing",
+  "Drawing / Painting / Sketching",
   "Reader's Club",
   "Story Telling",
   "Concert / Classic Movies",
   "Photography",
+  "Outing",
+  "Tracking",
+  "Picnic",
+  "Chess"
 ];
 
 export const countryCodes = [

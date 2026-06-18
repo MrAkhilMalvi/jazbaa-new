@@ -222,11 +222,7 @@ const Signup = () => {
               </span>
             </motion.div>
 
-            <RevealText
-              as="h1"
-              text="Claim your space."
-              className="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 dark:text-white tracking-tight leading-[1.1] w-full"
-            />
+
             
             <p className="text-slate-600 dark:text-white/70 text-base md:text-lg mt-3 font-medium leading-relaxed max-w-md">
               Takes less than 2 minutes to join the movement and start reconnecting with what you love.
@@ -459,7 +455,7 @@ const Signup = () => {
                   </Label>
                   <div className="flex flex-wrap gap-2">
                     {[
-                      { v: "upto25", l: "Up to 25" },
+                      { v: "upto25", l: "upto 25" },
                       { v: "25to50", l: "25 – 50" },
                       { v: "over50", l: "50+" },
                     ].map((o) => (
@@ -485,13 +481,13 @@ const Signup = () => {
               {/* --- ROLE CATEGORY --- */}
               <div className="space-y-3 relative z-10">
                 <Label className="text-[10px] uppercase tracking-widest font-bold text-slate-500 dark:text-white/40 mb-1.5 block">
-                  How do you want to join?
+                  Do you want to be a?
                 </Label>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   {[
-                    { v: "Member", d: "Attend events & connect" },
-                    { v: "Volunteer", d: "Help organize & engage" },
-                    { v: "Lead", d: "Lead a city Chapter" },
+                    { v: "A Member", d: "Attend events & connect" },
+                    { v: "A Volunteer", d: "Help organize & engage" },
+                    { v: "A Lead", d: "Lead a city Chapter" },
                   ].map((o) => (
                      <button
                       key={o.v}
@@ -520,7 +516,7 @@ const Signup = () => {
               <div className="space-y-3 relative z-10">
                 <div className="flex justify-between items-end mb-1">
                   <Label className="text-[10px] uppercase tracking-widest font-bold text-slate-500 dark:text-white/40">
-                    Select Interests
+                    Select Your Hobbies and Interests
                   </Label>
                   <span className="text-[10px] font-bold text-[#ff6a3d] bg-orange-100 dark:bg-[#ff6a3d]/20 px-1.5 py-0.5 rounded">
                     {interests.length}/3 selected

@@ -11,9 +11,13 @@ import {
   Mail,
   MapPin,
   Phone,
-  MessageSquare,
   Send,
   Sparkles,
+  Facebook,
+  Instagram,
+  Twitter,
+  Linkedin,
+  Youtube,
 } from "lucide-react";
 import { schema } from "@/lib/contact.schema";
 
@@ -67,6 +71,28 @@ const Contact = () => {
     }
   };
 
+  // Social media list configuration
+  const socialLinks = [
+    {
+      name: "Instagram",
+      href: "https://www.instagram.com/jazbaa.events/",
+      icon: Instagram,
+      hoverClass: "hover:bg-pink-600 hover:text-white hover:border-pink-500",
+    },
+    {
+      name: "Facebook",
+      href: "https://www.facebook.com/share/1BGbW67U7o",
+      icon: Facebook,
+      hoverClass: "hover:bg-blue-600 hover:text-white hover:border-blue-500",
+    },
+    {
+      name: "YouTube",
+      href: "https://www.youtube.com/@Jazbaa.Events",
+      icon: Youtube,
+      hoverClass: "hover:bg-red-600 hover:text-white hover:border-red-500",
+    },
+  ];
+
   return (
     <div className="bg-[#fbfaf8] dark:bg-black min-h-screen selection:bg-[#ff6a3d]/30 transition-colors duration-500 relative overflow-hidden">
       {/* Ambient Dark Mode Glows */}
@@ -78,25 +104,10 @@ const Contact = () => {
           ========================================= */}
       <section className="pt-24 md:pt-32 pb-8 px-4 relative z-10">
         <div className="max-w-[1200px] mx-auto">
-          <Reveal>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-orange-100 dark:bg-[#ff6a3d]/10 border border-orange-200 dark:border-[#ff6a3d]/20 shadow-sm transition-colors duration-300 mb-4">
-              <MessageSquare className="w-3 h-3 text-[#ff6a3d]" />
-              <span className="text-[10px] font-bold tracking-widest text-[#c04a18] dark:text-[#ff6a3d] uppercase">
-                Get in touch
-              </span>
-            </div>
-          </Reveal>
-
           <RevealText
             as="h1"
-            text="Let's build something"
+            text="Contact Us & Enquiry"
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 dark:text-white leading-[1.1] tracking-tight transition-colors duration-300"
-          />
-          <RevealText
-            as="h1"
-            text="beautiful together."
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-[#ff6a3d] italic leading-[1.1] tracking-tight mt-1"
-            delay={0.1}
           />
         </div>
       </section>
@@ -116,9 +127,27 @@ const Contact = () => {
             </Reveal>
 
             {[
-              { icon: Mail, l: "Write to us", v: "jazbaa.experiences@gmail.com", cLight: "bg-blue-50 text-blue-600", cDark: "dark:bg-blue-500/10 dark:text-blue-400" },
-              { icon: Phone, l: "Call us", v: "+91 90000 00000", cLight: "bg-emerald-50 text-emerald-600", cDark: "dark:bg-emerald-500/10 dark:text-emerald-400" },
-              { icon: MapPin, l: "Find us", v: "NAVIRA LIFE Essentials, India", cLight: "bg-purple-50 text-purple-600", cDark: "dark:bg-purple-500/10 dark:text-purple-400" },
+              {
+                icon: Mail,
+                l: "Write to us",
+                v: "hello.jazbaaevents@gmail.com",
+                cLight: "bg-blue-50 text-blue-600",
+                cDark: "dark:bg-blue-500/10 dark:text-blue-400",
+              },
+              {
+                icon: Phone,
+                l: "Call us",
+                v: "+91 9892394310",
+                cLight: "bg-emerald-50 text-emerald-600",
+                cDark: "dark:bg-emerald-500/10 dark:text-emerald-400",
+              },
+              {
+                icon: MapPin,
+                l: "Find us",
+                v: "NAVIRA LIFE Essentials, India",
+                cLight: "bg-purple-50 text-purple-600",
+                cDark: "dark:bg-purple-500/10 dark:text-purple-400",
+              },
             ].map(({ icon: Icon, l, v, cLight, cDark }, i) => (
               <motion.div
                 key={l}
@@ -154,14 +183,30 @@ const Contact = () => {
               transition={{ delay: 0.3 }}
               className="p-5 md:p-6 rounded-2xl bg-slate-900 dark:bg-zinc-800/80 border border-transparent dark:border-white/10 text-white overflow-hidden relative transition-colors duration-300"
             >
-              <Sparkles className="absolute -right-4 -top-4 w-16 h-16 text-white/5 rotate-12" />
+              <Sparkles className="absolute -right-4 -top-4 w-16 h-16 text-white/5 rotate-12 pointer-events-none" />
+              
               <h4 className="text-base font-bold mb-1.5 relative z-10">
                 Join the Community
               </h4>
-              <p className="text-xs md:text-sm text-slate-300 dark:text-white/70 relative z-10 leading-relaxed font-medium">
-                Follow our journey on Facebook for daily doses of passion and
-                creativity.
+              <p className="text-xs md:text-sm text-slate-300 dark:text-white/70 relative z-10 leading-relaxed font-medium mb-4">
+                Follow our journey across platforms for daily updates on passion, events, and creativity.
               </p>
+
+              {/* Social Media Links Grid */}
+              <div className="flex flex-wrap gap-2.5 relative z-10">
+                {socialLinks.map(({ name, href, icon: Icon, hoverClass }) => (
+                  <a
+                    key={name}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`Visit our ${name}`}
+                    className={`flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 border border-white/10 text-slate-200 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 ${hoverClass}`}
+                  >
+                    <Icon className="w-5 h-5" />
+                  </a>
+                ))}
+              </div>
             </motion.div>
           </div>
 
@@ -290,10 +335,6 @@ const Contact = () => {
                     )}
                   </Button>
                 </div>
-
-                <p className="text-center text-slate-500 dark:text-white/40 text-xs font-medium pt-1 transition-colors duration-300">
-                  We typically respond within 24-48 business hours.
-                </p>
               </form>
             </div>
           </Reveal>

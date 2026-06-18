@@ -14,7 +14,7 @@ import { useAuth } from "@/context/AuthContext";
 
 // Warm, joyful, human-focused photography (Unsplash). All q=85 for sharpness.
 const HERO_IMG_1 = "/images/Hero/image1.jpg"; // friends laughing, warm
-const HERO_IMG_2 = "/images/Hero/image2.jpg"; // singer on stage, warm
+const HERO_IMG_2 = "/images/Hero/image2.jpeg"; // singer on stage, warm
 const HERO_IMG_3 = "/images/Hero/image5.jpg"; // dancer in golden light
 const HERO_IMG_4 = "/images/Hero/hero1.jpg"; // crowd hands up, joy
 
@@ -65,7 +65,7 @@ export function Hero() {
   return (
     <section
       ref={ref}
-      className="relative min-h-[100svh] pt-28 md:pt-32 pb-16 md:pb-24 overflow-hidden bg-background"
+      className="relative min-h-[100svh] pt-14 md:pt-32 pb-16 md:pb-5 overflow-hidden bg-background"
     >
       {/* Clean, sharp grid overlay */}
       <div
@@ -79,20 +79,6 @@ export function Hero() {
       />
 
       <div className="container-editorial relative z-10">
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1 }}
-          className="flex flex-wrap items-center gap-2 sm:gap-3 mb-6 sm:mb-8"
-        >
-          <span className="hidden sm:block h-px w-6 sm:w-10 bg-palette-purple" />
-          <span className="text-sm sm:text-base md:text-lg lg:text-xl uppercase tracking-[0.12em] text-muted-foreground font-semibold">
-            JAZBAA · Live Your Passion · Celebrate YOU
-          </span>
-          <Sparkles className="h-3.5 w-3.5 text-palette-orange shrink-0" />
-        </motion.div>
-
         <div className="grid lg:grid-cols-12 gap-10 lg:gap-12 items-center lg:items-start">
           
           {/* =========================================
@@ -119,10 +105,9 @@ export function Hero() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.9, delay: 0.7 }}
-              className="mt-6 md:mt-8 text-base sm:text-lg md:text-xl text-foreground/70 dark:text-foreground/80 leading-relaxed text-balance max-w-xl font-medium"
+              className="mt-6 md:mt-8 text-base sm:text-lg md:text-xl text-foreground/70 dark:text-foreground/80 leading-relaxed text-balance max-w-2xl font-medium"
             >
-              A vibrant community where music, movement, mindfulness, and
-              meaningful connections come together.
+              Life is better when passions are shared. Find your people, your purpose, and your Jazbaa.
             </motion.p>
 
             <motion.div

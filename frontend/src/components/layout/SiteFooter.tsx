@@ -1,11 +1,17 @@
 import { Link } from "react-router-dom";
-import { Instagram, Youtube, Mail, FacebookIcon } from "lucide-react";
+import {
+  Instagram,
+  Youtube,
+  Mail,
+  FacebookIcon,
+  MailCheck,
+} from "lucide-react";
 
 export function SiteFooter() {
   return (
     <footer className="bg-white dark:bg-black transition-colors duration-300">
-      <div className="max-w-[1400px] mx-auto px-4 py-12 md:py-20">
-        <div className="grid gap-10 md:gap-12 sm:grid-cols-2 md:grid-cols-4">
+      <div className="max-w-[1600px] mx-auto px-4 py-10 md:py-5">
+        <div className="grid gap-10 md:gap-5 sm:grid-cols-2 md:grid-cols-4">
           {/* =========================================
               BRAND COLUMN
               ========================================= */}
@@ -24,8 +30,7 @@ export function SiteFooter() {
             </Link>
 
             <p className="mt-4 max-w-md text-base md:text-lg text-slate-600 dark:text-white/70 leading-relaxed font-medium">
-              A vibrant community where music, movement, mindfulness, and
-              meaningful connections come together.
+               A thriving community where learning, creativity, wellness, and meaningful connections inspire personal growth and collective impact.
             </p>
             <p className="mt-4 text-sm md:text-base text-slate-400 dark:text-white/40 font-semibold tracking-wide uppercase">
               By NAVIRA LIFE ESSENTIALS PVT. LTD.
@@ -78,10 +83,10 @@ export function SiteFooter() {
               <li>
                 <a
                   href="mailto:jazbaa.experiences@gmail.com"
-                  className="flex items-center gap-3 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
+                  className="flex items-center gap-3 hover:text-[#ff6a3d dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
                 >
-                  <Mail className="h-5 w-5 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
-                  jazbaa.experiences@gmail.com
+                  <MailCheck className="h-5 w-5 text-slate-400  group-hover:text-[#ff6a3d] transition-colors" />
+                  <p className="text-lg"> hello.jazbaaevents@gmail.com</p>
                 </a>
               </li>
               <li>
@@ -108,7 +113,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="https://www.facebook.com/profile.php?id=61588994383834"
+                  href="https://www.facebook.com/share/1BGbW67U7o"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"

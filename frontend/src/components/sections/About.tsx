@@ -3,7 +3,14 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { CtaSection } from "@/components/sections/CtaSection";
 import { motion } from "framer-motion";
-import { Sparkles, Eye, Target, CheckCircle2, ArrowRight } from "lucide-react";
+import {
+  Sparkles,
+  Eye,
+  Target,
+  CheckCircle2,
+  ArrowRight,
+  Compass,
+} from "lucide-react";
 import { Marquee } from "@/components/ui/marquee";
 import { useAuth } from "@/context/AuthContext";
 
@@ -14,7 +21,9 @@ const images = [
   "/images/About/scrollimage3.jpeg",
   "/images/About/scrollimage4.jpeg",
   "/images/About/scrollimage5.jpeg",
-  "/images/About/scrollimage6.jpeg",  
+  "/images/About/scrollimage6.jpeg",
+  "/images/About/scrollimage7.jpeg",
+  "/images/About/scrollimage8.jpeg",
 ];
 
 // GSAP-style fade up animation preset
@@ -29,15 +38,11 @@ const fadeUp = (delay = 0) => ({
    VERTICAL MARQUEE COMPONENT (FIXED)
    ========================================= */
 export function VerticalImageMarquee({ images }: { images: string[] }) {
-  // Duplicate images so there is enough content to scroll infinitely without snapping
-  const scrollingImages = [...images, ...images, ...images];
-  const half = Math.ceil(scrollingImages.length / 2);
-  const firstCol = scrollingImages.slice(0, half);
-  const secondCol = scrollingImages.slice(half);
-  
+const firstCol = images.slice(0, 4);
+const secondCol = images.slice(4, 8);
+
   return (
     <div className="relative flex h-full w-full flex-row gap-4 overflow-hidden rounded-3xl p-3">
-      
       {/* LEFT COLUMN (Scrolls UP) */}
       <div className="flex-1 overflow-hidden">
         <Marquee pauseOnHover vertical className="[--duration:35s] h-full">
@@ -55,7 +60,12 @@ export function VerticalImageMarquee({ images }: { images: string[] }) {
       {/* RIGHT COLUMN (Scrolls DOWN / Reverse) */}
       {/* Added 'mt-8' to offset the images so they don't look perfectly symmetrical */}
       <div className="flex-1 overflow-hidden mt-8">
-        <Marquee reverse pauseOnHover vertical className="[--duration:35s] h-full">
+        <Marquee
+          reverse
+          pauseOnHover
+          vertical
+          className="[--duration:35s] h-full"
+        >
           {secondCol.map((src, i) => (
             <img
               key={`col2-${i}`}
@@ -79,10 +89,10 @@ export function VerticalImageMarquee({ images }: { images: string[] }) {
 /* =========================================
    MAIN ABOUT COMPONENT
    ========================================= */
-   const About = () => {
-     const { user } = useAuth();
-     return (
-       <div className="bg-[#fbfaf8] dark:bg-black transition-colors duration-300">
+const About = () => {
+  const { user } = useAuth();
+  return (
+    <div className="bg-[#fbfaf8] dark:bg-black transition-colors duration-300">
       {/* =========================================
           HERO SECTION
           ========================================= */}
@@ -141,54 +151,79 @@ export function VerticalImageMarquee({ images }: { images: string[] }) {
       {/* =========================================
           VISION & MISSION 
           ========================================= */}
-      <section className="py-20 md:py-20 px-4 relative bg-[#fbfaf8] dark:bg-black transition-colors duration-300">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-300/10 dark:bg-orange-500/5 blur-[100px] rounded-full pointer-events-none transition-colors duration-300" />
+      <section className="py-20 md:py-28 px-4 relative bg-[#fbfaf8] dark:bg-black transition-colors duration-300 overflow-hidden">
+        {/* Soft background glow */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-300/10 dark:bg-orange-500/5 blur-[120px] rounded-full pointer-events-none transition-colors duration-300" />
 
         <div className="max-w-[1400px] mx-auto relative z-10">
-          <div className="grid lg:grid-cols-2 gap-16 lg:gap-24 relative">
+          {/* Main Grid Container aligned to start at the exact same height */}
+          <div className="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start relative">
+            {/* Vertical divider visible on desktop */}
             <div className="hidden lg:block absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-slate-200 dark:via-white/10 to-transparent -translate-x-1/2 transition-colors duration-300" />
 
             {/* VISION UNIT */}
-            <motion.div {...fadeUp(0)} className="relative group flex flex-col justify-center lg:pr-12">
-              <div className="absolute -inset-8 rounded-[3rem] bg-slate-100/0 group-hover:bg-slate-100/50 dark:group-hover:bg-white/[0.02] transition-colors duration-700 -z-10" />
-              <div className="flex items-center gap-5 mb-10">
-                <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm group-hover:scale-110 group-hover:-rotate-3 group-hover:border-orange-200 dark:group-hover:border-orange-500/30 transition-all duration-500 ease-out">
-                  <Eye className="w-8 h-8 text-[#ff6a3d]" />
+            <motion.div
+              {...fadeUp(0)}
+              className="relative group flex flex-col justify-start lg:pr-10 pt-4"
+            >
+              {/* Header */}
+              <div className="flex items-center gap-4 mb-8">
+                <div className="flex items-center justify-center w-14 h-14 rounded-2xl  group-hover:scale-110 group-hover:rotate-3 group-hover:border-orange-200 dark:group-hover:border-orange-500/30 transition-all duration-500 ease-out">
+                  <img
+                    src="/images/About/ourvisionicon.png"
+                    alt="Our Mission"
+                    className="w-7 h-7 object-contain scale-[2]"
+                  />
                 </div>
-                <h3 className="text-sm md:text-2xl font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-white/40 group-hover:text-[#ff6a3d] transition-colors duration-500">
+
+                <h3 className="text-xs md:text-lg font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/40 group-hover:text-[#ff6a3d] transition-colors duration-500">
                   Our Vision
                 </h3>
               </div>
-              <p className="text-3xl md:text-4xl lg:text-[2.75rem] font-semibold text-slate-800 dark:text-white/90 leading-[1.3] tracking-tight transition-colors duration-300">
-                To create a Happiness Club where people engage{" "}
-                <span className="relative inline-block group/word cursor-default">
-                  <span className="relative z-10 italic text-transparent bg-clip-text bg-gradient-to-r from-[#ff6a3d] to-[#ff9e80] group-hover/word:to-[#ff6a3d] transition-all duration-500">
-                    joyfully, creatively,
+
+              {/* Content */}
+              <div className="space-y-6">
+                <p className="text-2xl md:text-3xl lg:text-[2.5rem] font-semibold text-slate-800 dark:text-white/95 leading-[1.3] tracking-tight transition-colors duration-300">
+                  To create a Happiness Club where people engage{" "}
+                  <span className="relative inline-block group/word cursor-default">
+                    <span className="relative z-10 italic text-transparent bg-clip-text bg-gradient-to-r from-[#ff6a3d] to-[#ff9e80] group-hover/word:to-[#ff6a3d] transition-all duration-500">
+                      joyfully, creatively,
+                    </span>
+                    <span className="absolute bottom-1 left-0 w-full h-[3px] bg-[#ff6a3d]/30 origin-left scale-x-0 group-hover/word:scale-x-100 transition-transform duration-500 ease-out rounded-full" />
+                  </span>{" "}
+                  and{" "}
+                  <span className="relative inline-block group/word cursor-default">
+                    <span className="relative z-10 italic text-transparent bg-clip-text bg-gradient-to-r from-[#ff6a3d] to-[#ff9e80] group-hover/word:to-[#ff6a3d] transition-all duration-500">
+                      consciously.
+                    </span>
+                    <span className="absolute bottom-1 left-0 w-full h-[3px] bg-[#ff6a3d]/30 origin-left scale-x-0 group-hover/word:scale-x-100 transition-transform duration-500 ease-out rounded-full" />
                   </span>
-                  <span className="absolute bottom-1 left-0  w-full h-[3px] bg-[#ff6a3d]/30 origin-left scale-x-0 group-hover/word:scale-x-100 transition-transform duration-500 ease-out rounded-full" />
-                </span>{" "}
-                and{" "}
-                <span className="relative inline-block group/word cursor-default">
-                  <span className="relative z-10 italic text-transparent bg-clip-text bg-gradient-to-r from-[#ff6a3d] to-[#ff9e80] group-hover/word:to-[#ff6a3d] transition-all duration-500">
-                    consciously.
-                  </span>
-                  <span className="absolute bottom-1 left-0 w-full h-[3px] bg-[#ff6a3d]/30 origin-left scale-x-0 group-hover/word:scale-x-100 transition-transform duration-500 ease-out rounded-full" />
-                </span>
-              </p>
+                </p>
+              </div>
             </motion.div>
 
             {/* MISSION UNIT */}
-            <motion.div {...fadeUp(0.2)} className="relative group flex flex-col justify-center lg:pl-12">
-              <div className="absolute -inset-8 rounded-[3rem] bg-slate-100/0 group-hover:bg-slate-100/50 dark:group-hover:bg-white/[0.02] transition-colors duration-700 -z-10" />
-              <div className="flex items-center gap-5 mb-10">
-                <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 shadow-sm group-hover:scale-110 group-hover:rotate-3 group-hover:border-orange-200 dark:group-hover:border-orange-500/30 transition-all duration-500 ease-out">
-                  <Target className="w-8 h-8 text-[#ff6a3d]" />
+            <motion.div
+              {...fadeUp(0.15)}
+              className="relative group flex flex-col justify-start lg:pl-10 pt-4"
+            >
+              {/* Header (perfectly aligned visually with Vision) */}
+              <div className="flex items-center gap-4 mb-8">
+                <div className="flex items-center justify-center w-14 h-14 rounded-2xl  group-hover:scale-110 group-hover:rotate-3 group-hover:border-orange-200 dark:group-hover:border-orange-500/30 transition-all duration-500 ease-out">
+                  <img
+                    src="/images/About/ourmissionicon.png"
+                    alt="Our Mission"
+                    className="w-7 h-7 object-contain scale-[2]"
+                  />
                 </div>
-                <h3 className="text-sm md:text-2xl font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-white/40 group-hover:text-[#ff6a3d] transition-colors duration-500">
+
+                <h3 className="text-xs md:text-lg font-bold uppercase tracking-[0.2em] text-slate-400 dark:text-white/40 group-hover:text-[#ff6a3d] transition-colors duration-500">
                   Our Mission
                 </h3>
               </div>
-              <ul>
+
+              {/* Content List */}
+              <ul className="space-y-4">
                 {[
                   "Encourage people to pursue hobbies consistently.",
                   "Create safe and inclusive social environments.",
@@ -197,17 +232,19 @@ export function VerticalImageMarquee({ images }: { images: string[] }) {
                 ].map((item, i) => (
                   <motion.li
                     key={i}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.3 + i * 0.1 }}
-                    className="flex items-center gap-5 group/item cursor-default py-2"
+                    transition={{ duration: 0.5, delay: 0.2 + i * 0.1 }}
+                    className="flex items-center gap-4 group/item cursor-default py-1"
                   >
+                    {/* Dynamic bullet indicator */}
                     <div className="relative flex items-center justify-center w-8 h-8 shrink-0 overflow-hidden rounded-full bg-slate-200 dark:bg-white/10 group-hover/item:bg-[#ff6a3d] transition-colors duration-500">
                       <ArrowRight className="w-4 h-4 text-white absolute -translate-x-full opacity-0 group-hover/item:translate-x-0 group-hover/item:opacity-100 transition-all duration-500 ease-out" />
                       <div className="w-2 h-2 rounded-full bg-slate-400 dark:bg-white/40 group-hover/item:scale-0 transition-transform duration-300" />
                     </div>
-                    <span className="text-xl md:text-2xl font-medium text-slate-600 dark:text-white/60 group-hover/item:text-slate-900 dark:group-hover/item:text-white group-hover/item:translate-x-3 transition-all duration-500 ease-out leading-snug">
+
+                    <span className="text-lg md:text-xl font-medium text-slate-600 dark:text-white/60 group-hover/item:text-slate-900 dark:group-hover/item:text-white group-hover/item:translate-x-2 transition-all duration-500 ease-out leading-snug">
                       {item}
                     </span>
                   </motion.li>
@@ -223,15 +260,12 @@ export function VerticalImageMarquee({ images }: { images: string[] }) {
           ========================================= */}
       <section className="py-20 md:py-24 px-4 bg-white dark:bg-zinc-950 border-t border-slate-200/60 dark:border-white/10 transition-colors duration-300 overflow-hidden">
         <div className="max-w-[1400px] mx-auto grid lg:grid-cols-12 gap-16 lg:gap-12 items-center">
-          
-<div className="lg:col-span-6 relative w-full h-[550px] md:h-[650px] flex justify-center items-center">
-  <motion.div
-    className="w-full max-w-[450px] lg:max-w-[500px] h-full  relative"
-  >
-     {/* Height works perfectly because parent is h-[550px] */}
-    <VerticalImageMarquee images={images} />
-  </motion.div>
-</div>
+          <div className="lg:col-span-6 relative w-full h-[550px] md:h-[650px] flex justify-center items-center">
+            <motion.div className="w-full max-w-[450px] lg:max-w-[500px] h-full  relative">
+              {/* Height works perfectly because parent is h-[550px] */}
+              <VerticalImageMarquee images={images} />
+            </motion.div>
+          </div>
 
           {/* Right: Content & Checklist */}
           <div className="lg:col-span-6 lg:pl-10">
@@ -270,21 +304,19 @@ export function VerticalImageMarquee({ images }: { images: string[] }) {
             </div>
 
             <Reveal delay={0.5}>
-<div className="mt-12">
-  <Button
-    asChild
-    size="lg"
-    className="h-14 px-8 text-base bg-[#ff6a3d] hover:bg-[#e05b3e] text-white shadow-xl hover:shadow-orange-500/30 dark:hover:shadow-orange-500/20 hover:-translate-y-1 transition-all rounded-full border-0"
-  >
-    <Link to={user ? "/" : "/signup"}>
-      {user
-        ? "Get Involved"
-        : "Become part of JAZBAA"}
+              <div className="mt-12">
+                <Button
+                  asChild
+                  size="lg"
+                  className="h-14 px-8 text-base bg-[#ff6a3d] hover:bg-[#e05b3e] text-white shadow-xl hover:shadow-orange-500/30 dark:hover:shadow-orange-500/20 hover:-translate-y-1 transition-all rounded-full border-0"
+                >
+                  <Link to={user ? "/" : "/signup"}>
+                    {user ? "Get Involved" : "Become part of JAZBAA"}
 
-      <ArrowRight className="ml-2 h-5 w-5" />
-    </Link>
-  </Button>
-</div>
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Link>
+                </Button>
+              </div>
             </Reveal>
           </div>
         </div>

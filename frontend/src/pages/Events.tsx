@@ -58,7 +58,7 @@ const events: Evt[] = [
   {
     id: "3",
     title: "Reader's Club: 'Exchange Knowledge'",
-    cat: "Books",
+    cat: "Knowledge Hub",
     date: "28",
     month: "May",
     day: "Wednesday",
@@ -143,14 +143,6 @@ const Events = () => {
           ========================================= */}
       <section className="pt-28 md:pt-36 pb-12 px-4 relative z-10 text-center">
         <div className="max-w-[1000px] mx-auto flex flex-col items-center">
-          <Reveal>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-orange-100 dark:bg-orange-500/10 mb-6 border border-orange-200 dark:border-orange-500/20 shadow-sm transition-colors duration-300">
-              <CalendarDays className="w-4 h-4 text-[#ff6a3d]" />
-              <span className="text-xs font-bold tracking-[0.15em] text-[#c04a18] dark:text-orange-400 uppercase">
-                Gatherings
-              </span>
-            </div>
-          </Reveal>
 
           <RevealText
             as="h1"
