@@ -15,6 +15,7 @@ import NotFound from "@/pages/NotFound";
 import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsConditions from "@/pages/TermsConditions";
 import CookiePolicy from "@/pages/CookiePolicy";
+import { WhatsAppButton } from "../sections/WhatsAppButton";
 
 export function SiteLayout() {
   const location = useLocation();
@@ -103,6 +104,7 @@ export function SiteLayout() {
           </PageTransition>
         </AnimatePresence>
       </main>
+      <WhatsAppButton phoneNumber="919082378708" />
 
       <SiteFooter />
     </div>

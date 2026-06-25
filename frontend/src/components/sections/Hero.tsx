@@ -107,7 +107,7 @@ export function Hero() {
               transition={{ duration: 0.9, delay: 0.7 }}
               className="mt-6 md:mt-8 text-base sm:text-lg md:text-xl text-foreground/70 dark:text-foreground/80 leading-relaxed text-balance max-w-2xl font-medium"
             >
-              Life is better when passions are shared. Find your people, your purpose, and your Jazbaa.
+              Life is better when passions are shared. Find and connect with people sharing your similar interests.
             </motion.p>
 
             <motion.div

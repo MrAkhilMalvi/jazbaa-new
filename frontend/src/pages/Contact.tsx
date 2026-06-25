@@ -136,14 +136,14 @@ const Contact = () => {
               },
               {
                 icon: Phone,
-                l: "Call us",
+                l: "Contact us",
                 v: "+91 9892394310",
                 cLight: "bg-emerald-50 text-emerald-600",
                 cDark: "dark:bg-emerald-500/10 dark:text-emerald-400",
               },
               {
                 icon: MapPin,
-                l: "Find us",
+                l: "",
                 v: "NAVIRA LIFE Essentials, India",
                 cLight: "bg-purple-50 text-purple-600",
                 cDark: "dark:bg-purple-500/10 dark:text-purple-400",
