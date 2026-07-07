@@ -81,7 +81,7 @@ const Contact = () => {
     },
     {
       name: "Facebook",
-      href: "https://www.facebook.com/share/1BGbW67U7o",
+      href: "https://www.facebook.com/profile.php?id=61591240624769",
       icon: Facebook,
       hoverClass: "hover:bg-blue-600 hover:text-white hover:border-blue-500",
     },
@@ -140,13 +140,6 @@ const Contact = () => {
                 v: "+91 9892394310",
                 cLight: "bg-emerald-50 text-emerald-600",
                 cDark: "dark:bg-emerald-500/10 dark:text-emerald-400",
-              },
-              {
-                icon: MapPin,
-                l: "",
-                v: "NAVIRA LIFE Essentials, India",
-                cLight: "bg-purple-50 text-purple-600",
-                cDark: "dark:bg-purple-500/10 dark:text-purple-400",
               },
             ].map(({ icon: Icon, l, v, cLight, cDark }, i) => (
               <motion.div

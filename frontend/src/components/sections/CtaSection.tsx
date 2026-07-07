@@ -32,7 +32,7 @@ export function CtaSection() {
 
         <Reveal delay={0.3}>
           <p className="mt-6 sm:mt-2 text-2xl sm:text-2xl text-muted-foreground max-w-xl mx-auto px-2">
-            Be a part of a community that celebrates YOU.
+            Be a part of a tribe that celebrates YOU.
           </p>
         </Reveal>
 

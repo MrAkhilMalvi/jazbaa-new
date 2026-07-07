@@ -2,8 +2,8 @@ export const cookiePolicy = [
   {
     title: "Cookie Policy",
     body: [
-      "This Cookie Policy applies to all websites, applications, and branded pages on third-party platforms, such as Facebook and YouTube, that are operated by or on behalf of NAVIRA LIFE ESSENTIALS PVT.LTD.",
-      "By using NAVIRA LIFE ESSENTIALS PVT.LTD. sites, you agree to our use of cookies as outlined in this policy. If you do not consent, you can adjust your browser settings to disable cookies. However, doing so may affect the functionality and user experience of our website.",
+      "This Cookie Policy applies to all websites, applications, and branded pages on third-party platforms, such as Facebook and YouTube, that are operated by or on behalf of Navira Life Essentials Pvt. Ltd.",
+      "By using Navira Life Essentials Pvt. Ltd. sites, you agree to our use of cookies as outlined in this policy. If you do not consent, you can adjust your browser settings to disable cookies. However, doing so may affect the functionality and user experience of our website.",
     ],
   },
   {
@@ -129,7 +129,7 @@ export const privacyPolicy = [
   {
     title: "Cookie Policy",
     body: [
-      "This Cookie Policy applies to all websites, apps, and branded pages managed by NAVIRA LIFE ESSENTIALS PVT.LTD. By continuing to use our sites, you agree to our use of cookies.",
+      "This Cookie Policy applies to all websites, apps, and branded pages managed by Navira Life Essentials Pvt. Ltd. By continuing to use our sites, you agree to our use of cookies.",
       "Cookies are small text files stored on your device. They typically contain the origin website name, duration on your device, and a unique identifier.",
     ],
     bullets: [
@@ -154,7 +154,7 @@ export const terms = [
   {
     title: "Content & Intellectual Property",
     body: [
-      "All content is owned by NAVIRA LIFE ESSENTIALS PVT.LTD. Unauthorized use is strictly prohibited.",
+      "All content is owned by Navira Life Essentials Pvt. Ltd. Unauthorized use is strictly prohibited.",
     ],
   },
   {

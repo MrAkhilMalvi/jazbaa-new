@@ -32,8 +32,8 @@ export function SiteFooter() {
             <p className="mt-4 max-w-md text-base md:text-lg text-slate-600 dark:text-white/70 leading-relaxed font-medium">
                A thriving community where learning, creativity, wellness, and meaningful connections inspire personal growth and collective impact.
             </p>
-            <p className="mt-4 text-sm md:text-base text-slate-400 dark:text-white/40 font-semibold tracking-wide uppercase">
-              By NAVIRA LIFE ESSENTIALS PVT. LTD.
+            <p className="mt-4 text-sm md:text-base text-slate-400 dark:text-white/40 font-semibold tracking-wide">
+              By Navira Life Essentials Pvt. Ltd.
             </p>
           </div>
 
@@ -133,8 +133,7 @@ export function SiteFooter() {
           {/* Left: Copyright & Legal Links */}
           <div className="flex flex-col gap-3 items-center lg:items-start">
             <p className="text-sm md:text-base text-slate-500 dark:text-white/50 font-medium">
-              © {new Date().getFullYear()} JAZBAA. Live Your Passion. | NAVIRA
-              LIFE ESSENTIALS PVT.LTD.
+              © {new Date().getFullYear()} JAZBAA. Live Your Passion. | Navira Life Essentials Pvt. Ltd.
             </p>
 
             {/* Privacy & Terms Links */}

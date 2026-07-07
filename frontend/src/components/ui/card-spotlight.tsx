@@ -32,14 +32,15 @@ export const CardSpotlight = ({
   return (
     <div
       className={cn(
-        "group/spotlight relative overflow-hidden rounded-[2rem] border transition-colors duration-300",
+        `group/spotlight relative overflow-hidden rounded-[2rem] border
+         transition-all duration-500
 
-        // 🌞 LIGHT MODE
-        "bg-white border-slate-200 shadow-sm",
+         bg-white border-slate-200 shadow-sm
+         hover:shadow-[0_0_40px_rgba(255,106,61,0.18)]
 
-        // 🌙 DARK MODE
-        "dark:bg-zinc-900/50 dark:border-white/10 dark:shadow-none",
-
+         /* Dark Mode hover shadow adjusted to a softer, warmer orange glow */
+         dark:bg-zinc-900/50 dark:border-white/10
+         dark:hover:shadow-[0_0_50px_rgba(255,106,61,0.22)]`,
         className
       )}
       onMouseMove={handleMouseMove}
@@ -51,7 +52,7 @@ export const CardSpotlight = ({
           🌞 LIGHT MODE SPOTLIGHT (Orange Highlight)
           ============================================== */}
       <motion.div
-        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition duration-300 group-hover/spotlight:opacity-100 dark:hidde"
+        className="pointer-events-none absolute inset-0 z-0 opacity-0 transition duration-300 group-hover/spotlight:opacity-100 dark:hidden"
         style={{
           maskImage: useMotionTemplate`
             radial-gradient(
@@ -63,7 +64,7 @@ export const CardSpotlight = ({
           background: useMotionTemplate`
             radial-gradient(
               ${radius}px circle at ${mouseX}px ${mouseY}px,
-              rgba(255,106,61,0.0.20), /* Light Mode Orange Color */
+              rgba(255,106,61,0.20),
               transparent 60%
             )
           `,
@@ -74,8 +75,9 @@ export const CardSpotlight = ({
             animationSpeed={5}
             containerClassName="absolute inset-0 pointer-events-none"
             colors={[
-              [255, 106, 61], // accent orange
-              [255, 180, 120], // soft warm
+              [255, 106, 61],
+              [255, 145, 77],
+              [255, 195, 140],
             ]}
             dotSize={2}
           />
@@ -83,7 +85,7 @@ export const CardSpotlight = ({
       </motion.div>
 
       {/* ==============================================
-          🌙 DARK MODE SPOTLIGHT (Subtle Premium Glow)
+          🌙 DARK MODE SPOTLIGHT (Warm Orange Glow)
           ============================================== */}
       <motion.div
         className="pointer-events-none absolute inset-0 z-0 opacity-0 transition duration-300 group-hover/spotlight:opacity-100 hidden dark:block"
@@ -98,7 +100,7 @@ export const CardSpotlight = ({
           background: useMotionTemplate`
             radial-gradient(
               ${radius}px circle at ${mouseX}px ${mouseY}px,
-              rgba(255,255,255,0.03), /* Dark Mode Subtle White Glow */
+              rgba(255,106,61,0.12), /* Soft orange glow instead of white */
               transparent 60%
             )
           `,
@@ -107,15 +109,34 @@ export const CardSpotlight = ({
         {isHovering && (
           <CanvasRevealEffect
             animationSpeed={4}
-            containerClassName="absolute inset-0 pointer-events-none opacity-50"
+            containerClassName="absolute inset-0 pointer-events-none opacity-40"
             colors={[
-              [255, 255, 255], // subtle white dots
-              [161, 161, 170], // slate gray dots
+              [255, 106, 61],  // Primary orange
+              [255, 145, 77],  // Lighter orange accent
+              [120, 53, 4],    // Deep warm amber
             ]}
             dotSize={2}
           />
         )}
       </motion.div>
+
+      {/* Warm background gradient overlay on hover (supports both modes) */}
+      <div
+        className="
+          absolute inset-0 z-0 opacity-0
+          group-hover/spotlight:opacity-100
+          transition-opacity duration-500
+          bg-gradient-to-br
+          from-orange-100/30
+          via-orange-50/10
+          to-transparent
+          
+          dark:from-orange-950/15
+          dark:via-orange-900/5
+          dark:to-transparent
+          pointer-events-none
+        "
+      />
 
       {/* CONTENT */}
       <div className="relative z-10">{children}</div>

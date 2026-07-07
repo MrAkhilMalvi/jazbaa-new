@@ -8,26 +8,26 @@ import { Sparkles, Mic2, BookOpen, Heart, Users } from "lucide-react";
 const offers = [
   {
     label: "Performing Arts",
-    items: ["Singing & Karaoke", "Music & Instrument Circles", "Dance & Movement"],
+    items: ["Singing & Karaoke", "Music & Instrument Circles", "Dance & Movement", "Sketching, Painting & Photography"],
     img: "/images/Offerings/passion1.jpeg",
     icon: Mic2,
   },
   {
     label: "Intellectual Engagement",
-    items: ["Reader's Club & Discussions", "Storytelling", "Open Mic Evenings"],
+    items: ["Reader's Club & Discussions", "Storytelling", "Open Mic Evenings", "Domain Expert Sessions"],
     img: "/images/Offerings/passion2.jpeg",
     icon: BookOpen,
   },
   {
     label: "Wellness & Mindfulness",
-    items: ["Meditation & Breathwork", "Mind-Body Sessions", "Wellness Walks"],
+    items: ["Meditation & Breathwork", "Physical Exercise Session", "Wellness Expert Sessions" ,"Diet & Nutrition"],
     img: "/images/Offerings/passion3.jpg",
     icon: Heart,
   },
   {
     label: "Social Connection",
-    items: ["Community Meetups", "Themed Events & Concerts", "Friendship Circles"],
-    img: "/images/Offerings/passion4.jpeg",
+    items: ["Community Meetups", "Themed Events & Concerts", "Friendship Circles", "Festival Celebrations"],
+    img: "/images/Offerings/passion5.jpeg",
     icon: Users,
   },
 ];

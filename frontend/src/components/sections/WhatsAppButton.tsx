@@ -6,7 +6,7 @@ interface WhatsAppButtonProps {
 }
 
 export function WhatsAppButton({
-  phoneNumber = "919082378708",
+  phoneNumber = "919892394310",
   message = "Hello! I would like to know more about your services.",
 }: WhatsAppButtonProps): React.JSX.Element {
   const formattedMessage = encodeURIComponent(message);
