@@ -9,14 +9,11 @@ import { Textarea } from "@/components/ui/textarea";
 import emailjs from "@emailjs/browser";
 import {
   Mail,
-  MapPin,
   Phone,
   Send,
   Sparkles,
   Facebook,
   Instagram,
-  Twitter,
-  Linkedin,
   Youtube,
 } from "lucide-react";
 import { schema } from "@/lib/contact.schema";
@@ -87,7 +84,7 @@ const Contact = () => {
     },
     {
       name: "YouTube",
-      href: "https://www.youtube.com/@Jazbaa.Events",
+      href: "https://www.youtube.com/@Jazbaa",
       icon: Youtube,
       hoverClass: "hover:bg-red-600 hover:text-white hover:border-red-500",
     },
@@ -137,7 +134,7 @@ const Contact = () => {
               {
                 icon: Phone,
                 l: "Contact us",
-                v: "+91 9892394310",
+                v: "+91 989 239 4310",
                 cLight: "bg-emerald-50 text-emerald-600",
                 cDark: "dark:bg-emerald-500/10 dark:text-emerald-400",
               },
@@ -181,24 +178,32 @@ const Contact = () => {
               <h4 className="text-base font-bold mb-1.5 relative z-10">
                 Join the Community
               </h4>
-              <p className="text-xs md:text-sm text-slate-300 dark:text-white/70 relative z-10 leading-relaxed font-medium mb-4">
+              <p className="text-xs md:text-sm text-slate-300 dark:text-white/70 relative z-10 leading-relaxed font-medium mb-5">
                 Follow our journey across platforms for daily updates on passion, events, and creativity.
               </p>
 
-              {/* Social Media Links Grid */}
-              <div className="flex flex-wrap gap-2.5 relative z-10">
-                {socialLinks.map(({ name, href, icon: Icon, hoverClass }) => (
-                  <a
-                    key={name}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Visit our ${name}`}
-                    className={`flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 border border-white/10 text-slate-200 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 ${hoverClass}`}
-                  >
-                    <Icon className="w-5 h-5" />
-                  </a>
-                ))}
+              {/* Layout Container: Keeps the phrase left-aligned and row handles icons on right */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 relative z-10">
+                {/* The Phrase */}
+                <p className="text-xs tracking-widest font-bold text-orange-400 dark:text-orange-400/90 uppercase whitespace-nowrap">
+                  Connect, Like, Follow, Share
+                </p>
+
+                {/* Social Media Links Icons */}
+                <div className="flex flex-wrap gap-2.5">
+                  {socialLinks.map(({ name, href, icon: Icon, hoverClass }) => (
+                    <a
+                      key={name}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Visit our ${name}`}
+                      className={`flex items-center justify-center w-10 h-10 rounded-xl bg-white/10 border border-white/10 text-slate-200 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 ${hoverClass}`}
+                    >
+                      <Icon className="w-5 h-5" />
+                    </a>
+                  ))}
+                </div>
               </div>
             </motion.div>
           </div>

@@ -283,7 +283,8 @@ const Signup = () => {
             </motion.div>
 
             <p className="text-slate-600 dark:text-white/70 text-base md:text-lg mt-3 font-medium leading-relaxed max-w-md">
-Takes less than 2 minutes to start reviving your art & hobbies.
+              Takes less than 2 minutes to join the movement and to start
+              reviving your art & hobbies.
             </p>
           </Reveal>
 

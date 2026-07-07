@@ -91,7 +91,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="https://www.instagram.com/jazbaa.events/"
+                  href="https://www.instagram.com/jazbaa.experiences/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
@@ -102,7 +102,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="https://www.youtube.com/@Jazbaa.Events"
+                  href="https://www.youtube.com/@Jazbaa"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
@@ -113,7 +113,7 @@ export function SiteFooter() {
               </li>
               <li>
                 <a
-                  href="https://www.facebook.com/share/1BGbW67U7o"
+                  href="https://www.facebook.com/profile.php?id=61591240624769"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"

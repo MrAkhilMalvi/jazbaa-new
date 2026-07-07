@@ -3,7 +3,6 @@
 import { Reveal } from "@/components/animations/Reveal";
 import { ArrowUpRight, Sparkles } from "lucide-react";
 import { motion } from "framer-motion";
-import { CardSpotlight } from "@/components/ui/card-spotlight";
 
 const reasons = [
   {
@@ -43,8 +42,8 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
+      staggerChildren: 0.12,
+      delayChildren: 0.15,
     },
   },
 };
@@ -132,7 +131,7 @@ export function WhyJazbaa() {
         </div>
 
         {/* =========================================
-            MIDDLE: GRID INTRO HEADING (Added Section)
+            MIDDLE: GRID INTRO HEADING
             ========================================= */}
         <div className="mb-12 md:mb-16 border-t border-slate-200/60 dark:border-white/5 pt-16">
           <Reveal>
@@ -166,22 +165,33 @@ export function WhyJazbaa() {
           className="grid gap-6 md:gap-8 sm:grid-cols-2 lg:grid-cols-3"
         >
           {reasons.map((r) => (
-            <motion.div key={r.n} variants={cardVariants} className="h-full">
-              <CardSpotlight
-                className="
-                  h-full rounded-[2rem] p-8 md:p-10
-                  border border-slate-200 dark:border-white/10
-                  bg-slate-50 dark:bg-zinc-900/50
-                  shadow-lg dark:shadow-none
+            <motion.div
+              key={r.n}
+              variants={cardVariants}
+              className="h-full"
+              whileHover={{ y: -8, scale: 1.015 }}
+              transition={{ type: "spring", stiffness: 350, damping: 25 }}
+            >
+              {/* Outer Border Wrapper */}
+              <div className="group relative h-full rounded-[2rem] p-[1px] transition-all duration-500 ease-out bg-slate-200 dark:bg-white/10 hover:bg-transparent">
+                
+                {/* Under-glow layer (appears on hover) */}
+                <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-500 via-pink-500 to-indigo-500 opacity-0 group-hover:opacity-100 blur-xl transition-opacity duration-500 -z-10" />
+
+                {/* Shimmering gradient border backdrop */}
+                <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-br from-orange-500 via-pink-500 to-indigo-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+                {/* Inner Content Card */}
+                <div className="
+                  relative h-full rounded-[1.95rem] p-8 md:p-10
+                  bg-slate-50 dark:bg-zinc-900/95
                   transition-colors duration-300
-                  group cursor-default
-                "
-              >
-                <div className="flex flex-col h-full justify-between relative z-10">
+                  flex flex-col justify-between z-10
+                ">
                   <div>
                     <div className="flex items-start justify-between mb-8">
                       {/* Number Badge */}
-                      <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/40 font-bold text-xl group-hover:bg-[#ff6a3d] group-hover:text-white group-hover:border-[#ff6a3d] transition-all duration-500">
+                      <span className="inline-flex items-center justify-center w-12 h-12 rounded-2xl bg-white dark:bg-zinc-950 border border-slate-200 dark:border-white/10 text-slate-400 dark:text-white/40 font-bold text-xl group-hover:bg-[#ff6a3d] group-hover:text-white group-hover:border-[#ff6a3d] transition-all duration-500">
                         {r.n}
                       </span>
 
@@ -189,16 +199,16 @@ export function WhyJazbaa() {
                       <ArrowUpRight className="w-6 h-6 text-slate-300 dark:text-white/20 group-hover:text-[#ff6a3d] group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-500" />
                     </div>
 
-                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4 transition-colors duration-300">
+                    <h3 className="text-2xl md:text-3xl font-bold text-slate-900 dark:text-white mb-4 transition-colors duration-300 group-hover:text-slate-950 dark:group-hover:text-white">
                       {r.t}
                     </h3>
 
-                    <p className="text-base md:text-lg text-slate-600 dark:text-white/60 leading-relaxed transition-colors duration-300">
+                    <p className="text-base md:text-lg text-slate-600 dark:text-white/60 leading-relaxed transition-colors duration-300 group-hover:text-slate-800 dark:group-hover:text-white/80">
                       {r.d}
                     </p>
                   </div>
                 </div>
-              </CardSpotlight>
+              </div>
             </motion.div>
           ))}
         </motion.div>
