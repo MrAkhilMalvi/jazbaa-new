@@ -178,36 +178,45 @@ export const logoutUser = async (refreshToken) => {
 };
 
 export const forgotPassword = async (email) => {
-  const userRes = await pool.query("SELECT * FROM users WHERE email=$1", [
-    email,
-  ]);
+  try {
+    const userRes = await pool.query("SELECT * FROM users WHERE email=$1", [
+      email,
+    ]);
 
-  if (!userRes.rows.length) {
+    // Security best practice: return true even if user doesn't exist 
+    // so attackers can't enumerate emails.
+    if (!userRes.rows.length) {
+      return true;
+    }
+
+    const user = userRes.rows[0];
+    const token = crypto.randomBytes(32).toString("hex");
+    const expires = new Date(Date.now() + 1000 * 60 * 15);
+
+    // Clean up older reset tokens
+    await pool.query("DELETE FROM password_resets WHERE user_id=$1", [user.id]);
+
+    // Insert new token
+    await pool.query(
+      `INSERT INTO password_resets(
+        user_id,
+        token,
+        expires_at
+      )
+      VALUES($1,$2,$3)`,
+      [user.id, token, expires],
+    );
+
+    const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
+
+    await sendResetEmail(email, resetLink);
+
     return true;
+
+  } catch (error) {
+    console.error("Error in forgotPassword workflow:", error);
+    throw error; 
   }
-
-  const user = userRes.rows[0];
-  const token = crypto.randomBytes(32).toString("hex");
-  const expires = new Date(Date.now() + 1000 * 60 * 15);
-
-  await pool.query("DELETE FROM password_resets WHERE user_id=$1", [user.id]);
-
-  // insert new token
-  await pool.query(
-    `INSERT INTO password_resets(
-      user_id,
-      token,
-      expires_at
-    )
-    VALUES($1,$2,$3)`,
-    [user.id, token, expires],
-  );
-
-  const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
-
-  await sendResetEmail(email, resetLink);
-
-  return true;
 };
 
 export const resetPassword = async (token, password) => {
