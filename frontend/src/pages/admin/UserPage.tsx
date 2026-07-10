@@ -14,7 +14,6 @@ import { User } from "@/api/user.types";
 import { getUsersApi } from "@/api/Admin.api";
 import UsersTable from "./UsersTable";
 
-
 const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
@@ -109,16 +108,16 @@ const UsersPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50/50 pb-12 pt-24 text-slate-800">
+    <div className="min-h-screen bg-slate-50/50 pb-12 pt-24 text-slate-800 transition-colors duration-200 dark:bg-slate-950 dark:text-slate-200">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         
         {/* Top Header Section */}
         <div className="mb-8 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
               User Directory
             </h1>
-            <p className="mt-1.5 text-sm text-slate-500">
+            <p className="mt-1.5 text-sm text-slate-500 dark:text-slate-400">
               Manage system access, analyze registration metrics, and export data views.
             </p>
           </div>
@@ -127,7 +126,7 @@ const UsersPage = () => {
             <button
               onClick={fetchUsers}
               disabled={loading}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-600 shadow-sm transition hover:bg-slate-50 disabled:opacity-50"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg border border-slate-200 bg-white px-4 text-sm font-medium text-slate-600 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 disabled:opacity-50"
               title="Refresh directory data"
             >
               <RefreshCw className={`h-4 w-4 ${loading ? 'animate-spin' : ''}`} />
@@ -137,7 +136,7 @@ const UsersPage = () => {
               type="button"
               onClick={exportUsers}
               disabled={loading || filteredUsers.length === 0}
-              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+              className="inline-flex h-10 items-center justify-center gap-2 rounded-lg bg-indigo-600 px-4 text-sm font-medium text-white shadow-sm transition hover:bg-indigo-700 dark:bg-indigo-500 dark:hover:bg-indigo-600 disabled:cursor-not-allowed disabled:bg-slate-300 dark:disabled:bg-slate-800 disabled:shadow-none"
             >
               <Download className="h-4 w-4" />
               <span>Export {filteredUsers.length !== users.length ? "Filtered" : "Excel"}</span>
@@ -147,86 +146,86 @@ const UsersPage = () => {
 
         {/* Stats Section */}
         <div className="mb-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          <div className="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+          <div className="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-slate-800/80 dark:bg-slate-900">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Records</p>
-                <h2 className="mt-2 text-3xl font-bold text-slate-900">{users.length}</h2>
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Total Records</p>
+                <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">{users.length}</h2>
               </div>
-              <div className="rounded-lg bg-indigo-50 p-3 text-indigo-600">
+              <div className="rounded-lg bg-indigo-50 p-3 text-indigo-600 dark:bg-indigo-950/40 dark:text-indigo-400">
                 <Users className="h-6 w-6" />
               </div>
             </div>
-            <div className="mt-4 border-t border-slate-100 pt-3">
-              <p className="text-xs text-slate-500">
+            <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-800/50">
+              <p className="text-xs text-slate-500 dark:text-slate-400">
                 {filteredUsers.length} matches in current view
               </p>
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md">
+          <div className="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md dark:border-slate-800/80 dark:bg-slate-900">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Countries Represented</p>
-                <h2 className="mt-2 text-3xl font-bold text-slate-900">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Countries Represented</p>
+                <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                   {[...new Set(users.map((u) => u.country).filter(Boolean))].length}
                 </h2>
               </div>
-              <div className="rounded-lg bg-blue-50 p-3 text-blue-600">
+              <div className="rounded-lg bg-blue-50 p-3 text-blue-600 dark:bg-blue-950/40 dark:text-blue-400">
                 <Globe className="h-6 w-6" />
               </div>
             </div>
-            <div className="mt-4 border-t border-slate-100 pt-3">
-              <p className="text-xs text-slate-500">Global geographic diversity</p>
+            <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-800/50">
+              <p className="text-xs text-slate-500 dark:text-slate-400">Global geographic diversity</p>
             </div>
           </div>
 
-          <div className="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md col-span-1 sm:col-span-2 lg:col-span-1">
+          <div className="relative overflow-hidden rounded-xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all hover:shadow-md col-span-1 sm:col-span-2 lg:col-span-1 dark:border-slate-800/80 dark:bg-slate-900">
             <div className="flex items-center justify-between">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">Total Segments</p>
-                <h2 className="mt-2 text-3xl font-bold text-slate-900">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">Total Segments</p>
+                <h2 className="mt-2 text-3xl font-bold text-slate-900 dark:text-white">
                   {[...new Set(users.map((u) => u.category).filter(Boolean))].length}
                 </h2>
               </div>
-              <div className="rounded-lg bg-emerald-50 p-3 text-emerald-600">
+              <div className="rounded-lg bg-emerald-50 p-3 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400">
                 <Tag className="h-6 w-6" />
               </div>
             </div>
-            <div className="mt-4 border-t border-slate-100 pt-3">
-              <p className="text-xs text-slate-500">Active membership categories</p>
+            <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-800/50">
+              <p className="text-xs text-slate-500 dark:text-slate-400">Active membership categories</p>
             </div>
           </div>
         </div>
 
         {/* Search and Filters Segment */}
-        <div className="mb-6 rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm">
+        <div className="mb-6 rounded-xl border border-slate-200/80 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
             
             {/* Search Input */}
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-slate-400" />
+              <Search className="absolute left-3 top-1/2 h-4.5 w-4.5 -translate-y-1/2 text-slate-400 dark:text-slate-500" />
               <input
                 type="text"
                 placeholder="Search by name, email, or city..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-100"
+                className="w-full rounded-lg border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm text-slate-900 outline-none transition focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-100 dark:focus:border-indigo-500 dark:focus:bg-slate-900 dark:focus:ring-indigo-950/50"
               />
             </div>
 
             {/* Select Dropdowns */}
             <div className="flex flex-wrap items-center gap-3">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal className="h-4 w-4 text-slate-400" />
-                <span className="text-xs font-medium text-slate-500 uppercase">Filters:</span>
+                <SlidersHorizontal className="h-4 w-4 text-slate-400 dark:text-slate-500" />
+                <span className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase">Filters:</span>
               </div>
 
               {/* Category Filter */}
               <select
                 value={selectedCategory}
                 onChange={(e) => setSelectedCategory(e.target.value)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:border-slate-700 dark:focus:border-indigo-500 dark:focus:ring-indigo-950/50"
               >
                 <option value="All">All Categories</option>
                 {categories.filter(c => c !== "All").map((cat) => (
@@ -238,7 +237,7 @@ const UsersPage = () => {
               <select
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
-                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100"
+                className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs font-medium text-slate-700 outline-none transition hover:border-slate-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-300 dark:hover:border-slate-700 dark:focus:border-indigo-500 dark:focus:ring-indigo-950/50"
               >
                 <option value="All">All Countries</option>
                 {countries.filter(c => c !== "All").map((cnt) => (
@@ -253,7 +252,7 @@ const UsersPage = () => {
                     setSelectedCategory("All");
                     setSelectedCountry("All");
                   }}
-                  className="text-xs font-medium text-indigo-600 hover:text-indigo-800 hover:underline"
+                  className="text-xs font-medium text-indigo-600 hover:text-indigo-800 hover:underline dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                   Clear all filters
                 </button>

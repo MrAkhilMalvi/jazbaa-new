@@ -21,23 +21,23 @@ const UsersTable = ({
   itemsPerPage,
 }: UsersTableProps) => {
 
-  // Loading skeleton placeholder state
+  // Loading skeleton placeholder state with dark support
   if (loading) {
     return (
-      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
-        <div className="border-b border-slate-100 bg-slate-50/70 px-6 py-4">
-          <div className="h-5 w-32 animate-pulse rounded bg-slate-200"></div>
+      <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="border-b border-slate-100 bg-slate-50/70 px-6 py-4 dark:border-slate-850 dark:bg-slate-800/40">
+          <div className="h-5 w-32 animate-pulse rounded bg-slate-200 dark:bg-slate-800"></div>
         </div>
-        <div className="divide-y divide-slate-100 px-6">
+        <div className="divide-y divide-slate-100 px-6 dark:divide-slate-800">
           {[...Array(5)].map((_, i) => (
             <div key={i} className="flex items-center space-x-4 py-5 animate-pulse">
-              <div className="h-10 w-10 rounded-full bg-slate-200"></div>
+              <div className="h-10 w-10 rounded-full bg-slate-200 dark:bg-slate-800"></div>
               <div className="flex-1 space-y-2 py-1">
-                <div className="h-4 w-1/4 rounded bg-slate-200"></div>
-                <div className="h-3 w-1/3 rounded bg-slate-200"></div>
+                <div className="h-4 w-1/4 rounded bg-slate-200 dark:bg-slate-800"></div>
+                <div className="h-3 w-1/3 rounded bg-slate-200 dark:bg-slate-800"></div>
               </div>
-              <div className="h-4 w-16 rounded bg-slate-200"></div>
-              <div className="h-4 w-20 rounded bg-slate-200"></div>
+              <div className="h-4 w-16 rounded bg-slate-200 dark:bg-slate-800"></div>
+              <div className="h-4 w-20 rounded bg-slate-200 dark:bg-slate-800"></div>
             </div>
           ))}
         </div>
@@ -45,15 +45,15 @@ const UsersTable = ({
     );
   }
 
-  // Visual state for empty records or filter results
+  // Visual state for empty records or filter results with dark support
   if (!users.length) {
     return (
-      <div className="rounded-xl border border-dashed border-slate-300 bg-white py-16 text-center shadow-sm">
-        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400">
+      <div className="rounded-xl border border-dashed border-slate-300 bg-white py-16 text-center shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-500">
           <Inbox className="h-6 w-6" />
         </div>
-        <h3 className="mt-4 text-sm font-semibold text-slate-900">No records match your criteria</h3>
-        <p className="mt-1 text-xs text-slate-500">
+        <h3 className="mt-4 text-sm font-semibold text-slate-900 dark:text-slate-100">No records match your criteria</h3>
+        <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
           Try expanding or clearing your filters to discover records.
         </p>
       </div>
@@ -61,11 +61,11 @@ const UsersTable = ({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="overflow-x-auto">
-        <table className="max-w-full table-auto border-collapse text-left text-slate-600">
+        <table className="w-full table-auto border-collapse text-left text-slate-600 dark:text-slate-300">
           <thead>
-            <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500">
+            <tr className="border-b border-slate-200 bg-slate-50 text-xs font-semibold uppercase tracking-wider text-slate-500 dark:border-slate-800 dark:bg-slate-800/40 dark:text-slate-400">
               <th className="px-6 py-4">Full Name</th>
               <th className="px-6 py-4">Contact info</th>
               <th className="px-6 py-4">Location</th>
@@ -76,26 +76,25 @@ const UsersTable = ({
             </tr>
           </thead>
 
-          <tbody className="divide-y divide-slate-100 bg-white text-sm">
+          <tbody className="divide-y divide-slate-100 bg-white text-sm dark:divide-slate-800 dark:bg-slate-900">
             {users.map((user) => {
               const userInitials = `${user.first_name?.[0] || ""}${user.last_name?.[0] || ""}`.toUpperCase();
 
               return (
                 <tr
                   key={user.id}
-                  className="group transition-colors hover:bg-slate-50/50"
+                  className="group transition-colors hover:bg-slate-50/50 dark:hover:bg-slate-800/30"
                 >
                   {/* Name column featuring custom avatar display */}
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-bold text-indigo-700 text-xs">
+                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-50 font-bold text-indigo-700 text-xs dark:bg-indigo-950/60 dark:text-indigo-300">
                         {userInitials || "U"}
                       </div>
                       <div>
-                        <div className="font-semibold text-slate-900">
+                        <div className="font-semibold text-slate-900 dark:text-slate-100">
                           {user.first_name} {user.last_name}
                         </div>
-
                       </div>
                     </div>
                   </td>
@@ -103,12 +102,12 @@ const UsersTable = ({
                   {/* Email & Mobile combined details */}
                   <td className="px-6 py-4">
                     <div className="space-y-1">
-                      <span className="flex items-center gap-1.5 text-xs text-slate-500">
+                      <span className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-400">
                         <Mail className="h-3 w-3 shrink-0" />
                         {user.email}
                       </span>
                       {user.mobile && (
-                        <span className="block text-xs text-slate-400">
+                        <span className="block text-xs text-slate-400 dark:text-slate-500">
                           {user.mobile}
                         </span>
                       )}
@@ -118,26 +117,26 @@ const UsersTable = ({
                   {/* Location Column */}
                   <td className="px-6 py-4">
                     <div className="flex items-start gap-1.5 text-xs">
-                      <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400" />
+                      <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-slate-400 dark:text-slate-500" />
                       <div>
-                        <div className="text-slate-700">
+                        <div className="text-slate-700 dark:text-slate-300">
                           {user.city || "N/A"}, {user.state || "N/A"}
                         </div>
-                        <div className="text-slate-400 text-[11px]">{user.country}</div>
+                        <div className="text-slate-400 text-[11px] dark:text-slate-500">{user.country}</div>
                       </div>
                     </div>
                   </td>
 
                   {/* Age Group Badge */}
                   <td className="px-6 py-4">
-                    <span className="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 border border-blue-100">
+                    <span className="inline-flex rounded-full bg-blue-50 px-2.5 py-0.5 text-xs font-semibold text-blue-700 border border-blue-100 dark:bg-blue-950/40 dark:text-blue-300 dark:border-blue-900/30">
                       {user.age_group}
                     </span>
                   </td>
 
                   {/* Category Badge */}
                   <td className="px-6 py-4">
-                    <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-800 border border-slate-200">
+                    <span className="inline-flex rounded-full bg-slate-100 px-2.5 py-0.5 text-xs font-semibold text-slate-800 border border-slate-200 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700">
                       {user.category || "General"}
                     </span>
                   </td>
@@ -149,20 +148,20 @@ const UsersTable = ({
                         user.interests.slice(0, 3).map((interest) => (
                           <span
                             key={interest}
-                            className="inline-flex rounded bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200/50"
+                            className="inline-flex rounded bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200/50 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700/50"
                           >
                             {interest}
                           </span>
                         ))
                       ) : (
                         user.interests && (
-                          <span className="inline-flex rounded bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200/50">
+                          <span className="inline-flex rounded bg-slate-50 px-1.5 py-0.5 text-[10px] font-medium text-slate-600 border border-slate-200/50 dark:bg-slate-800/60 dark:text-slate-300 dark:border-slate-700/50">
                             {user.interests}
                           </span>
                         )
                       )}
                       {Array.isArray(user.interests) && user.interests.length > 3 && (
-                        <span className="text-[10px] text-slate-400 font-medium self-center pl-1">
+                        <span className="text-[10px] text-slate-400 font-medium self-center pl-1 dark:text-slate-500">
                           +{user.interests.length - 3} more
                         </span>
                       )}
@@ -170,9 +169,9 @@ const UsersTable = ({
                   </td>
 
                   {/* Registration Date Column */}
-                  <td className="px-6 py-4 text-xs text-slate-500">
+                  <td className="px-6 py-4 text-xs text-slate-500 dark:text-slate-400">
                     <span className="flex items-center gap-1.5">
-                      <Calendar className="h-3.5 w-3.5 text-slate-400" />
+                      <Calendar className="h-3.5 w-3.5 text-slate-400 dark:text-slate-500" />
                       {new Date(user.created_at).toLocaleDateString(undefined, {
                         year: 'numeric',
                         month: 'short',
@@ -187,36 +186,36 @@ const UsersTable = ({
         </table>
       </div>
 
-      {/* Pagination Controls Section */}
-      <div className="flex flex-col items-center justify-between gap-4 border-t border-slate-150 bg-slate-50 px-6 py-4 sm:flex-row">
-        <div className="text-xs text-slate-500">
-          Showing <span className="font-semibold text-slate-700">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
-          <span className="font-semibold text-slate-700">
+      {/* Pagination Controls Section with dark support */}
+      <div className="flex flex-col items-center justify-between gap-4 border-t border-slate-150 bg-slate-50 px-6 py-4 sm:flex-row dark:border-slate-800 dark:bg-slate-900/60">
+        <div className="text-xs text-slate-500 dark:text-slate-400">
+          Showing <span className="font-semibold text-slate-700 dark:text-slate-300">{(currentPage - 1) * itemsPerPage + 1}</span> to{" "}
+          <span className="font-semibold text-slate-700 dark:text-slate-300">
             {Math.min(currentPage * itemsPerPage, totalCount)}
           </span>{" "}
-          of <span className="font-semibold text-slate-700">{totalCount}</span> filtered entries
+          of <span className="font-semibold text-slate-700 dark:text-slate-300">{totalCount}</span> filtered entries
         </div>
 
         <div className="flex items-center space-x-1">
           <button
             onClick={() => onPageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="inline-flex h-8 w-8 items-center justify-center rounded border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white"
+            className="inline-flex h-8 w-8 items-center justify-center rounded border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-white dark:disabled:hover:bg-slate-900"
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           
           <div className="flex items-center gap-1.5 px-3">
-            <span className="text-xs text-slate-500">Page</span>
-            <span className="text-xs font-semibold text-slate-800">{currentPage}</span>
-            <span className="text-xs text-slate-500">of</span>
-            <span className="text-xs font-semibold text-slate-800">{totalPages}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">Page</span>
+            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">{currentPage}</span>
+            <span className="text-xs text-slate-500 dark:text-slate-400">of</span>
+            <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">{totalPages}</span>
           </div>
 
           <button
             onClick={() => onPageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="inline-flex h-8 w-8 items-center justify-center rounded border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white"
+            className="inline-flex h-8 w-8 items-center justify-center rounded border border-slate-200 bg-white text-slate-600 shadow-sm transition hover:bg-slate-50 dark:border-slate-800 dark:bg-slate-900 dark:text-slate-400 dark:hover:bg-slate-800 disabled:opacity-40 disabled:hover:bg-white dark:disabled:hover:bg-slate-900"
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -226,4 +225,4 @@ const UsersTable = ({
   );
 };
 
-export default UsersTable;
+export default UsersTable; 
