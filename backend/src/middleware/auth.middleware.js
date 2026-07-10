@@ -59,3 +59,35 @@ export const protect = async (req, res, next) => {
     next(err);
   }
 };
+
+export const adminProtect = async (req, res, next) => {
+  try {
+    // Safety check: make sure the 'protect' middleware ran first and we have a user ID
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({ message: "Unauthorized. Please log in first." });
+    }
+
+    // Look up the user in the database to see their actual role status
+    const userResult = await pool.query(
+      "SELECT is_admin FROM users WHERE id = $1",
+      [req.user.id]
+    );
+
+    // If user doesn't exist in the table at all
+    if (userResult.rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = userResult.rows[0];
+
+    // Check if is_admin is explicitly true
+    if (user.is_admin !== true) {
+      return res.status(403).json({ message: "Forbidden: Admin access only" });
+    }
+
+    // User is authorized! Proceed to the admin route.
+    next();
+  } catch (err) {
+    next(err);
+  }
+};

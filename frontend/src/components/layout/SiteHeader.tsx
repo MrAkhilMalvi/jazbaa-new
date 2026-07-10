@@ -1,12 +1,12 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState, useRef } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LayoutDashboard } from "lucide-react"; // Imported LayoutDashboard icon
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
 
-const links = [
+const baseLinks = [
   { to: "/", label: "Home" },
   { to: "/events", label: "Events & Experiences" },
   { to: "/#about", label: "About Us" },
@@ -22,6 +22,12 @@ export function SiteHeader() {
   const { user, logout } = useAuth();
 
   const profileMenuRef = useRef<HTMLDivElement>(null);
+
+  // 🛠️ DYNAMICALLY ADD ADMIN LINK IF THE USER IS AN ADMIN
+  const links = [...baseLinks];
+  if (user?.is_admin) {
+    links.push({ to: "/admin/dashboard", label: "Admin" });
+  }
 
   // Handle scroll styling
   useEffect(() => {
@@ -119,7 +125,7 @@ export function SiteHeader() {
         </Link>
 
         {/* =========================================
-            DESKTOP NAV
+            DESKTOP NAV (Includes dynamic Dashboard link)
             ========================================= */}
         <nav className="hidden md:flex items-center gap-2 lg:gap-4">
           {links.map((l) => {
@@ -150,7 +156,7 @@ export function SiteHeader() {
 
           {!user ? (
             <>
-              {/* Login Button with Dynamic States */}
+              {/* Login Button */}
               <Button
                 asChild
                 variant="ghost"
@@ -164,7 +170,7 @@ export function SiteHeader() {
                 <Link to="/login">Login</Link>
               </Button>
 
-              {/* Sign Up Button with Dynamic States */}
+              {/* Sign Up Button */}
               <Button
                 asChild
                 className={cn(
@@ -200,6 +206,22 @@ export function SiteHeader() {
               {/* Avatar Dropdown Menu */}
               {profileOpen && (
                 <div className="absolute right-0 mt-3 w-48 bg-white dark:bg-zinc-900 border border-slate-200 dark:border-white/10 rounded-2xl shadow-2xl p-2 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
+                  
+                  {/* ⭐ ADMIN SHORTCUT INSIDE AVATAR MENU */}
+                  {user?.is_admin && (
+                    <Button
+                      asChild
+                      variant="ghost"
+                      className="w-full justify-start text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-white/5 rounded-xl text-base font-semibold transition-colors h-10 px-4 mb-1 gap-2"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      <Link to="/admin/dashboard">
+                        <LayoutDashboard className="w-4 h-4 text-[#ff6a3d]" />
+                        Dashboard
+                      </Link>
+                    </Button>
+                  )}
+
                   <Button
                     variant="ghost"
                     className="w-full justify-start text-red-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-xl text-base font-semibold transition-colors h-10 px-4"

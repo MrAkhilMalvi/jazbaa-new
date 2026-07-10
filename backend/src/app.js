@@ -3,6 +3,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 
 import authRoutes from "./modules/auth/auth.routes.js";
+import adminRoutes from "./modules/admin/admin.routes.js";
 import { errorHandler } from "./middleware/error.middleware.js";
 
 const app = express();
@@ -59,6 +60,7 @@ app.use((req, res, next) => {
 
 // ✅ Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/admin", adminRoutes);
 
 // ✅ Health check
 app.get("/", (req, res) => {

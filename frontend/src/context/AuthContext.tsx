@@ -6,6 +6,7 @@ type User = {
   email: string;
   avatar?: string;
   first_name?:string;
+  is_admin:boolean;
 };
 
 type AuthContextType = {

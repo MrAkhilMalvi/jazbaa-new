@@ -5,7 +5,7 @@ import pool from "../../config/db.js";
 export const getMe = async (req, res, next) => {
   try {
     const result = await pool.query(
-      "SELECT id,email,avatar,first_name FROM users WHERE id=$1",
+      "SELECT id,email,avatar,first_name,is_admin FROM users WHERE id=$1",
       [req.user.id]
     );
 

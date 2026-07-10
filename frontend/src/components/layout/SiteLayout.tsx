@@ -16,6 +16,8 @@ import PrivacyPolicy from "@/pages/PrivacyPolicy";
 import TermsConditions from "@/pages/TermsConditions";
 import CookiePolicy from "@/pages/CookiePolicy";
 import { WhatsAppButton } from "../sections/WhatsAppButton";
+import AdminDashboard from "@/pages/admin/UserPage";
+import { AdminProtectedRoute } from "../AdminProtectedRoute";
 
 export function SiteLayout() {
   const location = useLocation();
@@ -100,6 +102,15 @@ export function SiteLayout() {
 
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
+
+              <Route 
+          path="/admin/dashboard" 
+          element={
+            <AdminProtectedRoute>
+              <AdminDashboard />
+            </AdminProtectedRoute>
+          } 
+        />
             </Routes>
           </PageTransition>
         </AnimatePresence>
