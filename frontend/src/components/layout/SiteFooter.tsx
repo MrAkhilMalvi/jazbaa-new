@@ -2,9 +2,9 @@ import { Link } from "react-router-dom";
 import {
   Instagram,
   Youtube,
-  Mail,
-  FacebookIcon,
   MailCheck,
+  FacebookIcon,
+  Phone,
 } from "lucide-react";
 
 export function SiteFooter() {
@@ -58,7 +58,7 @@ export function SiteFooter() {
                   to="/events"
                   className="inline-block hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] sm:hover:translate-x-1 transition-all duration-300"
                 >
-                  Events
+                  Events & Experiences
                 </Link>
               </li>
               <li>
@@ -73,56 +73,73 @@ export function SiteFooter() {
           </div>
 
           {/* =========================================
-              CONNECT LINKS
+              CONNECT LINKS (With Email & Phone layout)
               ========================================= */}
           <div>
             <h4 className="font-bold text-xl md:text-2xl text-slate-900 dark:text-white mb-5 md:mb-6">
               Connect
             </h4>
-            <ul className="space-y-4 md:space-y-5 text-base md:text-lg font-medium text-slate-600 dark:text-white/70">
-              <li>
-                <a
-                  href="mailto:support.jazbaa@gmail.com"
-                  className="flex items-center gap-3 hover:text-[#ff6a3d dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
-                >
-                  <MailCheck className="h-5 w-5 text-slate-400  group-hover:text-[#ff6a3d] transition-colors" />
-                  <p className="text-lg">support.jazbaa@gmail.com</p>
-                </a>
-              </li>
-              <li>
+            <div className="space-y-4">
+              
+              {/* Email Link (Gmail Red theme) */}
+              <a
+                href="mailto:support.jazbaa@gmail.com"
+                className="flex items-center gap-3 text-base md:text-lg font-medium text-slate-600 dark:text-white/70 hover:text-[#ea4335] dark:hover:text-[#ea4335] hover:translate-x-1 transition-all duration-300 group"
+              >
+                <div className="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 group-hover:border-[#ea4335] group-hover:bg-[#ea4335]/10 transition-colors duration-300 flex items-center justify-center shrink-0">
+                  <MailCheck className="h-5 w-5 text-slate-400 group-hover:text-[#ea4335] transition-colors" />
+                </div>
+                <span className="truncate">support.jazbaa@gmail.com</span>
+              </a>
+
+              {/* Mobile Link (Emerald Green theme) */}
+              <a
+                href="tel:+919892394310"
+                className="flex items-center gap-3 text-base md:text-lg font-medium text-slate-600 dark:text-white/70 hover:text-[#10b981] dark:hover:text-[#10b981] hover:translate-x-1 transition-all duration-300 group"
+              >
+                <div className="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 group-hover:border-[#10b981] group-hover:bg-[#10b981]/10 transition-colors duration-300 flex items-center justify-center shrink-0">
+                  <Phone className="h-5 w-5 text-slate-400 group-hover:text-[#10b981] transition-colors" />
+                </div>
+                <span className="truncate">+91 989 239 4310</span>
+              </a>
+
+              {/* Social Media Link Grid (Only Icons, styled like Contact Section) */}
+              <div className="flex flex-wrap gap-2.5 pt-2">
+                {/* Instagram Icon */}
                 <a
                   href="https://www.instagram.com/jazbaa.experiences/"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
+                  aria-label="Visit our Instagram"
+                  className="flex items-center justify-center w-11 h-11 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 hover:bg-pink-600 hover:text-white hover:border-pink-500"
                 >
-                  <Instagram className="h-5 w-5 shrink-0 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
-                  <span className="truncate">@Jazbaa.Events</span>
+                  <Instagram className="w-5 h-5" />
                 </a>
-              </li>
-              <li>
+
+                {/* YouTube Icon */}
                 <a
-                  href="https://www.youtube.com/@Jazbaa"
+                  href="https://www.youtube.com/@JazbaaVibes"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
+                  aria-label="Visit our YouTube"
+                  className="flex items-center justify-center w-11 h-11 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 hover:bg-red-600 hover:text-white hover:border-red-500"
                 >
-                  <Youtube className="h-5 w-5 shrink-0 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
-                  <span className="truncate">JAZBAA Community</span>
+                  <Youtube className="w-5 h-5" />
                 </a>
-              </li>
-              <li>
+
+                {/* Facebook Icon */}
                 <a
                   href="https://www.facebook.com/profile.php?id=61591240624769"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 pr-2 hover:text-[#ff6a3d] dark:hover:text-[#ff6a3d] hover:translate-x-1 transition-all duration-300 group"
+                  aria-label="Visit our Facebook"
+                  className="flex items-center justify-center w-11 h-11 rounded-xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-500 dark:text-slate-300 transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 hover:bg-blue-600 hover:text-white hover:border-blue-500"
                 >
-                  <FacebookIcon className="h-5 w-5 shrink-0 text-slate-400 group-hover:text-[#ff6a3d] transition-colors" />
-                  <span className="truncate">Jazbaa Events</span>
+                  <FacebookIcon className="w-5 h-5" />
                 </a>
-              </li>
-            </ul>
+              </div>
+
+            </div>
           </div>
         </div>
 

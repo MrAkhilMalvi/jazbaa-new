@@ -72,7 +72,7 @@ const Contact = () => {
   const socialLinks = [
     {
       name: "Instagram",
-      href: "https://www.instagram.com/jazbaa.events/",
+      href: "https://www.instagram.com/jazbaa.experiences/",
       icon: Instagram,
       hoverClass: "hover:bg-pink-600 hover:text-white hover:border-pink-500",
     },
@@ -84,7 +84,7 @@ const Contact = () => {
     },
     {
       name: "YouTube",
-      href: "https://www.youtube.com/@Jazbaa",
+      href: "https://www.youtube.com/@JazbaaVibes",
       icon: Youtube,
       hoverClass: "hover:bg-red-600 hover:text-white hover:border-red-500",
     },
