@@ -22,6 +22,8 @@ const allowedOrigins = [
   "http://localhost:8081",
   "https://jazbaa.naviralife.co.in",
   "https://www.jazbaa.naviralife.co.in",
+  "https://jazbaa.co.in",
+  "https://www.jazbaa.co.in",  
   process.env.CLIENT_URL,
 ].filter(Boolean);
 
