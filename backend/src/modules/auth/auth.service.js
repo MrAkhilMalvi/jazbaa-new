@@ -138,6 +138,8 @@ export const googleUser = async (token, meta) => {
     );
 
     user = insert.rows[0];
+    console.log(user);
+    
   } else {
     user = userRes.rows[0];
 
@@ -179,36 +181,38 @@ export const logoutUser = async (refreshToken) => {
 
 export const forgotPassword = async (email) => {
   try {
-    // 1. Look up user
-    const userRes = await pool.query("SELECT * FROM users WHERE email=$1", [
-      email,
-    ]);
+    const userRes = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
 
+    // 1. Check if the rows array is empty first
     if (!userRes.rows.length) {
-      console.log(
-        "⚠️ [Forgot Password] Email NOT found in database. Exiting silently for security (Returning true).",
-      );
+      console.log("⚠️ Email not found in database.");
       return true;
     }
 
-    // 2. Generate secure token
+    // 2. NOW define the user variable 🌟
+    const user = userRes.rows[0];
+
+    // 3. ONLY use "user" after this line!
+    console.log(`[Forgot Password] Target User ID is: ${user.id}`);
+
     const token = crypto.randomBytes(32).toString("hex");
     const expires = new Date(Date.now() + 1000 * 60 * 60);
 
     await pool.query("DELETE FROM password_resets WHERE user_id=$1", [user.id]);
 
     await pool.query(
-      `INSERT INTO password_resets (user_id, token, expires_at) VALUES ($1, $2, $3)`,
+      `INSERT INTO password_resets(user_id, token, expires_at) VALUES($1,$2,$3)`,
       [user.id, token, expires],
     );
 
     const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
-
     await sendResetEmail(email, resetLink);
+
     return true;
+
   } catch (error) {
-    console.error("❌ CRITICAL ERROR in forgotPassword workflow:", error);
-    throw error;
+    console.error("Error in forgotPassword workflow:", error);
+    throw error; 
   }
 };
 
