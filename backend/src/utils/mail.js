@@ -6,18 +6,28 @@ if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
 }
 
 export const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // true for port 465
-  pool: true,   // Keeps connections open for faster, more reliable delivery in production
-  family: 4,    // Forces Node to use IPv4 instead of failing on IPv6
+  // 🌟 FIXED FOR RENDER: Using Google's direct IPv4 SMTP server address.
+  // This completely bypasses Render's internal DNS resolving to an unreachable IPv6 address.
+  host: "74.125.142.108", 
+  port: 587,            // 🌟 PORT 587: Much more open and cloud-friendly than 465 on Render
+  secure: false,         // Must be false for port 587 (upgrades securely via STARTTLS)
+  pool: true,            // Keeps connections open for faster, reliable delivery in production
+  
+  // ⏱️ TIMEOUT PROTECTION: Stops the server from hanging indefinitely if blocked
+  connectionTimeout: 10000, // 10 seconds max to connect
+  greetingTimeout: 10000,   // 10 seconds max to greet server
+  socketTimeout: 15000,     // 15 seconds max for inactivity
+  
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS, // Make sure this is your 16-character Google App Password
   },
   tls: {
-    // Prevents TLS/SSL handshake failures common on Linux cloud servers
     rejectUnauthorized: false,
+    minVersion: "TLSv1.2",
+    // 🌟 Crucial when using a direct IP instead of a hostname:
+    // This tells Nodemailer to expect the matching gmail.com certificate.
+    servername: "smtp.gmail.com" 
   },
 });
 
