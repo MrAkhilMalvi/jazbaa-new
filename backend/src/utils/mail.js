@@ -128,7 +128,7 @@ export const sendWelcomeEmail = async (email, firstName) => {
   console.log(`[Resend Mailer] Dispatching welcome email to: ${email}`);
 
   const senderEmail =
-    process.env.EMAIL_FROM || "Team Jazbaa <onboarding@resend.dev>";
+    process.env.EMAIL_FROM || "Team Jazbaa <noreply@jazbaa.co.in>";
 
   try {
     const { data, error } = await resend.emails.send({
