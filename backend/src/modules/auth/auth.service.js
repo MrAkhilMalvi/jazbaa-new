@@ -6,7 +6,7 @@ import {
 } from "../../utils/token.js";
 import { OAuth2Client } from "google-auth-library";
 import crypto from "crypto";
-import { sendResetEmail } from "../../utils/mail.js";
+import { sendResetEmail, sendWelcomeEmail } from "../../utils/mail.js";
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -78,7 +78,15 @@ export const signupUser = async (data) => {
     ],
   );
 
-  return result.rows[0];
+  const user = result.rows[0];
+
+  try {
+    await sendWelcomeEmail(user.email, user.first_name);
+  } catch (err) {
+    console.error("Welcome email failed:", err);
+  }
+
+  return user;
 };
 
 // 🔵 Login
@@ -133,13 +141,18 @@ export const googleUser = async (token, meta) => {
   if (!userRes.rows.length) {
     const insert = await pool.query(
       `INSERT INTO users(email, google_id, avatar, first_name, consent)
-       VALUES($1,$2,$3,$4,true) RETURNING *`,
+     VALUES($1,$2,$3,$4,true) RETURNING *`,
       [email, sub, picture, name],
     );
 
     user = insert.rows[0];
-    console.log(user);
-    
+
+    // Send welcome email only for first Google login
+    try {
+      await sendWelcomeEmail(user.email, user.first_name);
+    } catch (err) {
+      console.error("Welcome email failed:", err);
+    }
   } else {
     user = userRes.rows[0];
 
@@ -181,7 +194,9 @@ export const logoutUser = async (refreshToken) => {
 
 export const forgotPassword = async (email) => {
   try {
-    const userRes = await pool.query("SELECT * FROM users WHERE email=$1", [email]);
+    const userRes = await pool.query("SELECT * FROM users WHERE email=$1", [
+      email,
+    ]);
 
     // 1. Check if the rows array is empty first
     if (!userRes.rows.length) {
@@ -209,10 +224,9 @@ export const forgotPassword = async (email) => {
     await sendResetEmail(email, resetLink);
 
     return true;
-
   } catch (error) {
     console.error("Error in forgotPassword workflow:", error);
-    throw error; 
+    throw error;
   }
 };
 

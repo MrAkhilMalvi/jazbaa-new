@@ -2,7 +2,9 @@ import { Resend } from "resend";
 
 // Quick check to alert you if your Render environment variables are missing
 if (!process.env.RESEND_API_KEY) {
-  console.error("❌ CRITICAL PRODUCTION ERROR: RESEND_API_KEY environment variable is missing!");
+  console.error(
+    "❌ CRITICAL PRODUCTION ERROR: RESEND_API_KEY environment variable is missing!",
+  );
 }
 
 // Initialize the Resend client
@@ -15,13 +17,14 @@ const resend = new Resend(process.env.RESEND_API_KEY);
  */
 export const sendResetEmail = async (email, link) => {
   console.log(`[Resend Mailer] Dispatching reset token link to: ${email}`);
-  
+
   // Production Dynamic Sender: Uses your environment variable, or falls back safely
-  const senderEmail = process.env.EMAIL_FROM || "Team Jazbaa <onboarding@resend.dev>";
+  const senderEmail =
+    process.env.EMAIL_FROM || "Team Jazbaa <onboarding@resend.dev>";
 
   try {
     const { data, error } = await resend.emails.send({
-      from: senderEmail, 
+      from: senderEmail,
       to: [email],
       subject: "Reset your Jazbaa password",
       // Prevents email threading issues in customer inboxes
@@ -70,10 +73,88 @@ export const sendResetEmail = async (email, link) => {
       throw error;
     }
 
-    console.log(`[Resend Mailer] Email accepted by Resend server. Message ID: ${data.id}`);
+    console.log(
+      `[Resend Mailer] Email accepted by Resend server. Message ID: ${data.id}`,
+    );
     return data;
   } catch (error) {
-    console.error("❌ [Resend Mailer Exception] Failed to execute API call:", error);
+    console.error(
+      "❌ [Resend Mailer Exception] Failed to execute API call:",
+      error,
+    );
+    throw error;
+  }
+};
+
+/**
+ * 🎨 TEMPLATE: Jazbaa Welcome Email Template Layout Generator
+ */
+const getWelcomeTemplate = (firstName) => {
+  // Capitalize the first letter of the name if it exists, or fallback gracefully
+  const formattedName = firstName
+    ? firstName.charAt(0).toUpperCase() + firstName.slice(1)
+    : "Friend";
+
+  return `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; max-width: 550px; margin: 0 auto; padding: 30px 20px; color: #333333; line-height: 1.6;">
+      <p style="font-size: 16px; margin-bottom: 20px;">🌟 <strong>Welcome to the Jazbaa family, ${formattedName}!</strong> 💛</p>
+      
+      <p style="font-size: 16px; margin-bottom: 20px;">Thanks for joining us.</p>
+      
+      <p style="font-size: 16px; margin-bottom: 20px;">
+        This is where forgotten hobbies find their way back, new interests take shape, and unforgettable memories begin. 🎨🎶🌿
+      </p>
+      
+      <p style="font-size: 16px; margin-bottom: 25px;">
+        We'll be here to keep you updated with everything happening at <em>Jazbaa</em>.
+      </p>
+
+      <p style="font-size: 16px; margin-bottom: 30px; font-weight: 500;">
+        Here's to many amazing experiences ahead. ✨
+      </p>
+      
+      <p style="font-size: 15px; margin-bottom: 0; font-weight: 600;">Warm regards,</p>
+      <p style="font-size: 15px; margin-top: 2px; color: #555555;">Team Jazbaa</p>
+    </div>
+  `;
+};
+
+/**
+ * 🚀 DISPATCHER: Sends the Welcome Email via Resend HTTPS API
+ * @param {string} email - Recipient's email address
+ * @param {string} firstName - Recipient's first name
+ */
+export const sendWelcomeEmail = async (email, firstName) => {
+  console.log(`[Resend Mailer] Dispatching welcome email to: ${email}`);
+
+  const senderEmail =
+    process.env.EMAIL_FROM || "Team Jazbaa <onboarding@resend.dev>";
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: senderEmail,
+      to: [email],
+      subject: "Welcome to Jazbaa 🎉",
+      headers: {
+        "X-Entity-Ref-ID": Math.random().toString(36).substring(2),
+      },
+      // Generates the customized template with their name
+      html: getWelcomeTemplate(firstName),
+    });
+
+    if (error) {
+      throw error;
+    }
+
+    console.log(
+      `[Resend Mailer] Welcome email sent successfully! Message ID: ${data.id}`,
+    );
+    return data;
+  } catch (error) {
+    console.error(
+      "❌ [Resend Mailer Exception] Failed to send welcome email:",
+      error,
+    );
     throw error;
   }
 };
