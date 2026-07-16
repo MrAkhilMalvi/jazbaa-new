@@ -127,7 +127,7 @@ const Contact = () => {
               {
                 icon: Mail,
                 l: "Write to us",
-                v: "support.jazbaa@gmail.com",
+                v: "support@jazbaa.co.in",
                 cLight: "bg-blue-50 text-blue-600",
                 cDark: "dark:bg-blue-500/10 dark:text-blue-400",
               },

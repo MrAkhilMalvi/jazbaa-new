@@ -46,7 +46,7 @@ export function SiteLayout() {
     };
 
     const frame = requestAnimationFrame(scrollToHash);
-    
+
     // Reduced delays to match faster route transitions
     const shortRetry = window.setTimeout(scrollToHash, 50);
     const transitionRetry = window.setTimeout(scrollToHash, 300);
@@ -103,14 +103,14 @@ export function SiteLayout() {
               {/* 404 */}
               <Route path="*" element={<NotFound />} />
 
-              <Route 
-          path="/admin/dashboard" 
-          element={
-            <AdminProtectedRoute>
-              <AdminDashboard />
-            </AdminProtectedRoute>
-          } 
-        />
+              <Route
+                path="/admin/dashboard"
+                element={
+                  <AdminProtectedRoute>
+                    <AdminDashboard />
+                  </AdminProtectedRoute>
+                }
+              />
             </Routes>
           </PageTransition>
         </AnimatePresence>

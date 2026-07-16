@@ -83,13 +83,13 @@ export function SiteFooter() {
               
               {/* Email Link (Gmail Red theme) */}
               <a
-                href="mailto:support.jazbaa@gmail.com"
+                href="mailto:support@jazbaa.co.in"
                 className="flex items-center gap-3 text-base md:text-lg font-medium text-slate-600 dark:text-white/70 hover:text-[#ea4335] dark:hover:text-[#ea4335] hover:translate-x-1 transition-all duration-300 group"
               >
                 <div className="p-2.5 rounded-xl border border-slate-200 dark:border-white/10 group-hover:border-[#ea4335] group-hover:bg-[#ea4335]/10 transition-colors duration-300 flex items-center justify-center shrink-0">
                   <MailCheck className="h-5 w-5 text-slate-400 group-hover:text-[#ea4335] transition-colors" />
                 </div>
-                <span className="truncate">support.jazbaa@gmail.com</span>
+                <span className="truncate">support@jazbaa.co.in</span>
               </a>
 
               {/* Mobile Link (Emerald Green theme) */}
