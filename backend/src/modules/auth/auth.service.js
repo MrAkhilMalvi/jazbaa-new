@@ -179,81 +179,69 @@ export const logoutUser = async (refreshToken) => {
 
 export const forgotPassword = async (email) => {
   try {
+    // 1. Look up user
     const userRes = await pool.query("SELECT * FROM users WHERE email=$1", [
       email,
     ]);
 
-    // Security best practice: return true even if user doesn't exist 
-    // so attackers can't enumerate emails.
     if (!userRes.rows.length) {
+      console.log(
+        "⚠️ [Forgot Password] Email NOT found in database. Exiting silently for security (Returning true).",
+      );
       return true;
     }
 
-    const user = userRes.rows[0];
+    // 2. Generate secure token
     const token = crypto.randomBytes(32).toString("hex");
-    const expires = new Date(Date.now() + 1000 * 60 * 15);
+    const expires = new Date(Date.now() + 1000 * 60 * 60);
 
-    // Clean up older reset tokens
     await pool.query("DELETE FROM password_resets WHERE user_id=$1", [user.id]);
 
-    // Insert new token
     await pool.query(
-      `INSERT INTO password_resets(
-        user_id,
-        token,
-        expires_at
-      )
-      VALUES($1,$2,$3)`,
+      `INSERT INTO password_resets (user_id, token, expires_at) VALUES ($1, $2, $3)`,
       [user.id, token, expires],
     );
 
     const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
 
     await sendResetEmail(email, resetLink);
-
     return true;
-
   } catch (error) {
-    console.error("Error in forgotPassword workflow:", error);
-    throw error; 
+    console.error("❌ CRITICAL ERROR in forgotPassword workflow:", error);
+    throw error;
   }
 };
 
 export const resetPassword = async (token, password) => {
-  const tokenRes = await pool.query(
-    `SELECT * FROM password_resets
-     WHERE token=$1`,
-    [token],
-  );
+  try {
+    const tokenRes = await pool.query(
+      `SELECT * FROM password_resets WHERE token=$1`,
+      [token],
+    );
 
-  if (!tokenRes.rows.length) {
-    throw new Error("INVALID_TOKEN");
+    if (!tokenRes.rows.length) {
+      console.log("❌ [Reset Password] Token not found in database.");
+      throw new Error("INVALID_TOKEN");
+    }
+
+    const resetData = tokenRes.rows[0];
+
+    // 2. Check token expiration
+    if (new Date(resetData.expires_at) < new Date()) {
+      console.log("❌ [Reset Password] Token has expired.");
+      throw new Error("TOKEN_EXPIRED");
+    }
+
+    const hashed = await bcrypt.hash(password, 10);
+
+    await pool.query(`UPDATE users SET password=$1 WHERE id=$2`, [
+      hashed,
+      resetData.user_id,
+    ]);
+    await pool.query(`DELETE FROM password_resets WHERE token=$1`, [token]);
+    return true;
+  } catch (error) {
+    console.error("❌ CRITICAL ERROR in resetPassword workflow:", error);
+    throw error;
   }
-
-  const resetData = tokenRes.rows[0];
-
-  // check expiry
-  if (new Date(resetData.expires_at) < new Date()) {
-    throw new Error("TOKEN_EXPIRED");
-  }
-
-  const hashed = await bcrypt.hash(password, 10);
-
-  // update password
-  await pool.query(
-    `UPDATE users
-     SET password=$1
-     WHERE id=$2`,
-    [hashed, resetData.user_id],
-  );
-
-  // delete token after use
-  await pool.query(
-    `UPDATE password_resets
-SET used = true
-WHERE token=$1`,
-    [token],
-  );
-
-  return true;
 };
