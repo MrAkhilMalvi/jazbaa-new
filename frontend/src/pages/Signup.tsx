@@ -10,7 +10,7 @@ import {
   Eye,
   EyeOff,
 } from "lucide-react";
-import { Reveal, RevealText } from "@/components/animations/Reveal";
+import { Reveal } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,9 +25,29 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Field } from "@/components/ui/Field";
-import { countryCodes, interestsList } from "@/constants/SingupConstants";
+import { countryCodes } from "@/constants/SingupConstants";
 
 const SIGNUP_ILLUSTRATION = "/images/singupimg.webp";
+
+// Updated list of 16 interests
+const INTERESTS_OPTIONS = [
+  "Singing & Karaoke",
+  "Music & Instrument Circles",
+  "Dance & Movement",
+  "Sketching, Painting & Photography",
+  "Reader's Club & Discussions",
+  "Storytelling",
+  "Open Mic Evenings",
+  "Domain Expert Sessions",
+  "Meditation & Breathwork",
+  "Physical Exercise Session",
+  "Wellness Expert Sessions",
+  "Diet & Nutrition",
+  "Community Meetups",
+  "Themed Events & Concerts",
+  "Friendship Circles",
+  "Festival Celebrations",
+];
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -186,7 +206,6 @@ const Signup = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setErrors({});
 
     const fd = new FormData(e.currentTarget);
@@ -212,31 +231,24 @@ const Signup = () => {
 
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
-
       parsed.error.errors.forEach((err) => {
         const key = String(err.path[0] ?? "");
-
         if (key) {
           fieldErrors[key] = err.message;
         }
       });
 
       setErrors(fieldErrors);
-
       toast.error(
         Object.values(fieldErrors)[0] || "Please check all required fields.",
       );
-
       return;
     }
 
     try {
       setSubmitting(true);
-
       await signupApi(parsed.data);
-
       toast.success("Welcome to JAZBAA 🎉");
-
       (e.target as HTMLFormElement).reset();
 
       setInterests([]);
@@ -274,7 +286,7 @@ const Signup = () => {
               className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-orange-100 dark:bg-[#ff6a3d]/10 border border-orange-200 dark:border-[#ff6a3d]/20 shadow-sm mb-4 cursor-default"
             >
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6a3d] opacity-75 animate-duration-1000"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#ff6a3d] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-[#ff6a3d]"></span>
               </span>
               <span className="text-xs md:text-sm font-bold text-[#c04a18] dark:text-[#ff6a3d] uppercase tracking-wider">
@@ -288,7 +300,7 @@ const Signup = () => {
             </p>
           </Reveal>
 
-          {/* Checklist Layout Optimized for Mobile Alignment */}
+          {/* Checklist */}
           <div className="pt-2 lg:pt-3 space-y-3.5 w-full max-w-md mx-auto lg:mx-0 flex flex-col items-start text-left">
             {[
               "Connect with like-minded people.",
@@ -392,7 +404,7 @@ const Signup = () => {
                     )}
                   </Field>
 
-                  {/* Phone Input with 10 digit enforcement */}
+                  {/* Phone Input */}
                   <div className="flex flex-col space-y-1.5">
                     <Label className="text-xs font-bold text-slate-500 dark:text-white/40 ml-1">
                       Mobile Number
@@ -440,7 +452,7 @@ const Signup = () => {
                     )}
                   </div>
 
-                  {/* Password with Eye icon toggle */}
+                  {/* Password */}
                   <div className="flex flex-col space-y-1">
                     <Field label="Password" focusState={focused === "pw"}>
                       <div className="relative">
@@ -473,7 +485,7 @@ const Signup = () => {
                     )}
                   </div>
 
-                  {/* Confirm Password with Eye icon toggle */}
+                  {/* Confirm Password */}
                   <div className="flex flex-col space-y-1">
                     <Field
                       label="Confirm Password"
@@ -512,10 +524,10 @@ const Signup = () => {
                 </div>
               </div>
 
-              {/* --- DEMOGRAPHICS (DYNAMIC LOCATION API INTERACTION) --- */}
+              {/* --- DEMOGRAPHICS --- */}
               <div className="space-y-4 relative z-10">
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  {/* Country Dropdown */}
+                  {/* Country */}
                   <div className="flex flex-col space-y-1.5">
                     <Label className="text-xs font-bold text-slate-500 dark:text-white/40 ml-1">
                       Country
@@ -547,7 +559,7 @@ const Signup = () => {
                     )}
                   </div>
 
-                  {/* State Dropdown */}
+                  {/* State */}
                   <div className="flex flex-col space-y-1.5">
                     <Label className="text-xs font-bold text-slate-500 dark:text-white/40 ml-1">
                       State
@@ -579,7 +591,7 @@ const Signup = () => {
                     )}
                   </div>
 
-                  {/* City Dropdown */}
+                  {/* City */}
                   <div className="flex flex-col space-y-1.5">
                     <Label className="text-xs font-bold text-slate-500 dark:text-white/40 ml-1">
                       City
@@ -713,7 +725,7 @@ const Signup = () => {
                   </span>
                 </div>
                 <div className="flex flex-wrap gap-1.5 md:gap-2">
-                  {interestsList.map((i) => {
+                  {INTERESTS_OPTIONS.map((i) => {
                     const active = interests.includes(i);
                     return (
                       <motion.button
@@ -724,7 +736,7 @@ const Signup = () => {
                         className={cn(
                           "px-3.5 py-1.5 rounded-full text-[11px] md:text-xs font-bold border transition-all duration-300",
                           active
-                            ? "bg-slate-900 dark:bg-white text-white dark:text-black border-transparent shadow-sm"
+                            ? "bg-[#ff6a3d] border-[#ff6a3d] text-white shadow-sm scale-[1.01]"
                             : "bg-slate-50 dark:bg-black/40 border-slate-200 dark:border-white/10 text-slate-600 dark:text-white/60 hover:border-slate-300 hover:scale-[1.01]",
                         )}
                       >
