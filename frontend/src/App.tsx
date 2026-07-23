@@ -4,9 +4,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
-import { SiteLayout } from "@/components/layout/SiteLayout";
 import { SmoothScroll } from "@/components/animations/SmoothScroll";
 import { AuthProvider } from "@/context/AuthContext";
+import { AppRoutes } from "./AppRoutes"; // <-- Import AppRoutes here!
 
 const App = () => (
   <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
@@ -16,7 +16,7 @@ const App = () => (
           <Sonner position="top-right" richColors />
           <BrowserRouter>
             <SmoothScroll />
-            <SiteLayout />
+            <AppRoutes /> {/* <-- RENDER AppRoutes INSTEAD OF SiteLayout */}
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>

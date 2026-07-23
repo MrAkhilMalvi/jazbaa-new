@@ -10,9 +10,9 @@ import {
 } from "lucide-react";
 import * as XLSX from "xlsx";
 
-import { User } from "@/api/user.types";
-import { getUsersApi } from "@/api/Admin.api";
+import { User } from "@/types/user.types";
 import UsersTable from "./UsersTable";
+import { getUsersApi } from "@/services/admin.service";
 
 const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);

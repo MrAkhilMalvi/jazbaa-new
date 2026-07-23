@@ -8,14 +8,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Reveal, RevealText } from "@/components/animations/Reveal";
 import { Aurora } from "@/components/animations/Aurora";
-import { getMeApi, googleLoginApi } from "@/api/Auth.api";
 import { GoogleLogin } from "@react-oauth/google";
-import { loginApi } from "@/api/Auth.api";
+
 import { useAuth } from "@/context/AuthContext";
 import { loginSchema } from "@/lib/auth.schema";
+import { googleLoginApi, loginApi } from "@/services/auth.service";
+import { log } from "console";
 
-const SIDE_IMG =
-  "/images/loginimage.jpeg";
+const SIDE_IMG = "/images/loginimage.jpeg";
 
 const Login = () => {
   const [busy, setBusy] = useState(false);
@@ -23,7 +23,7 @@ const Login = () => {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isDark, setIsDark] = useState(false);
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { setUser, setIsAuthenticated } = useAuth();
 
   // Detect and track system/document dark mode status
   useEffect(() => {
@@ -47,51 +47,101 @@ const Login = () => {
     e.preventDefault();
     setErrors({});
 
-    const fd = new FormData(e.currentTarget);
-    const formData = Object.fromEntries(fd);
+    const formData = Object.fromEntries(new FormData(e.currentTarget));
 
+    // 1. Validate form fields using Zod
     const parsed = loginSchema.safeParse(formData);
 
     if (!parsed.success) {
       const fieldErrors: Record<string, string> = {};
-      parsed.error.errors.forEach((err) => {
-        if (err.path[0]) {
-          fieldErrors[err.path[0].toString()] = err.message;
+      parsed.error.issues.forEach((issue) => {
+        if (issue.path[0]) {
+          fieldErrors[issue.path[0].toString()] = issue.message;
         }
       });
       setErrors(fieldErrors);
-      toast.error("Please enter correct values.");
+      toast.error("Please fill in all required fields correctly.");
       return;
     }
 
     try {
       setBusy(true);
-
       const res = await loginApi(parsed.data);
-      const me = await getMeApi();
+      const user = res.data.user;
+      localStorage.setItem(
+        "jazbaa-auth",
+        JSON.stringify({ isAuthenticated: true, user: res.data }),
+      );
+      setUser(user);
+      setIsAuthenticated(true);
 
-      setUser(me.data.user);
-      navigate("/");
+      toast.success("Welcome back!");
+      navigate("/", { replace: true });
     } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Login failed");
+      setErrors(err.message);
+      return false;
     } finally {
       setBusy(false);
     }
   };
 
-  const handleGoogleLogin = async (credentialResponse: any) => {
-    try {
-      setBusy(true);
-      const res = await googleLoginApi(credentialResponse.credential);
-      setUser(res?.data);
-      toast.success("Logged in with Google 🚀");
-      navigate("/");
-    } catch (err) {
-      toast.error("Google login failed");
-    } finally {
-      setBusy(false);
+const handleGoogleLogin = async (credentialResponse: any) => {
+  try {
+    setBusy(true);
+
+    const res = await googleLoginApi(credentialResponse.credential);
+    
+    // Extract user safely from res.data.user
+    const user = res?.data?.user || res?.data;
+
+    // Check completion status directly
+    if (!user?.is_profile_completed) {
+      toast.info("Please complete your profile details to finalize signup.");
+
+      // Safely parse name, converting null values to empty strings ("")
+      const firstName = user?.first_name || user?.firstName || "";
+      const lastName = user?.last_name || user?.lastName || "";
+      
+      // Fallback logic if full 'name' string exists instead
+      const fallbackFirstName = user?.name ? user.name.split(" ")[0] : "";
+      const fallbackLastName = user?.name ? user.name.split(" ").slice(1).join(" ") : "";
+
+      navigate("/complete-profile", {
+        state: {
+          googleUser: {
+            email: user?.email || "",
+            avatar: user?.avatar || "",
+            firstName: firstName || fallbackFirstName,
+            lastName: lastName || fallbackLastName,
+            googleId: user?.id || user?.googleId || "",
+          },
+        },
+        replace: true,
+      });
+      return; // Stop execution here
     }
-  };
+
+    // Normal Login Success
+    localStorage.setItem(
+      "jazbaa-auth",
+      JSON.stringify({ isAuthenticated: true, user: res.data })
+    );
+
+    setUser(user);
+    setIsAuthenticated(true);
+
+    toast.success("Logged in successfully! 🚀");
+    navigate("/", { replace: true });
+
+  } catch (err: any) {
+    console.error("Login Navigation Error:", err);
+    toast.error(
+      err?.response?.data?.message || "Google login failed. Please try again."
+    );
+  } finally {
+    setBusy(false);
+  }
+};
 
   return (
     <section className="relative min-h-screen py-10 lg:py-16 flex items-center mt-5 justify-center overflow-hidden bg-[#fbfaf8] dark:bg-black transition-colors duration-500">
@@ -99,7 +149,6 @@ const Login = () => {
       <div className="absolute top-[-10%] left-[-10%] w-[300px] h-[300px] bg-orange-400/20 dark:bg-[#ff6a3d]/20 blur-[100px] rounded-full pointer-events-none md:hidden" />
 
       <div className="max-w-[1200px] mx-auto px-4 w-full grid lg:grid-cols-2 gap-8 xl:gap-12 items-center relative z-10">
-        
         {/* =========================================
             LEFT PANEL (Visual)
             ========================================= */}
@@ -122,7 +171,8 @@ const Login = () => {
                 className="font-bold text-4xl xl:text-5xl tracking-tight leading-[1.1] mb-4"
               />
               <p className="max-w-lg text-sm xl:text-base text-white/80 font-medium leading-relaxed">
-                Sign in to explore experiences, connect with inspiring individuals, and make every moment meaningful.
+                Sign in to explore experiences, connect with inspiring
+                individuals, and make every moment meaningful.
               </p>
             </div>
           </div>
@@ -194,7 +244,11 @@ const Login = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors"
                   >
-                    {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                    {showPassword ? (
+                      <EyeOff className="w-4 h-4" />
+                    ) : (
+                      <Eye className="w-4 h-4" />
+                    )}
                   </button>
                 </div>
                 {errors.password && (

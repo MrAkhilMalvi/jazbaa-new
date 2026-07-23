@@ -20,7 +20,7 @@ export const sendResetEmail = async (email, link) => {
 
   // Production Dynamic Sender: Uses your environment variable, or falls back safely
   const senderEmail =
-    process.env.EMAIL_FROM || "Team Jazbaa <noreply@jazbaa.naviralife.co.in>";
+    process.env.EMAIL_FROM || "Team Jazbaa <noreply@jazbaa.co.in>";
 
   try {
     const { data, error } = await resend.emails.send({
@@ -128,7 +128,7 @@ export const sendWelcomeEmail = async (email, firstName) => {
   console.log(`[Resend Mailer] Dispatching welcome email to: ${email}`);
 
   const senderEmail =
-    process.env.EMAIL_FROM || "Team Jazbaa <noreply@jazbaa.naviralife.co.in>";
+    process.env.EMAIL_FROM || "Team Jazbaa <noreply@jazbaa.co.in>";
 
   try {
     const { data, error } = await resend.emails.send({

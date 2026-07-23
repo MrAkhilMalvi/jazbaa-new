@@ -14,7 +14,6 @@ import { Reveal } from "@/components/animations/Reveal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { signupApi } from "@/api/Auth.api";
 import { signupSchema } from "@/lib/auth.schema";
 import {
   Select,
@@ -25,29 +24,10 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { Field } from "@/components/ui/Field";
-import { countryCodes } from "@/constants/SingupConstants";
+import { countryCodes, INTERESTS_OPTIONS } from "@/constants/SingupConstants";
+import { signupApi } from "@/services/auth.service";
 
 const SIGNUP_ILLUSTRATION = "/images/singupimg.webp";
-
-// Updated list of 16 interests
-const INTERESTS_OPTIONS = [
-  "Singing & Karaoke",
-  "Music & Instrument Circles",
-  "Dance & Movement",
-  "Sketching, Painting & Photography",
-  "Reader's Club & Discussions",
-  "Storytelling",
-  "Open Mic Evenings",
-  "Domain Expert Sessions",
-  "Meditation & Breathwork",
-  "Physical Exercise Session",
-  "Wellness Expert Sessions",
-  "Diet & Nutrition",
-  "Community Meetups",
-  "Themed Events & Concerts",
-  "Friendship Circles",
-  "Festival Celebrations",
-];
 
 const Signup = () => {
   const navigate = useNavigate();

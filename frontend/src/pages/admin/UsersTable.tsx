@@ -1,4 +1,4 @@
-import { User } from "@/api/user.types";
+import { User } from "@/types/user.types";
 import { ChevronLeft, ChevronRight, Inbox, Calendar, MapPin, Mail } from "lucide-react";
 
 interface UsersTableProps {

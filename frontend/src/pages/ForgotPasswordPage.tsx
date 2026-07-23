@@ -1,7 +1,8 @@
+import { forgotPasswordApi } from "@/services/auth.service";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { forgotPasswordApi } from "../api/Auth.api";
+
 
 const ForgotPasswordPage = () => {
   const [email, setEmail] = useState("");

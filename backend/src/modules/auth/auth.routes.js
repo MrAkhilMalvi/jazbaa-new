@@ -4,9 +4,9 @@ import {
   login,
   googleLogin,
   logout,
-  getMe,
   forgotPassword,
   resetPassword,
+  completeProfile,
 } from "./auth.controller.js";
 
 import { protect } from "../../middleware/auth.middleware.js";
@@ -21,8 +21,6 @@ router.post("/logout", logout);
 router.post("/forgot-password", forgotPassword);
 router.post("/reset-password", resetPassword);
 
-
-// 🔒 Protected
-router.get("/me", protect, getMe);
+router.post("/complete-profile", protect, completeProfile);
 
 export default router;

@@ -19,7 +19,7 @@ app.use(cookieParser());
 // ✅ Allowed origins
 const allowedOrigins = [
   "http://localhost:3000",
-  "http://localhost:8081",
+  "http://localhost:8082",
   "https://jazbaa.naviralife.co.in",
   "https://www.jazbaa.naviralife.co.in",
   "https://jazbaa.co.in",
@@ -56,7 +56,7 @@ app.use(
 
 // ✅ Debug middleware
 app.use((req, res, next) => {
-  console.log("Cookies:", req.cookies);
+  // console.log("Cookies:", req.cookies);
   next();
 });
 

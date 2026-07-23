@@ -10,5 +10,8 @@ export const API_ENDPOINTS = {
   },
   ADMIN: {
     GETUSERS:  "/admin/users",
+  },
+  USER: {
+    PROFILE: "/auth/complete-profile"
   }
 };

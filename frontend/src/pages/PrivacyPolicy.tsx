@@ -1,4 +1,4 @@
-import { LegalPage } from "@/components/legal/LegalPage";
+import { LegalPage } from "@/pages/LegalPage";
 import { privacyPolicy } from "@/constants/LegalConst";
 
 
